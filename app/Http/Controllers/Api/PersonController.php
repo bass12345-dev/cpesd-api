@@ -17,10 +17,13 @@ class PersonController extends Controller
     {
         $items = PersonModel::all();
 
-         return response()->json([
-            'status' => true,
-            'items' => $items
-        ]);
+        return json_encode($items);
+
+        //  return response()->json([
+        //     // 'status' => true,
+        //     // 'items' => $items
+        //     $items
+        // ]);
     }
 
     /**

@@ -13,9 +13,16 @@ class CreatePeopleTable extends Migration
      */
     public function up()
     {
-        Schema::create('people', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('persons', function (Blueprint $table) {
+            $table->uuid('person_id')->primary();
+            $table->string('first_name');
+            $table->string('middle_name');
+            $table->string('last_name');
+            $table->string('extension');
+            $table->string('phone_number');
+            $table->string('address');
+            $table->string('email_address');
+            $table->dateTime('created_at', $precision = 0);
         });
     }
 
@@ -26,6 +33,6 @@ class CreatePeopleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('people');
+        Schema::dropIfExists('persons');
     }
 }

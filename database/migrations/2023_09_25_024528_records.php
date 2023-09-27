@@ -15,8 +15,9 @@ class Records extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->uuid('record_id')->primary();
+             $table->string('p_id');
             $table->string('record_description');
-            $table->rememberToken();
+           
             $table->dateTime('created_at', $precision = 0);
         });
     }
