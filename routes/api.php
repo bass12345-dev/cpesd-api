@@ -25,3 +25,10 @@ Route::put('update/{id}','App\Http\Controllers\Api\PersonController@update');
 Route::put('remove/{id}','App\Http\Controllers\Api\PersonController@remove');
 Route::put('set-active/{id}','App\Http\Controllers\Api\PersonController@set_active');
 Route::delete('delete/{id}', 'App\Http\Controllers\Api\PersonController@delete');
+
+Route::get('person_info', 'App\Http\Controllers\Api\PersonController@person_info');
+Route::put('add_record/{id}', 'App\Http\Controllers\Api\PersonController@add_record');
+
+Route::get('get_records', 'App\Http\Controllers\Api\PersonController@get_records');
+
+Route::get('count_all', 'App\Http\Controllers\Api\PersonController@count_all');

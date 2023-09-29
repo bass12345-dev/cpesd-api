@@ -42,6 +42,26 @@ class PersonController extends Controller
     }
 
 
+    public function get_records(){
+
+         $items = [];
+        $items = DB::table('records')->where('p_id', $_GET['id'])->get();
+        return response()->json($items);
+
+    }
+
+    public function count_all(){
+        $data = [];
+
+        $active = DB::table('persons')->where('status', 'active')->count();
+        $inactive = DB::table('persons')->where('status', 'inactive')->count();
+        $data[] = array('active' => $active , 'inactive' => $active);
+
+         return response()->json($data);
+
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -196,6 +216,43 @@ class PersonController extends Controller
         echo json_encode($data);
     }
 
+    public function person_info(){
+
+        $person_data = DB::table('persons')->where('person_id', $_GET['id'])->first();
+
+        return response()->json($person_data);
+
+    
+    }
+
+
+    public function add_record(Request $request, $id){
+
+
+    $items = array(
+
+        'record_description'  => $request->input('record_description'),
+        'p_id'                => $id,
+        'created_at'          => '2023-06-19 13:35:39',
+        
+    );
+
+     $add = DB::table('records')->insert($items);
+
+      if ($add) {
+
+             $data = array('message' => 'Add Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+
+    }
 
     /**
      * Remove the specified resource from storage.
