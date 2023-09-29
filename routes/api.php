@@ -21,5 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('person', PersonController::class);
 Route::post('/add', 'App\Http\Controllers\Api\PersonController@add');
-
-
+Route::put('update/{id}','App\Http\Controllers\Api\PersonController@update');
+Route::put('remove/{id}','App\Http\Controllers\Api\PersonController@remove');
+Route::put('set-active/{id}','App\Http\Controllers\Api\PersonController@set_active');
+Route::delete('delete/{id}', 'App\Http\Controllers\Api\PersonController@delete');

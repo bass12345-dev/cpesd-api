@@ -26,16 +26,22 @@ class PersonController extends Controller
 
     public function index()
     {
-        $items = PersonModel::all();
+        // $items = PersonModel::all();
+        // return json_encode($items);
+         // $items = DB::table('persons')->where('status', 'active')->get();
+         // return response()->json($items);
+        $items = [];
 
-        return json_encode($items);
+        if ($_GET['type'] == 'active') {
+            $items = DB::table('persons')->where('status', 'active')->get();
+        }else if($_GET['type'] == 'inactive'){
+            $items = DB::table('persons')->where('status', 'inactive')->get();
+        }
 
-        //  return response()->json([
-        //     // 'status' => true,
-        //     // 'items' => $items
-        //     $items
-        // ]);
+        return response()->json($items);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -125,10 +131,71 @@ class PersonController extends Controller
      * @param  \App\Models\PersoModel  $persoModel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PersoModel $persoModel)
+    public function update(Request $request, $id)
     {
-        //
+        echo $id;
     }
+
+
+     public function remove(Request $request, $id)
+    {
+
+        $update = DB::table('persons')
+                    ->where('person_id', $id)
+                    ->update(array('status'=> 'inactive'));
+
+        if ($update) {
+
+             $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong/Data is not updated' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+    }
+
+
+         public function set_active(Request $request, $id)
+    {
+
+        $update = DB::table('persons')
+                    ->where('person_id', $id)
+                    ->update(array('status'=> 'active'));
+
+        if ($update) {
+
+             $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong/Data is not updated' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+    }
+
+
+    public function delete(Request $request, $id)
+    {
+        
+        $delete =  PersonModel::where('person_id', $id)->delete();
+                if($delete) {
+
+                    $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
+
+                }else {
+                    $data = array('message' => 'Error', 'response' => 'false');
+                }
+
+        echo json_encode($data);
+    }
+
 
     /**
      * Remove the specified resource from storage.
