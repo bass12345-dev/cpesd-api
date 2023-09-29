@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PersonModel;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PersonController extends Controller
 {
@@ -13,6 +15,15 @@ class PersonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public $person;
+
+    public function __construct()
+    {
+        $this->person   = new PersonModel;
+        
+    }
+
     public function index()
     {
         $items = PersonModel::all();
@@ -31,14 +42,38 @@ class PersonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function add()
+    public function add(Request $request)
     {
-        $items = PersonModel::all();
+      
 
-         return response()->json([
-            'status' => true,
-            'items' => $items
-        ]);
+     $items = array(
+
+        'first_name'                 => $request->input('firstName'),
+        'middle_name'                => $request->input('middleName'),
+        'last_name'                  => $request->input('lastName'),
+        'extension'                  => $request->input('extension'),
+        'phone_number'               => $request->input('phoneNumber'),
+        'address'                    => $request->input('address'),
+        'email_address'              => $request->input('email_address'),
+        'created_at'                 => '2023-06-19 13:35:39',
+        'status'                     => 'active'
+    );
+
+     $add = DB::table('persons')->insert($items);
+
+      if ($add) {
+
+             $data = array('message' => 'Add Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+
     }
     /**
      * Show the form for creating a new resource.
@@ -58,7 +93,7 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

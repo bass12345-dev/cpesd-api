@@ -20,5 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('person', PersonController::class);
-Route::get('/add', 'App\Http\Controllers\Api\PersonController@add');
+Route::post('/add', 'App\Http\Controllers\Api\PersonController@add');
+
 
