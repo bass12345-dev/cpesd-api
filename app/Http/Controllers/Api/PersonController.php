@@ -267,6 +267,29 @@ class PersonController extends Controller
 
     }
 
+
+    public function update_person_info(Request $request, $id){
+
+
+     $update = DB::table('persons')
+                    ->where('person_id', $id)
+                    ->update($request->all());
+
+      if ($update) {
+
+             $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+
+    }
+
     /**
      * Remove the specified resource from storage.
      *
