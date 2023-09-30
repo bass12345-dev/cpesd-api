@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\PersonModel;
+use App\Models\RecordModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -17,19 +18,15 @@ class PersonController extends Controller
      */
 
     public $person;
-
+    public $record;
     public function __construct()
     {
         $this->person   = new PersonModel;
-        
+        $this->record   = new RecordModel;
     }
 
     public function index()
     {
-        // $items = PersonModel::all();
-        // return json_encode($items);
-         // $items = DB::table('persons')->where('status', 'active')->get();
-         // return response()->json($items);
         $items = [];
 
         if ($_GET['type'] == 'active') {
@@ -55,7 +52,7 @@ class PersonController extends Controller
 
         $active = DB::table('persons')->where('status', 'active')->count();
         $inactive = DB::table('persons')->where('status', 'inactive')->count();
-        $data[] = array('active' => $active , 'inactive' => $active);
+        $data[] = array('active' => $active , 'inactive' => $inactive);
 
          return response()->json($data);
 
@@ -205,6 +202,22 @@ class PersonController extends Controller
     {
         
         $delete =  PersonModel::where('person_id', $id)->delete();
+                if($delete) {
+
+                    $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
+
+                }else {
+                    $data = array('message' => 'Error', 'response' => 'false');
+                }
+
+        echo json_encode($data);
+    }
+
+
+    public function delete_record(Request $request, $id)
+    {
+        
+        $delete =  RecordModel::where('record_id', $id)->delete();
                 if($delete) {
 
                     $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
