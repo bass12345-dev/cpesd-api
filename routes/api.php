@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //POST
 Route::apiResource('person', PersonController::class);
 Route::post('/add', 'App\Http\Controllers\Api\PersonController@add');
+Route::post('/search-query', 'App\Http\Controllers\Api\PersonController@search_query');
+
 
 //Update
 Route::put('update/{id}','App\Http\Controllers\Api\PersonController@update');

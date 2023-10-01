@@ -277,4 +277,26 @@ class PersonController extends Controller
     {
         //
     }
+
+
+        public function search_query(Request $request)
+    {
+      
+
+    // $items = array(
+
+    //     'first_name'                 => $request->input('first_name'),
+    //     'middle_name'                => $request->input('middle_name'),
+    //     'last_name'                  => $request->input('last_name'),
+    // );
+
+    $search = $request->input('first_name').' '.$request->input('last_name');
+
+     $users = PersonModel::select("person_id", "first_name", "last_name", "middle_name", "address", "email_address", "phone_number")
+                       ->where(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$search."%")
+                       ->get();
+    return json_encode($users);
+
+
+    }
 }
