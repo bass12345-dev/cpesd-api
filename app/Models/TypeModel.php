@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RecordModel extends Model
+class TypeModel extends Model
 {
     use HasFactory;
-    protected $table = 'records';
+
+    protected $table = 'document_types';
 
      protected $fillable = [
-        'p_id',
-        'record_description',
-        'created_at',
+        'type_id',
+        'type_name',
+        'created',
     
         
     ];
 
     public $timestamps = false;
-
 }
