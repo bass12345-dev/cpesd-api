@@ -1,0 +1,13 @@
+npm i sweetalert
+
+ng add angular-datatables
+
+
+# If you want to export excel files
+npm install jszip --save
+# JS file
+npm install datatables.net-buttons --save
+# CSS file
+npm install datatables.net-buttons-dt --save
+# Typings
+npm install @types/datatables.net-buttons --save-dev
