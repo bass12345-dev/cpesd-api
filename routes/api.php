@@ -60,3 +60,7 @@ Route::get('get-users', 'App\Http\Controllers\Api\UserController@get_users');
 //Document types
 Route::get('get-document-types', 'App\Http\Controllers\Api\DocumentTypeController@get_document_types');
 Route::post('add-document-type', 'App\Http\Controllers\Api\DocumentTypeController@add_document_type');
+
+
+//Documents
+Route::post('add-document', 'App\Http\Controllers\Api\DocumentController@add_document');
