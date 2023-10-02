@@ -41,6 +41,16 @@ Route::get('person_info', 'App\Http\Controllers\Api\PersonController@person_info
 Route::get('get_records', 'App\Http\Controllers\Api\PersonController@get_records');
 Route::get('count_all', 'App\Http\Controllers\Api\PersonController@count_all');
 
+
+
+
 //Delete
 Route::delete('delete/{id}', 'App\Http\Controllers\Api\PersonController@delete');
 Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@delete_record');
+
+
+//Document Tracker
+
+
+//Get
+Route::get('get-users', 'App\Http\Controllers\Api\UserController@get_users');
