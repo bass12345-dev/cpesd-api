@@ -19,6 +19,7 @@ class DocumentModel extends Model
         'offi_id',
         'doc_type',
         'document_description',
+        'created'
     
         
     ];
