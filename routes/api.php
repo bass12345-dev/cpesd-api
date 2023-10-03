@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Auth
+Route::post('/verify-code', 'App\Http\Controllers\Api\AuthController@verify_code');
+
 
 
 //Blacklisted
