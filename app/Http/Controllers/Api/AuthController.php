@@ -18,7 +18,7 @@ class AuthController extends Controller
     	 	$user = $key->get()[0];
     	 	return response()->json(['message'=>'1','response' => true]);
     	 }else {
-    	 	return response()->json(['message'=>'invalid password', 'response' => false]);
+    	 	return response()->json(['message'=>'Invalid Security Code', 'response' => false]);
     	 }
     	 
     }

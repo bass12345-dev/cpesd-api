@@ -43,7 +43,7 @@ Route::put('update-person-info/{id}', 'App\Http\Controllers\Api\PersonController
 Route::get('person_info', 'App\Http\Controllers\Api\PersonController@person_info');
 Route::get('get_records', 'App\Http\Controllers\Api\PersonController@get_records');
 Route::get('count_all', 'App\Http\Controllers\Api\PersonController@count_all');
-
+Route::get('check_person', 'App\Http\Controllers\Api\PersonController@check_person');
 
 
 

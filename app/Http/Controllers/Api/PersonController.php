@@ -77,7 +77,7 @@ class PersonController extends Controller
         'extension'                  => $request->input('extension'),
         'phone_number'               => $request->input('phoneNumber'),
         'address'                    => $request->input('address'),
-        'email_address'              => $request->input('email_address'),
+        'email_address'              => $request->input('emailAddress'),
         'created_at'                 => '2023-06-19 13:35:39',
         'status'                     => 'active'
     );
@@ -86,7 +86,7 @@ class PersonController extends Controller
 
       if ($add) {
 
-             $data = array('message' => 'Add Successfully' , 'response' => true );
+             $data = array('message' => 'Added Successfully' , 'response' => true );
 
         }else {
 
@@ -270,10 +270,20 @@ class PersonController extends Controller
 
     public function update_person_info(Request $request, $id){
 
+     $items = array(
+
+        'first_name'                 => $request->input('firstName'),
+        'middle_name'                => $request->input('middleName'),
+        'last_name'                  => $request->input('lastName'),
+        'extension'                  => $request->input('extension'),
+        'phone_number'               => $request->input('phoneNumber'),
+        'address'                    => $request->input('address'),
+        'email_address'              => $request->input('emailAddress'),
+    );
 
      $update = DB::table('persons')
                     ->where('person_id', $id)
-                    ->update($request->all());
+                    ->update($items);
 
       if ($update) {
 
@@ -281,7 +291,7 @@ class PersonController extends Controller
 
         }else {
 
-            $data = array('message' => 'Something Wrong' , 'response' => false );
+            $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
 
 
         }
@@ -301,17 +311,19 @@ class PersonController extends Controller
         //
     }
 
+    public function check_person(){
+      
+        $check = DB::table('persons')->where('person_id', $_GET['id'])->count();
+         return response()->json($check);
+
+    }
+
 
         public function search_query(Request $request)
     {
       
 
-    // $items = array(
 
-    //     'first_name'                 => $request->input('first_name'),
-    //     'middle_name'                => $request->input('middle_name'),
-    //     'last_name'                  => $request->input('last_name'),
-    // );
 
     $search = $request->input('first_name').' '.$request->input('last_name');
 
