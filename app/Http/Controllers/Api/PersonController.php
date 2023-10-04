@@ -68,7 +68,7 @@ class PersonController extends Controller
     public function add(Request $request)
     {
       
-
+        
      $items = array(
 
         'first_name'                 => $request->input('firstName'),
@@ -158,12 +158,12 @@ class PersonController extends Controller
     {
 
         $update = DB::table('persons')
-                    ->where('person_id', $id)
+                    ->where('persons.person_id', $id)
                     ->update(array('status'=> 'inactive'));
 
         if ($update) {
 
-             $data = array('message' => 'Updated Successfully' , 'response' => true );
+             $data = array('message' => 'Removed Successfully' , 'response' => true );
 
         }else {
 
@@ -203,7 +203,7 @@ class PersonController extends Controller
         
         $delete =  PersonModel::where('person_id', $id)->delete();
                 if($delete) {
-
+                    RecordModel::where('p_id', $id)->delete();
                     $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
 
                 }else {

@@ -11,3 +11,7 @@ npm install datatables.net-buttons --save
 npm install datatables.net-buttons-dt --save
 # Typings
 npm install @types/datatables.net-buttons --save-dev
+
+
+
+npm i xlsx --save
