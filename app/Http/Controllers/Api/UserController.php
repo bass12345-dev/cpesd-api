@@ -30,4 +30,28 @@ class UserController extends Controller
         return response()->json($items);
 
     }
+
+
+    public function get_user_data(){
+
+   
+
+        $row = DB::table('users')->where('user_id', $_GET['id'])->get();
+
+        $items = array(
+
+                'user_id' => $row[0]->user_id,
+                'office_id' => $row[0]->off_id,
+                'first_name' => $row[0]->first_name,   
+                'last_name' => $row[0]->last_name,   
+                'middle_name' => $row[0]->middle_name,   
+                'extension' => $row[0]->extension,  
+                'address' => $row[0]->address,     
+                'contact_number' => $row[0]->contact_number,   
+                'email_address' => $row[0]->email_address,                        
+        );
+
+        return response()->json($items);
+
+    }
 }

@@ -42,7 +42,7 @@ class AuthController extends Controller
 
                      
 
-                     return response()->json(['message'=>'Success.','response'=> true]);
+                     return response()->json(['message'=>'Success.','response'=> true,'data' => $user->get()[0]->user_id ]);
 
 
                      }else{

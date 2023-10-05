@@ -25,11 +25,11 @@ class DocumentController extends Controller
 
         'tracking_number'   		=> '123',
         'document_name'    			=> $request->input('document_name'),
-        'u_id'    					=> 9,
-        'offi_id'    				=> 1,
-        'doc_type'    				=> $request->input('doc_type'),
-        'document_description'    	=> $request->input('document_description'),
-        'document_created'       	=> '2023-06-19 13:35:39',
+        'u_id'    					=> $request->input('user_id'),
+        'offi_id'    				=> $request->input('office_id'),
+        'doc_type'    				=> $request->input('document_type'),
+        'document_description'    	=> $request->input('description'),
+        'created'       	=> '2023-06-19 13:35:39',
     );
 
     $add = DB::table('documents')->insert($items);
@@ -50,6 +50,12 @@ class DocumentController extends Controller
 
 
 
+    }
+
+
+    public function get_my_documents(){
+
+        echo $_GET['id'];
     }
 
 }
