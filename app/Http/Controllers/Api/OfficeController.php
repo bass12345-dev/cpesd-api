@@ -3,30 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\TypeModel;
+use App\Models\OfficeModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class DocumentTypeController extends Controller
+class OfficeController extends Controller
 {
     
-    public $type;
-    public function __construct()
-    {
-        $this->type   = new TypeModel;
-    }
-
     //POST
-    public function add_document_type(Request $request){
+    public function add_office(Request $request){
 
    	$items = array(
 
-        'type_name'    => $request->input('type'),
+        'office'    	=> $request->input('office'),
+        'office_status' => 'active', 
         'created'       => '2023-06-19 13:35:39',
     );
 
-    $add = DB::table('document_types')->insert($items);
+    $add = DB::table('offices')->insert($items);
 
     if ($add) {
 
@@ -44,19 +39,11 @@ class DocumentTypeController extends Controller
 
     }
 
-    //GET
-    public function get_document_types(){
 
-    	$items = DB::table('document_types')->get();
-    	return response()->json($items);
-
-    }
-
-    //Delete
-    public function delete_type(Request $request, $id)
+     public function delete_office(Request $request, $id)
     {
         
-        $delete =  TypeModel::where('type_id', $id)->delete();
+        $delete =  OfficeModel::where('office_id', $id)->delete();
 
                 if($delete) {
 
@@ -67,5 +54,11 @@ class DocumentTypeController extends Controller
                 }
 
         echo json_encode($data);
+    }
+
+    public function offices(){
+
+    	return response()->json(OfficeModel::all());
+
     }
 }
