@@ -55,7 +55,10 @@ class DocumentController extends Controller
 
     public function get_my_documents(){
 
-        echo $_GET['id'];
+        $key = DB::table('documents')->where('u_id', $_GET['id'])->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->get();
+
+        return response()->json($key);
+
     }
 
 }

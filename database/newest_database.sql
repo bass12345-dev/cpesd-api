@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2023 at 10:55 AM
+-- Generation Time: Oct 06, 2023 at 01:03 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.4.19
 
@@ -47,7 +47,8 @@ INSERT INTO `documents` (`document_id`, `tracking_number`, `document_name`, `u_i
 (2, '1291939210', '', 11, 3, 1, 'QR-1581740473.png', '2022-04-18 11:32:16'),
 (3, '123', 'sadsad', 9, 1, 2, NULL, '2023-06-19 13:35:39'),
 (4, '123', 'asdsad', 9, 1, 2, 'asdsad', '2023-06-19 13:35:39'),
-(5, '123', 'asdasd', 9, 1, 2, 'asdasd', '2023-06-19 13:35:39');
+(5, '123', 'asdasd', 9, 1, 2, 'asdasd', '2023-06-19 13:35:39'),
+(6, '123', 'sample', 9, 1, 2, 'asdasdasdsad', '2023-06-19 13:35:39');
 
 -- --------------------------------------------------------
 
@@ -87,6 +88,36 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history`
+--
+
+CREATE TABLE `history` (
+  `history_id` int(11) NOT NULL,
+  `t_number` int(11) NOT NULL,
+  `f_id` int(11) NOT NULL,
+  `typ_id` int(11) NOT NULL,
+  `user1` int(11) NOT NULL,
+  `office1` int(11) NOT NULL,
+  `user2` int(11) NOT NULL,
+  `office2` int(11) NOT NULL,
+  `status` set('to-receive','received','to-hold','hold','to-complete','completed') NOT NULL,
+  `received_status` int(11) NOT NULL,
+  `received_date` datetime NOT NULL,
+  `release_status` int(11) NOT NULL,
+  `release_date` datetime NOT NULL,
+  `remarks` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`history_id`, `t_number`, `f_id`, `typ_id`, `user1`, `office1`, `user2`, `office2`, `status`, `received_status`, `received_date`, `release_status`, `release_date`, `remarks`) VALUES
+(1, 500987727, 1, 1, 11, 3, 11, 3, 'received', 1, '2022-04-18 10:23:28', 1, '2022-04-18 10:23:28', '');
 
 -- --------------------------------------------------------
 
@@ -325,6 +356,12 @@ ALTER TABLE `failed_jobs`
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
+-- Indexes for table `history`
+--
+ALTER TABLE `history`
+  ADD PRIMARY KEY (`history_id`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -382,7 +419,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `document_types`
@@ -395,6 +432,12 @@ ALTER TABLE `document_types`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `history`
+--
+ALTER TABLE `history`
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `migrations`

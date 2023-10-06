@@ -59,7 +59,7 @@ Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@d
 
 //Users
 Route::get('get-users', 'App\Http\Controllers\Api\UserController@get_users');
-Route::get('get-user-data', 'App\Http\Controllers\Api\UserController@get_user');
+Route::get('get-user-data', 'App\Http\Controllers\Api\UserController@get_user_data');
 
 
 //Document types
