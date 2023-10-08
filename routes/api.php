@@ -70,6 +70,7 @@ Route::delete('delete-type/{id}', 'App\Http\Controllers\Api\DocumentTypeControll
 //Documents
 Route::post('add-document', 'App\Http\Controllers\Api\DocumentController@add_document');
 Route::get('get-my-documents', 'App\Http\Controllers\Api\DocumentController@get_my_documents');
+Route::delete('delete-my-document/{id}', 'App\Http\Controllers\Api\DocumentController@delete_my_document');
 
 
 
@@ -79,3 +80,6 @@ Route::get('offices', 'App\Http\Controllers\Api\OfficeController@offices');
 Route::delete('delete-office/{id}', 'App\Http\Controllers\Api\OfficeController@delete_office');
 
 
+// History 
+Route::get('get-received-documents', 'App\Http\Controllers\Api\DocumentController@get_received_documents');
+Route::post('forward-document', 'App\Http\Controllers\Api\DocumentController@forward_document');

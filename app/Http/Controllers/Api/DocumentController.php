@@ -39,7 +39,7 @@ class DocumentController extends Controller
             $where = array('document_id' => DB::getPdo()->lastInsertId());
             $row = DB::table('documents')->where($where)->get()[0];
 
-            $info1 = array(
+            $items1 = array(
                                 't_number'         =>  $row->tracking_number,
                                 'typ_id'           =>  $row->doc_type,
                                 'user1'            =>  $row->u_id,
@@ -54,7 +54,7 @@ class DocumentController extends Controller
                 );
 
 
-            $add1 = DB::table('documents')->insert($items);
+            $add1 = DB::table('history')->insert($items1);
 
             if ($add1) {
                 
@@ -99,7 +99,7 @@ class DocumentController extends Controller
         $data = [];
         foreach ($rows as $value => $key) {
 
-            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? '<button class="btn btn-danger"  ><i class="fas fa-trash"></i></button>' : '';
+            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
 
             $data[] = array(
 
@@ -107,7 +107,8 @@ class DocumentController extends Controller
                     'document_name'     => $key->document_name,
                     'type_name'         => $key->type_name,
                     'created'           => $key->created,
-                    'a'                 => $delete_button
+                    'a'                 => $delete_button,
+                    'document_id'       => $key->document_id
             );
         }
 
@@ -117,6 +118,65 @@ class DocumentController extends Controller
 
         return response()->json($data);
 
+    }
+
+    public function get_received_documents(){
+
+
+        $data = [];
+       $rows = DB::table('history')->where('user1', $_GET['id'])->where('received_status', 1)->where('release_status',0)->where('status' , 'received')->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->get();
+
+
+       foreach ($rows as $value => $key) {
+
+            $type = DB::table('document_types')->where('type_id', $key->doc_type)->get();
+
+            $data[] = array(
+
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $type[0]->type_name,
+                    'created'           => $key->created,
+                  
+                    'document_id'       => $key->document_id
+            );
+        }
+
+        return response()->json($data); 
+
+
+    }
+
+
+     //Delete
+    public function delete_my_document(Request $request, $id)
+    {
+       
+        $delete =  DocumentModel::where('document_id', $id);
+        $tracking_number =  $delete->get()[0]->tracking_number;
+
+                if($delete->delete()) {
+
+                    DB::table('history')->where('t_number', $tracking_number)->delete();
+
+                    $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
+
+                }else {
+                    $data = array('message' => 'Error', 'response' => 'false');
+                }
+
+        echo json_encode($data);
+    }
+
+    public function forward_document(Request $request){
+
+        print_r($request->all());
+
+        //update history release_status to 1
+        // $where1 = array('t_number' =>  $this->input->post('tracking_number'));
+        // $where2 = array('received_status' => 1  );
+        // $info = array('release_status' => 1);
+        // $update_release = $this->UpdateModel->update2($where1,$where2,$info,$this->history_table);
     }
 
 }
