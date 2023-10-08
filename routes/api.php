@@ -83,3 +83,11 @@ Route::delete('delete-office/{id}', 'App\Http\Controllers\Api\OfficeController@d
 // History 
 Route::get('get-received-documents', 'App\Http\Controllers\Api\DocumentController@get_received_documents');
 Route::post('forward-document', 'App\Http\Controllers\Api\DocumentController@forward_document');
+Route::get('get-forwarded-documents', 'App\Http\Controllers\Api\DocumentController@get_forward_documents');
+Route::get('get-incoming-documents', 'App\Http\Controllers\Api\DocumentController@get_incoming_documents');
+Route::post('receive-document', 'App\Http\Controllers\Api\DocumentController@receive_document');
+
+Route::post('complete-document', 'App\Http\Controllers\Api\DocumentController@complete_document');
+
+Route::get('get-history', 'App\Http\Controllers\Api\DocumentController@get_history');
+Route::get('get-document-data', 'App\Http\Controllers\Api\DocumentController@get_document_data');
