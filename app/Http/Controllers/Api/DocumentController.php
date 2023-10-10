@@ -133,7 +133,7 @@ class DocumentController extends Controller
 
     public function get_my_documents(){
 
-        $rows = DB::table('documents')->where('u_id', $_GET['id'])->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->get();
+        $rows = DB::table('documents')->where('u_id', $_GET['id'])->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->orderBy('documents.document_id', 'desc')->get();
         $data = [];
         foreach ($rows as $value => $key) {
 
@@ -499,7 +499,7 @@ class DocumentController extends Controller
                         // 'color' => ($row['status'] === 'hold') ? 'bg-yellow' : 'bg-green',
                         'remarks' => $row->remarks,
                         'user' => $user,
-                        'last_rec' => $last_rec->history_id == $row->history_id ? true : false,
+                        'last_rec' => $last_rec->history_id == $row->history_id ? false : true,
                         'document_name' => $row->document_name
 
 
@@ -509,12 +509,15 @@ class DocumentController extends Controller
 
             }
 
+
+            return response()->json($data);
+
         }else {
 
             echo json_encode(['response' => false,'message'=> 'Nothing']);
         }
 
 
-        return response()->json($data);
+        
       }
 }
