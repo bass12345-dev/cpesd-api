@@ -93,3 +93,7 @@ Route::post('complete-document', 'App\Http\Controllers\Api\DocumentController@co
 
 Route::get('get-history', 'App\Http\Controllers\Api\DocumentController@get_history');
 Route::get('get-document-data', 'App\Http\Controllers\Api\DocumentController@get_document_data');
+
+
+
+Route::get('track-document', 'App\Http\Controllers\Api\DocumentController@track_document');

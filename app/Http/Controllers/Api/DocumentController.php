@@ -109,7 +109,7 @@ class DocumentController extends Controller
 
                     'document_name'     => $row->document_name,
                     'tracking_number'   => $row->tracking_number,
-                    'encoded_by'        =>$row->first_name .' '.$row->middle_name.' '.$row->last_name.' '.$row->extension,
+                    'encoded_by'        => $row->first_name .' '.$row->middle_name.' '.$row->last_name.' '.$row->extension,
                     'office'            => $row->office,
                     'document_type'     => $row->type_name,
                     'description'       => $row->document_description,
@@ -456,4 +456,65 @@ class DocumentController extends Controller
 
       }
 
+
+      public function track_document(){
+        $where1 = array('t_number' => trim($_GET['tracking_number']));
+        $where2 = array('received_status' => 1);
+        $received = DB::table('history')->where($where1)->where($where2);
+        $history = '';
+        $data = [];
+         $user = false;
+        if ($received->count() > 0) {
+           $history = DB::table('history')
+           ->where($where1)
+           ->where($where2)
+           ->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')
+           ->leftJoin('offices', 'offices.office_id', '=', 'history.office2')
+           ->leftJoin('users', 'users.user_id', '=', 'history.user2')->orderBy('history_id', 'desc')->get();
+
+            $where3 = array('tracking_number' => trim($_GET['tracking_number']));
+            $document = DB::table('documents')->where('tracking_number', $_GET['tracking_number'])->get()[0];
+            $last_rec  =  DB::table('history')->where($where1)->orderBy('history_id', 'desc')->limit('1')->get()[0];
+            foreach ($history as $row) {
+
+                 $str = 'abcdef';
+                $shuffled = str_shuffle($str);
+
+                 if ($_GET['id'] === $document->u_id) {
+
+                    $user = true;
+                    # code...
+                }
+
+
+
+                      $data[] = array(
+                        'history_id' => $row->history_id,
+                        'i' => $shuffled,
+                        'department_name' => $row->office,
+                        'received_by' =>  $row->first_name .' '.$row->middle_name.' '.$row->last_name.' '.$row->extension,
+                        'tracking_code' => $row->tracking_number,
+                        'status' => $row->status,
+                        'date' =>  date('M d Y', strtotime($row->received_date)).' - '.date('h:i a', strtotime($row->received_date)),
+                        // 'color' => ($row['status'] === 'hold') ? 'bg-yellow' : 'bg-green',
+                        'remarks' => $row->remarks,
+                        'user' => $user,
+                        'last_rec' => $last_rec->history_id == $row->history_id ? true : false,
+                        'document_name' => $row->document_name
+
+
+                );
+
+
+
+            }
+
+        }else {
+
+            echo json_encode(['response' => false,'message'=> 'Nothing']);
+        }
+
+
+        return response()->json($data);
+      }
 }
