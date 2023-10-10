@@ -18,6 +18,21 @@ class DocumentController extends Controller
     }
 
 
+    public function countmydoc_dash(){
+
+        // echo $_GET['id'];
+        $data = array(
+
+                'count_documents'    => DB::table('documents')->where('u_id', $_GET['id'])->count(),
+                'incoming'          => DB::table('history')->where('user2', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count(),
+                'received'          => DB::table('history')->where('user2', $_GET['id'])->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->count(),
+                'forwarded'         => DB::table('history')->where('user1', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count()
+        );
+
+        echo json_encode($data);
+    }
+
+
         //POST
     public function add_document(Request $request){
 
@@ -98,6 +113,7 @@ class DocumentController extends Controller
                     'office'            => $row->office,
                     'document_type'     => $row->type_name,
                     'description'       => $row->document_description,
+                    'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? false : true
         );
 
         return json_encode($data);
@@ -420,17 +436,17 @@ class DocumentController extends Controller
 
                 $data[] = array(
 
-                            'user1' => $user1[0]->first_name.' '.$user1[0]->middle_name.' '.$user1[0]->last_name,
-                            'office1' => $user1[0]->office,
-                            'user2' => $row->user2 != 0 ?  $user2[0]->first_name.' '.$user2[0]->middle_name.' '.$user2[0]->last_name : ' - ',
-                            'office2' => $row->user2 != 0 ?  $user2[0]->office : ' - ',
-                            'tracking_number' => $row->t_number,
-                            'date_released' => $row->release_date != NULL ? date('M d Y', strtotime($row->release_date)).' - '.date('h:i a', strtotime($row->release_date)) : ' - ',
-                            'date_received' => $row->received_date != NULL ? date('M d Y', strtotime($row->received_date)).' - '.date('h:i a', strtotime($row->received_date)) : ' - ',
+                            'user1'             => $row->release_date != NULL ? $user1[0]->first_name.' '.$user1[0]->middle_name.' '.$user1[0]->last_name : ' - ',
+                            'office1'           => $user1[0]->office,
+                            'user2'             => $row->user2 != 0 ?  $user2[0]->first_name.' '.$user2[0]->middle_name.' '.$user2[0]->last_name : ' - ',
+                            'office2'            => $row->user2 != 0 ?  $user2[0]->office : ' - ',
+                            'tracking_number'   => $row->t_number,
+                            'date_released'     => $row->release_date != NULL ? date('M d Y', strtotime($row->release_date)).' - '.date('h:i a', strtotime($row->release_date)) : ' - ',
+                            'date_received'     => $row->received_date != NULL ? date('M d Y', strtotime($row->received_date)).' - '.date('h:i a', strtotime($row->received_date)) : ' - ',
                             // 'duration' => $row['received_date'] != '0000-00-00 00:00:00' ?   $this->duration($interval) : ' - ',
 
  
-                            'duration' => $row->received_date != NULL ?   $display_month.' '.$display_day.' '.$display_hour.' '.$display_min: ' - ',
+                            'duration'          => $row->received_date != NULL ?   $display_month.' '.$display_day.' '.$display_hour.' '.$display_min: ' - ',
                 );
 
         }

@@ -55,6 +55,8 @@ Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@d
 //Document Tracker
 
 
+//Dashboard
+Route::get('count-doc-t', 'App\Http\Controllers\Api\DocumentController@countmydoc_dash');
 //Get 
 
 //Users
