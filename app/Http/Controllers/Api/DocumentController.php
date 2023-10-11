@@ -289,7 +289,7 @@ class DocumentController extends Controller
 
 
         $data = [];
-       $rows = DB::table('history')->where('user1', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->get();
+       $rows = DB::table('history')->where('user1', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->orderBy('history.history_id', 'desc')->get();
 
 
        foreach ($rows as $value => $key) {
@@ -404,12 +404,16 @@ class DocumentController extends Controller
       public function get_history(){
 
         $where = array('t_number' => $_GET['t']);
-        $history = DB::table('history')->where($where)->get();
+        $history = DB::table('history')->where($where);
 
         $data = [];
 
 
-        foreach ($history as $value => $row) {
+        if ($history->count() > 0) {
+            // code...
+        
+
+        foreach ($history->get() as $value => $row) {
 
             $where1 = array('user_id' => $row->user1 );
             $user1  = DB::table('users')->where($where1)->leftJoin('offices', 'offices.office_id', '=', 'users.off_id')->get();
@@ -451,8 +455,14 @@ class DocumentController extends Controller
 
         }
 
-         echo json_encode($data);
+        
 
+     }else{
+
+         $data = array('message' => 'Tracking number not found', 'response' => false);
+
+     }
+    echo json_encode($data);
 
       }
 

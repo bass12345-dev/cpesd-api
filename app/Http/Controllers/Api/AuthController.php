@@ -65,6 +65,41 @@ class AuthController extends Controller
    
     }
 
+
+    public function verify_admin(Request $request){
+
+
+            $username = $request->input('username');
+            $password = $request->input('password');
+
+            $user = DB::table('users')->where('user_type', 'admin')->where('username', $request->input('username'));
+
+       
+
+            if ($user->count() > 0 ) {
+
+                $check = password_verify($password, $user->get()[0]->password);
+
+                if ($check) {
+
+                     
+
+                     return response()->json(['message'=>'Success.','response'=> true,'data' => $user->get()[0]->user_id ]);
+
+
+                     }else{
+                         return response()->json(['message'=>'invalid Password.','response'=> false]);
+
+                      }
+
+
+            }else {
+
+                return response()->json(['message'=>'invalid Username.','response'=> false]);
+            }
+   
+    }
+
     public function change_code(Request $request){
 
         $key = DB::table('security')->where('us_id', $_GET['id']);

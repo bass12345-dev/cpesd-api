@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/verify-code', 'App\Http\Controllers\Api\AuthController@verify_code');
 Route::post('/verify-user', 'App\Http\Controllers\Api\AuthController@verify_user');
 
+Route::post('/verify-admin', 'App\Http\Controllers\Api\AuthController@verify_admin');
+
 Route::post('/change-code', 'App\Http\Controllers\Api\AuthController@change_code');
 
 
