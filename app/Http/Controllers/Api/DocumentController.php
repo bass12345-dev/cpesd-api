@@ -520,4 +520,50 @@ class DocumentController extends Controller
 
         
       }
+
+
+
+
+      //Admin
+
+
+        public function countadmindoc_dash(){
+
+        // echo $_GET['id'];
+        $data = array(
+
+                'count_documents'    => DB::table('documents')->count(),
+                'count_offices'          => DB::table('offices')->where('office_status', 'active')->count(),
+                'count_document_types'          => DB::table('history')->count(),
+                'count_users'         => DB::table('users')->where('user_status', 'active')->count()
+        );
+
+        echo json_encode($data);
+    }
+
+      public function get_all_documents(){
+
+          $rows = DB::table('documents')->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->orderBy('documents.document_id', 'desc')->get();
+        $data = [];
+        foreach ($rows as $value => $key) {
+
+            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+
+            $data[] = array(
+
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $key->type_name,
+                    'created'           => $key->created,
+                    'a'                 => $delete_button,
+                    'document_id'       => $key->document_id
+            );
+        }
+
+
+     
+       
+
+        return response()->json($data);
+      }
 }

@@ -99,3 +99,12 @@ Route::get('get-document-data', 'App\Http\Controllers\Api\DocumentController@get
 
 
 Route::get('track-document', 'App\Http\Controllers\Api\DocumentController@track_document');
+
+
+
+//Admin
+
+
+//Get
+Route::get('get-all-documents', 'App\Http\Controllers\Api\DocumentController@get_all_documents');
+Route::get('count-docs', 'App\Http\Controllers\Api\DocumentController@countadmindoc_dash');
