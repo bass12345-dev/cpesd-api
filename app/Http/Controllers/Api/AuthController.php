@@ -12,15 +12,22 @@ class AuthController extends Controller
     public function verify_code(Request $request){
 
 
-    	 $key = DB::table('security')->where('security_code', $request->input('code'));
+    	 $key = DB::table('security')->where('us_id', 8);
     	 
     	 if ($key->count() > 0) {
-    	 	
-    	 	$user = $key->get()[0];
-    	 	return response()->json(['message'=>'1','response' => true]);
+            
+    	 	 $verify_code = password_verify($request->input('code'),$key->get()[0]->security_code); 
+
+                if ($verify_code) {
+
+        	 	$user = $key->get()[0];
+        	 	return response()->json(['message'=>$user->us_id,'response' => true]);
+        	 }else {
+        	 	return response()->json(['message'=>'Invalid Security Code', 'response' => false]);
+             }
     	 }else {
-    	 	return response()->json(['message'=>'Invalid Security Code', 'response' => false]);
-    	 }
+             return response()->json(['message'=>'ID not found Please Contact Developer','response'=> false]);
+         }
     	 
     }
 
@@ -56,5 +63,49 @@ class AuthController extends Controller
                 return response()->json(['message'=>'invalid Username.','response'=> false]);
             }
    
+    }
+
+    public function change_code(Request $request){
+
+        $key = DB::table('security')->where('us_id', $_GET['id']);
+
+        if ($key->count() > 0) {
+
+            $verify_code = password_verify($request->input('old'),$key->get()[0]->security_code); 
+
+            if ($verify_code) {
+
+                $update     = DB::table('security')
+                    ->where('us_id', $_GET['id'])
+                    ->update(array('security_code'=> password_hash($request->input('new'), PASSWORD_DEFAULT) ));
+
+
+                 if ($update) {
+                    
+                  $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+                }else {
+
+                  $data = array('message' => 'Something Wrong' , 'response' => false );
+                }
+
+                return response()->json($data);
+
+                // code...
+            }else {
+
+                  return response()->json(['message'=>'Invalid Old Security Code','response'=> false]);
+            }
+
+           
+
+        }else{
+
+             return response()->json(['message'=>'ID not found','response'=> false]);
+
+
+        }
+
+
     }
 }
