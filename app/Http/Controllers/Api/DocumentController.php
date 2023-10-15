@@ -520,7 +520,7 @@ class DocumentController extends Controller
             }
 
 
-            return response()->json($data);
+         echo json_encode($data);
 
         }else {
 
