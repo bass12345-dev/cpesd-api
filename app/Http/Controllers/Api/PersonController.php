@@ -268,6 +268,36 @@ class PersonController extends Controller
     }
 
 
+    public function update_record(Request $request, $id){
+
+
+    $items = array(
+
+        'record_description'  => $request->input('record_description'),
+      
+        
+    );
+
+    $update = DB::table('records')
+                    ->where('record_id', $id)
+                    ->update($items);
+
+      if ($update) {
+
+             $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+
+    }
+
+
     public function update_person_info(Request $request, $id){
 
      $items = array(

@@ -41,6 +41,7 @@ Route::put('update/{id}','App\Http\Controllers\Api\PersonController@update');
 Route::put('remove/{id}','App\Http\Controllers\Api\PersonController@remove');
 Route::put('set-active/{id}','App\Http\Controllers\Api\PersonController@set_active');
 Route::put('add_record/{id}', 'App\Http\Controllers\Api\PersonController@add_record');
+Route::put('update_record/{id}', 'App\Http\Controllers\Api\PersonController@update_record');
 Route::put('update-person-info/{id}', 'App\Http\Controllers\Api\PersonController@update_person_info');
 
 //Get
