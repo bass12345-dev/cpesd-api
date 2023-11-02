@@ -553,11 +553,12 @@ class DocumentController extends Controller
 
       public function get_all_documents(){
 
-          $rows = DB::table('documents')->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->orderBy('documents.document_id', 'desc')->get();
+          $rows = DB::table('documents')->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users','users.user_id','=','documents.u_id',)->orderBy('documents.document_id', 'desc')->get();
         $data = [];
         foreach ($rows as $value => $key) {
 
             $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+
 
             $data[] = array(
 
@@ -566,7 +567,8 @@ class DocumentController extends Controller
                     'type_name'         => $key->type_name,
                     'created'           => $key->created,
                     'a'                 => $delete_button,
-                    'document_id'       => $key->document_id
+                    'document_id'       => $key->document_id,
+                    'created_by'        => $key->first_name.' '.$key->middle_name.' '.$key->last_name.' '.$key->extension
             );
         }
 
