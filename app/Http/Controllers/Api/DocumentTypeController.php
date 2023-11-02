@@ -68,4 +68,35 @@ class DocumentTypeController extends Controller
 
         echo json_encode($data);
     }
+
+
+
+    public function update_type(Request $request, $id){
+
+
+    $items = array(
+
+        'type_name'  => $request->input('type'),
+      
+        
+    );
+
+    $update = DB::table('document_types')
+                    ->where('type_id', $id)
+                    ->update($items);
+
+      if ($update) {
+
+             $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+
+    }
 }

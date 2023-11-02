@@ -61,4 +61,34 @@ class OfficeController extends Controller
     	return response()->json(OfficeModel::all());
 
     }
+
+
+    public function update_office(Request $request, $id){
+
+
+    $items = array(
+
+        'office'  => $request->input('office'),
+      
+        
+    );
+
+    $update = DB::table('offices')
+                    ->where('office_id', $id)
+                    ->update($items);
+
+      if ($update) {
+
+             $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
+
+
+        }
+       
+       return response()->json($data);
+
+    }
 }

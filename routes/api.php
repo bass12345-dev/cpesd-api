@@ -73,6 +73,7 @@ Route::get('get-user-data', 'App\Http\Controllers\Api\UserController@get_user_da
 Route::get('get-document-types', 'App\Http\Controllers\Api\DocumentTypeController@get_document_types');
 Route::post('add-document-type', 'App\Http\Controllers\Api\DocumentTypeController@add_document_type');
 Route::delete('delete-type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@delete_type');
+Route::put('update_type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@update_type');
 
 //Documents
 Route::post('add-document', 'App\Http\Controllers\Api\DocumentController@add_document');
@@ -85,6 +86,7 @@ Route::delete('delete-my-document/{id}', 'App\Http\Controllers\Api\DocumentContr
 Route::post('add-office', 'App\Http\Controllers\Api\OfficeController@add_office');
 Route::get('offices', 'App\Http\Controllers\Api\OfficeController@offices');
 Route::delete('delete-office/{id}', 'App\Http\Controllers\Api\OfficeController@delete_office');
+Route::put('update_office/{id}', 'App\Http\Controllers\Api\OfficeController@update_office');
 
 
 // History 
