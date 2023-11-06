@@ -20,17 +20,24 @@ class DocumentTypeController extends Controller
     //POST
     public function add_document_type(Request $request){
 
+    date_default_timezone_set('Asia/Manila');
+
+    
+
+  
    	$items = array(
 
         'type_name'    => $request->input('type'),
-        'created'       => '2023-06-19 13:35:39',
+        'created'       =>  Carbon::now()->toDateTimeString(),
     );
+
+
 
     $add = DB::table('document_types')->insert($items);
 
     if ($add) {
 
-             $data = array('message' => 'Add Successfully' , 'response' => true );
+             $data = array('message' => 'Added Successfully' , 'response' => true );
 
         }else {
 
@@ -48,7 +55,22 @@ class DocumentTypeController extends Controller
     public function get_document_types(){
 
     	$items = DB::table('document_types')->get();
-    	return response()->json($items);
+
+        $data = [];
+        foreach ($items as $row) {
+
+            $data[] = array(
+
+
+                    'type_name' => $row->type_name,
+                    'type_id'   => $row->type_id,
+                    'created'   => date('M d Y - h:i a', strtotime($row->created))
+            );
+            // code...
+        }
+
+
+    	return response()->json($data);
 
     }
 
@@ -56,15 +78,29 @@ class DocumentTypeController extends Controller
     public function delete_type(Request $request, $id)
     {
         
-        $delete =  TypeModel::where('type_id', $id)->delete();
+      
 
-                if($delete) {
+        $check = DB::table('documents')->where('doc_type', $id)->count();
 
-                    $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
+        if ($check > 0) {
+             $data = array('message' => 'This type of document is used in other operation' , 'response' => false);
+        }else {
+
+            $delete =  TypeModel::where('type_id', $id)->delete();
+
+            if($delete) {
+
+                    $data = array('message' => 'Deleted Succesfully' , 'response' => true);
 
                 }else {
-                    $data = array('message' => 'Error', 'response' => 'false');
+                    $data = array('message' => 'Error', 'response' => false);
                 }
+
+
+
+        }
+
+     
 
         echo json_encode($data);
     }

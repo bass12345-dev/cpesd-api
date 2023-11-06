@@ -112,6 +112,7 @@ class DocumentController extends Controller
                     'encoded_by'        => $row->first_name .' '.$row->middle_name.' '.$row->last_name.' '.$row->extension,
                     'office'            => $row->office,
                     'document_type'     => $row->type_name,
+                    'type_id'           => $row->type_id,
                     'description'       => $row->document_description,
                     'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? false : true
         );
@@ -577,5 +578,39 @@ class DocumentController extends Controller
        
 
         return response()->json($data);
+      }
+
+
+
+      public function update_document(Request $request, $id){
+
+        $id    = $request->input('t_number');
+
+        $items = array(
+
+                    'document_name'         => $request->input('document_name'),
+                    'doc_type'              => $request->input('document_type'),
+                    'document_description'  => $request->input('description'),
+        );
+
+        $update     = DB::table('documents')
+                    ->where('documents.tracking_number', $id)
+                    ->update($items);
+
+         if($update) {
+
+
+            $data = array('message' => 'updated Succesfully' , 'response' => true );
+                
+
+        }else {
+
+            $data = array('message' => 'Something Wrong/No Changes Apply ' , 'response' => false );
+
+        }
+        
+        
+       return response()->json($data); 
+
       }
 }

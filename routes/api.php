@@ -79,6 +79,8 @@ Route::put('update_type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@
 Route::post('add-document', 'App\Http\Controllers\Api\DocumentController@add_document');
 Route::get('get-my-documents', 'App\Http\Controllers\Api\DocumentController@get_my_documents');
 Route::delete('delete-my-document/{id}', 'App\Http\Controllers\Api\DocumentController@delete_my_document');
+Route::put('update_document/{id}', 'App\Http\Controllers\Api\DocumentController@update_document');
+
 
 
 
