@@ -67,6 +67,8 @@ Route::get('count-doc-t', 'App\Http\Controllers\Api\DocumentController@countmydo
 //Users
 Route::get('get-users', 'App\Http\Controllers\Api\UserController@get_users');
 Route::get('get-user-data', 'App\Http\Controllers\Api\UserController@get_user_data');
+Route::post('register', 'App\Http\Controllers\Api\UserController@register');
+Route::put('remove-user/{id}', 'App\Http\Controllers\Api\UserController@remove_user');
 
 
 //Document types

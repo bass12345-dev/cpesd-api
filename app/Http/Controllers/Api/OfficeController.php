@@ -42,16 +42,26 @@ class OfficeController extends Controller
 
      public function delete_office(Request $request, $id)
     {
-        
-        $delete =  OfficeModel::where('office_id', $id)->delete();
+
+
+        $check = DB::table('documents')->where('offi_id', $id)->count();
+
+        if ($check > 0) {
+             $data = array('message' => 'This type of document is used in other operation' , 'response' => false);
+
+        }else {
+
+
+            $delete =  OfficeModel::where('office_id', $id)->delete();
 
                 if($delete) {
 
-                    $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
+                    $data = array('message' => 'Deleted Succesfully' , 'response' => true );
 
                 }else {
-                    $data = array('message' => 'Error', 'response' => 'false');
+                    $data = array('message' => 'Error', 'response' => false);
                 }
+        }
 
         echo json_encode($data);
     }
