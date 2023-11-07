@@ -66,7 +66,12 @@ class DocumentController extends Controller
 
     function addOne(){
 
-        return DB::table('documents')->where("DATE_FORMAT(documents.created,'%Y') = '".date('Y-m-d', time())."' ")->get()[0]->tracking_number +  1;
+        // return DB::table('documents')->where("DATE_FORMAT(documents.created,'%Y') = '".date('Y-m-d', time())."' ")->get()[0]->tracking_number +  1;
+        // select(DB::raw('DATE_FORMAT(cust.cust_dob, "%d-%b-%Y") as formatted_dob'));
+
+        return DB::table('documents')->select(DB::raw('DATE_FORMAT(documents.created,"%Y") as date_created'))->where('date_created',date('Y', time()))->get()[0]->tracking_number +  1;
+
+      // return DB::table('documents')->where("DATE_FORMAT(documents.created,'%Y') = '".date('Y-m-d', time())."' ")->get()[0]->tracking_number +  1;  
 
     }
 
