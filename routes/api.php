@@ -117,3 +117,6 @@ Route::get('track-document', 'App\Http\Controllers\Api\DocumentController@track_
 //Get
 Route::get('get-all-documents', 'App\Http\Controllers\Api\DocumentController@get_all_documents');
 Route::get('count-docs', 'App\Http\Controllers\Api\DocumentController@countadmindoc_dash');
+
+
+Route::get('get-last', 'App\Http\Controllers\Api\DocumentController@get_last');

@@ -33,13 +33,81 @@ class DocumentController extends Controller
     }
 
 
+    public function get_last(){
+
+        $l = '';
+        $verify = DB::table('documents')->count();
+        if($verify) {
+
+            if(date('Y', time()) > $this->get_created())
+                {      
+                     $l = '001';
+                }else if (date('Y', time()) < $this->get_created()) {
+
+                    $this->l($l);
+                }else if (date('Y', time()) === $this->get_created()){
+                   $this->l($l);
+                }
+        }else {
+             $l = '001';
+        }
+
+       echo json_encode(array('number'=> $l,'y'=> date('Y', time()), 'm' => date('m', time()), 'd' => date('d', time()) ));
+    }
+
+    function l($l){
+
+        $x = $this->addOne();
+        $l = $this->put_zeros($x);
+
+        return $l;
+
+    }
+
+    function addOne(){
+
+        return DB::table('documents')->where("DATE_FORMAT(documents.created,'%Y') = '".date('Y-m-d', time())."' ")->get()[0]->tracking_number +  1;
+
+    }
+
+     function get_created(){
+
+        return date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created));
+
+    }
+
+        function put_zeros($x){
+
+        $l = '';
+           if ($x  < 10) {
+
+                        $l = '00'.$x;
+                      
+                    }else if($x < 100 ) {
+
+                        $l = '0'.$x;
+                       
+
+                    }else {
+
+
+                         $l = $x;
+                        
+                    }
+
+                    return $l;
+
+    }
+
+
+
         //POST
     public function add_document(Request $request){
 
 
     $items = array(
 
-        'tracking_number'   		=> $this->generate_tracking_number(),
+        'tracking_number'   		=> $request->input('tracking_number'),
         'document_name'    			=> $request->input('document_name'),
         'u_id'    					=> $request->input('user_id'),
         'offi_id'    				=> $request->input('office_id'),
