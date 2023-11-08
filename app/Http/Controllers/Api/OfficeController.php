@@ -21,6 +21,8 @@ class OfficeController extends Controller
         'created'       => '2023-06-19 13:35:39',
     );
 
+     if(!empty($items['office'])) {
+
     $add = DB::table('offices')->insert($items);
 
     if ($add) {
@@ -33,6 +35,11 @@ class OfficeController extends Controller
 
 
         }
+
+    }else {
+
+        $data = array('message' => 'Empty Field' , 'response' => false );
+    }
        
        return response()->json($data);
 

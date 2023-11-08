@@ -77,6 +77,13 @@ Route::post('add-document-type', 'App\Http\Controllers\Api\DocumentTypeControlle
 Route::delete('delete-type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@delete_type');
 Route::put('update_type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@update_type');
 
+//Final Actions
+Route::get('get-actions', 'App\Http\Controllers\Api\FinalActionsController@get_final_actions');
+Route::post('add-action', 'App\Http\Controllers\Api\FinalActionsController@add_action');
+Route::delete('delete-action/{id}', 'App\Http\Controllers\Api\FinalActionsController@delete_action');
+Route::put('update_action/{id}', 'App\Http\Controllers\Api\FinalActionsController@update_action');
+
+
 //Documents
 Route::post('add-document', 'App\Http\Controllers\Api\DocumentController@add_document');
 Route::get('get-my-documents', 'App\Http\Controllers\Api\DocumentController@get_my_documents');

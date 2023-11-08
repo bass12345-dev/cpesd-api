@@ -23,7 +23,7 @@ class DocumentTypeController extends Controller
     date_default_timezone_set('Asia/Manila');
 
     
-
+    
   
    	$items = array(
 
@@ -31,7 +31,7 @@ class DocumentTypeController extends Controller
         'created'       =>  Carbon::now()->toDateTimeString(),
     );
 
-
+    if(!empty($items['type_name'])) {
 
     $add = DB::table('document_types')->insert($items);
 
@@ -45,6 +45,12 @@ class DocumentTypeController extends Controller
 
 
         }
+
+    }else {
+
+        $data = array('message' => 'Empty Field' , 'response' => false );
+
+    }
        
        return response()->json($data);
 

@@ -39,17 +39,23 @@ class DocumentController extends Controller
         $verify = DB::table('documents')->count();
         if($verify) {
 
-            if(date('Y', time()) > $this->get_created())
+            if(date('Y', time()) > date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created)))
                 {      
-                     $l = '001';
-                }else if (date('Y', time()) < $this->get_created()) {
+                     $l = date('Ymd', time()).'001';
 
-                    $this->l($l);
-                }else if (date('Y', time()) === $this->get_created()){
-                   $this->l($l);
+                }else if (date('Y', time()) < date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created))) {
+
+                    $l = DB::table('documents')->whereRaw("YEAR(documents.created) = '".date('Y-m-d', time())."' ")->orderBy('created', 'desc')->get()[0]->tracking_number +  1;
+                    // $l = $this->put_zeros($x);
+                    
+                }else if (date('Y', time()) === date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created))){
+
+                    $x = DB::table('documents')->whereRaw("YEAR(documents.created) = '".date('Y', time())."' ")->orderBy('created', 'desc')->get()[0]->tracking_number +  1;
+                    $l = $this->put_zeros($x);
+                   
                 }
         }else {
-             $l = '001';
+             $l = date('Ymd', time()).'001';
         }
 
        echo json_encode(array('number'=> $l,'y'=> date('Y', time()), 'm' => date('m', time()), 'd' => date('d', time()) ));
@@ -66,12 +72,7 @@ class DocumentController extends Controller
 
     function addOne(){
 
-        // return DB::table('documents')->where("DATE_FORMAT(documents.created,'%Y') = '".date('Y-m-d', time())."' ")->get()[0]->tracking_number +  1;
-        // select(DB::raw('DATE_FORMAT(cust.cust_dob, "%d-%b-%Y") as formatted_dob'));
-
-        return DB::table('documents')->select(DB::raw('DATE_FORMAT(documents.created,"%Y") as date_created'))->where('date_created',date('Y', time()))->get()[0]->tracking_number +  1;
-
-      // return DB::table('documents')->where("DATE_FORMAT(documents.created,'%Y') = '".date('Y-m-d', time())."' ")->get()[0]->tracking_number +  1;  
+        return DB::table('documents')->whereRaw("YEAR(documents.created) = '".date('Y', time())."' ")->get()[0]->tracking_number +  1;
 
     }
 
@@ -246,6 +247,7 @@ class DocumentController extends Controller
             $data[] = array(
 
                     'tracking_number'   => $key->tracking_number,
+                    't_'                => $key->tracking_number,
                     'document_name'     => $key->document_name,
                     'type_name'         => $type[0]->type_name,
                     'received_date'     => $key->received_date,
@@ -456,7 +458,7 @@ class DocumentController extends Controller
 
         $update_receive     = DB::table('history')
                     ->where('history.history_id', $id)
-                    ->update(array('status' => 'completed'));
+                    ->update(array('status' => 'completed','final_action_taken' => $request->input('final_action_taken'), 'remarks' => $request->input('remarks1') ));
 
          if($update_receive) {
 
@@ -478,7 +480,7 @@ class DocumentController extends Controller
       public function get_history(){
 
         $where = array('t_number' => $_GET['t']);
-        $history = DB::table('history')->where($where);
+        $history = DB::table('history')->where($where)->leftJoin('final_actions', 'final_actions.action_id', '=', 'history.final_action_taken');
 
         $data = [];
 
@@ -494,6 +496,8 @@ class DocumentController extends Controller
 
             $where2 = array('user_id' => $row->user2);
             $user2  = DB::table('users')->where($where2)->leftJoin('offices', 'offices.office_id', '=', 'users.off_id')->get();
+
+            
 
                 $date1 = new DateTime($row->received_date);
                 $date2 = $row->release_date  == NULL ? new DateTime($row->received_date) :   new DateTime($row->release_date);
@@ -517,7 +521,7 @@ class DocumentController extends Controller
                             'user1'             => $row->release_date != NULL ? $user1[0]->first_name.' '.$user1[0]->middle_name.' '.$user1[0]->last_name : ' - ',
                             'office1'           => $user1[0]->office,
                             'user2'             => $row->user2 != 0 ?  $user2[0]->first_name.' '.$user2[0]->middle_name.' '.$user2[0]->last_name : ' - ',
-                            'office2'            => $row->user2 != 0 ?  $user2[0]->office : ' - ',
+                            'office2'           => $row->user2 != 0 ?  $user2[0]->office : ' - ',
                             'tracking_number'   => $row->t_number,
                             'date_released'     => $row->release_date != NULL ? date('M d Y', strtotime($row->release_date)).' - '.date('h:i a', strtotime($row->release_date)) : ' - ',
                             'date_received'     => $row->received_date != NULL ? date('M d Y', strtotime($row->received_date)).' - '.date('h:i a', strtotime($row->received_date)) : ' - ',
@@ -525,6 +529,8 @@ class DocumentController extends Controller
 
  
                             'duration'          => $row->received_date != NULL ?   $display_month.' '.$display_day.' '.$display_hour.' '.$display_min: ' - ',
+                            'remarks'           => empty($row->remarks) ? 'no remarks' : $row->remarks,
+                            'final_action_taken'=> $row->action_name
                 );
 
         }
