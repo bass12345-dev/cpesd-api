@@ -86,6 +86,15 @@ class FinalActionsController extends Controller
         //Delete
     public function delete_action(Request $request, $id)
     {
+
+
+        $check = DB::table('history')->where('final_action_taken', $id)->count();
+
+        if ($check > 0) {
+            
+             $data = array('message' => 'This action is used in other operation' , 'response' => false);
+
+        }else {
         
             $delete =  FinalActionsModel::where('action_id', $id)->delete();
 
@@ -96,6 +105,8 @@ class FinalActionsController extends Controller
                 }else {
                     $data = array('message' => 'Error', 'response' => false);
                 }
+
+            }
 
         echo json_encode($data);
     }
