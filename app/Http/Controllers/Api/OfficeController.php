@@ -14,12 +14,18 @@ class OfficeController extends Controller
     //POST
     public function add_office(Request $request){
 
+    $now = new \DateTime();
+    $now->setTimezone(new \DateTimezone('Asia/Manila'));
+
    	$items = array(
 
         'office'    	=> $request->input('office'),
         'office_status' => 'active', 
-        'created'       => '2023-06-19 13:35:39',
+        'created'       =>  $now->format('Y-m-d H:i:s')
+
     );
+
+    
 
      if(!empty($items['office'])) {
 
@@ -75,7 +81,25 @@ class OfficeController extends Controller
 
     public function offices(){
 
-    	return response()->json(OfficeModel::all());
+        $items = DB::table('offices')->get();
+
+        $data = [];
+        foreach ($items as $row) {
+
+            $data[] = array(
+
+
+                    'office' => $row->office,
+                    'office_id'   => $row->office_id,
+                    'created'   => date('M d Y - h:i a', strtotime($row->created))
+            );
+            // code...
+        }
+
+
+        return response()->json($data);
+
+    	// return response()->json(OfficeModel::all());
 
     }
 
