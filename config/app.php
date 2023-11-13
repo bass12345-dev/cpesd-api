@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/api/public'),
+    'url' => env('APP_URL', 'http://192.168.1.25/cpesd-api/public'),
 
     'asset_url' => env('ASSET_URL', null),
 

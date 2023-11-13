@@ -31,6 +31,22 @@ class AuthController extends Controller
     	 
     }
 
+
+    public function verify_b_user(Request $request){
+
+      $id = $request->input('id');
+      $key = DB::table('security')->where('us_id', $id);
+
+       if ($key->count() > 0) {
+            return response()->json([ 'response' => true]);
+       }else {
+             return response()->json(['response'=> false]);
+         }
+
+
+
+    }
+
     public function verify_user(Request $request){
 
 
@@ -143,4 +159,7 @@ class AuthController extends Controller
 
 
     }
+
+
+
 }

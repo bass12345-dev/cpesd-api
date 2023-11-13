@@ -31,6 +31,9 @@ Route::post('/change-code', 'App\Http\Controllers\Api\AuthController@change_code
 //Blacklisted
 
 //POST
+
+Route::post('/verify-b-user', 'App\Http\Controllers\Api\AuthController@verify_b_user');
+
 Route::apiResource('person', PersonController::class);
 Route::post('/add', 'App\Http\Controllers\Api\PersonController@add');
 Route::post('/search-query', 'App\Http\Controllers\Api\PersonController@search_query');
