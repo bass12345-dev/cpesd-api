@@ -47,6 +47,37 @@ class AuthController extends Controller
 
     }
 
+
+    public function verify_dt_user(Request $request){
+
+      $id = $request->input('id');
+      $key = DB::table('users')->where('user_id', $id);
+
+       if ($key->count() > 0) {
+            return response()->json([ 'response' => true]);
+       }else {
+             return response()->json(['response'=> false]);
+         }
+         
+
+
+    }
+
+    public function verify_dt_admin(Request $request){
+
+      $id = $request->input('id');
+      $key = DB::table('users')->where('user_id', $id)->where('user_type','admin');
+
+       if ($key->count() > 0) {
+            return response()->json([ 'response' => true]);
+       }else {
+             return response()->json(['response'=> false]);
+         }
+         
+
+
+    }
+
     public function verify_user(Request $request){
 
 

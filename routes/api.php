@@ -62,6 +62,9 @@ Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@d
 
 //Document Tracker
 
+//Checking
+Route::post('/verify-dt-user', 'App\Http\Controllers\Api\AuthController@verify_dt_user');
+Route::post('/verify-dt-admin', 'App\Http\Controllers\Api\AuthController@verify_dt_admin');
 
 //Dashboard
 Route::get('count-doc-t', 'App\Http\Controllers\Api\DocumentController@countmydoc_dash');
