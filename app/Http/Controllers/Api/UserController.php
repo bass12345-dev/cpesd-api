@@ -36,7 +36,7 @@ class UserController extends Controller
 
    
 
-        $row = DB::table('users')->where('user_id', $_GET['id'])->get();
+        $row = DB::table('users')->where('user_id', base64_decode($_GET['id']))->get();
 
         $items = array(
 

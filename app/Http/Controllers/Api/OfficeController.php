@@ -89,9 +89,9 @@ class OfficeController extends Controller
             $data[] = array(
 
 
-                    'office' => $row->office,
-                    'office_id'   => $row->office_id,
-                    'created'   => date('M d Y - h:i a', strtotime($row->created))
+                    'office'        => $row->office,
+                    'office_id'     => $row->office_id,
+                    'created'       => date('M d Y - h:i a', strtotime($row->created))
             );
             // code...
         }

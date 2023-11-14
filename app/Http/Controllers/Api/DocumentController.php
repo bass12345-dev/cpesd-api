@@ -7,7 +7,7 @@ use App\Models\DocumentModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use DateTime;
+
 
 class DocumentController extends Controller
 {
@@ -23,7 +23,7 @@ class DocumentController extends Controller
         // echo $_GET['id'];
         $data = array(
 
-                'count_documents'    => DB::table('documents')->where('u_id', $_GET['id'])->count(),
+                'count_documents'    => DB::table('documents')->where('u_id', base64_decode($_GET['id']))->count(),
                 'incoming'          => DB::table('history')->where('user2', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count(),
                 'received'          => DB::table('history')->where('user2', $_GET['id'])->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->count(),
                 'forwarded'         => DB::table('history')->where('user1', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count()
@@ -110,19 +110,23 @@ class DocumentController extends Controller
         //POST
     public function add_document(Request $request){
 
-
+     $now = new \DateTime();
+    $now->setTimezone(new \DateTimezone('Asia/Manila'));
     $items = array(
 
         'tracking_number'   		=> $request->input('tracking_number'),
         'document_name'    			=> $request->input('document_name'),
-        'u_id'    					=> $request->input('user_id'),
+        'u_id'    					=> base64_decode($request->input('user_id')),
         'offi_id'    				=> $request->input('office_id'),
         'doc_type'    				=> $request->input('document_type'),
         'document_description'    	=> $request->input('description'),
-        'created'       	        => date('Y-m-d H:i:s', time()),
+        'created'       	        =>  $now->format('Y-m-d H:i:s')
     );
 
-    $add = DB::table('documents')->insert($items);
+
+    // $add = DB::table('documents')->insert($items);
+
+
 
     if ($add) {
 
@@ -140,7 +144,7 @@ class DocumentController extends Controller
                                 'office2'          =>  $row->offi_id,
                                 'status'           =>  'received',
                                 'received_status'  =>  '1',
-                                'received_date'    => date('Y-m-d H:i:s', time()),
+                                'received_date'    => $now->format('Y-m-d H:i:s'),
                                 'release_date'     => NULL,  
                                 'release_status'   => NULL,
                                 'release_date'     => NULL, 
@@ -208,7 +212,13 @@ class DocumentController extends Controller
 
     public function get_my_documents(){
 
-        $rows = DB::table('documents')->where('u_id', $_GET['id'])->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->orderBy('documents.document_id', 'desc')->get();
+        $rows = DB::table('documents as documents')->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')->select('documents.created as d_created','documents.tracking_number as tracking_number', 'documents.document_name as document_name', 'documents.document_id as document_id', 'document_types.type_name')->where('u_id', base64_decode($_GET['id']))
+
+        
+
+        ->orderBy('documents.document_id', 'desc')->get();
+
+       
         $data = [];
         foreach ($rows as $value => $key) {
 
@@ -219,7 +229,7 @@ class DocumentController extends Controller
                     'tracking_number'   => $key->tracking_number,
                     'document_name'     => $key->document_name,
                     'type_name'         => $key->type_name,
-                    'created'           => $key->created,
+                    'created'           => $key->d_created,
                     'a'                 => $delete_button,
                     'document_id'       => $key->document_id
             );
@@ -237,7 +247,7 @@ class DocumentController extends Controller
 
 
         $data = [];
-       $rows = DB::table('history')->where('user2', $_GET['id'])->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->get();
+       $rows = DB::table('history')->where('user2', base64_decode($_GET['id']))->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->get();
 
 
        foreach ($rows as $value => $key) {
@@ -365,7 +375,7 @@ class DocumentController extends Controller
 
 
         $data = [];
-       $rows = DB::table('history')->where('user1', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->orderBy('history.history_id', 'desc')->get();
+       $rows = DB::table('history')->where('user1', base64_decode($_GET['id']))->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->orderBy('history.history_id', 'desc')->get();
 
 
        foreach ($rows as $value => $key) {
@@ -397,7 +407,7 @@ class DocumentController extends Controller
       public function get_incoming_documents(){
 
         $data = [];
-       $rows = DB::table('history')->where('user2', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user1')->get();
+       $rows = DB::table('history')->where('user2', base64_decode($_GET['id']))->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user1')->get();
 
 
        foreach ($rows as $value => $key) {
