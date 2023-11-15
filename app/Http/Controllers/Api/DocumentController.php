@@ -7,6 +7,7 @@ use App\Models\DocumentModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 
 class DocumentController extends Controller
@@ -124,7 +125,7 @@ class DocumentController extends Controller
     );
 
 
-    // $add = DB::table('documents')->insert($items);
+    $add = DB::table('documents')->insert($items);
 
 
 
@@ -212,11 +213,7 @@ class DocumentController extends Controller
 
     public function get_my_documents(){
 
-        $rows = DB::table('documents as documents')->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')->select('documents.created as d_created','documents.tracking_number as tracking_number', 'documents.document_name as document_name', 'documents.document_id as document_id', 'document_types.type_name')->where('u_id', base64_decode($_GET['id']))
-
-        
-
-        ->orderBy('documents.document_id', 'desc')->get();
+        $rows = DB::table('documents as documents')->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')->select('documents.created as d_created','documents.tracking_number as tracking_number', 'documents.document_name as document_name', 'documents.document_id as document_id', 'document_types.type_name')->where('u_id', base64_decode($_GET['id']))->orderBy('documents.document_id', 'desc')->get();
 
        
         $data = [];
@@ -229,7 +226,7 @@ class DocumentController extends Controller
                     'tracking_number'   => $key->tracking_number,
                     'document_name'     => $key->document_name,
                     'type_name'         => $key->type_name,
-                    'created'           => $key->d_created,
+                    'created'           => date('M d Y - h:i a', strtotime($key->d_created)),
                     'a'                 => $delete_button,
                     'document_id'       => $key->document_id
             );
@@ -247,20 +244,35 @@ class DocumentController extends Controller
 
 
         $data = [];
-       $rows = DB::table('history')->where('user2', base64_decode($_GET['id']))->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->get();
+
+        $rows = DB::table('history as history')
+            ->leftJoin('documents as documents', 'documents.tracking_number', '=', 'history.t_number')
+            ->leftJoin('users as users', 'users.user_id', '=', 'history.user2')
+            ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+            ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
+                     'documents.document_id as document_id','users.user_type as user_type',
+                     'document_types.type_name as type_name', 'history.received_date as received_date',
+                     'history.history_id as history_id','history.remarks as remarks')
+            ->where('user2', base64_decode($_GET['id']))
+            ->where('received_status', 1)
+            ->where('release_status',NULL )
+            ->where('status' , 'received')
+            ->orderBy('received_date', 'desc')->get();
+
+
+       // $rows = DB::table('history')->where('user2', base64_decode($_GET['id']))->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->get();
 
 
        foreach ($rows as $value => $key) {
 
-            $type = DB::table('document_types')->where('type_id', $key->doc_type)->get();
-
+         
             $data[] = array(
 
                     'tracking_number'   => $key->tracking_number,
                     't_'                => $key->tracking_number,
                     'document_name'     => $key->document_name,
-                    'type_name'         => $type[0]->type_name,
-                    'received_date'     => $key->received_date,
+                    'type_name'         => $key->type_name,
+                    'received_date'     => date('M d Y - h:i a', strtotime($key->received_date)) ,
                     'history_id'        => $key->history_id,
                     'document_id'       => $key->document_id,
                     'a'                 => $key->user_type == 'admin' ? false : true,
@@ -374,22 +386,39 @@ class DocumentController extends Controller
      public function get_forward_documents(){
 
 
-        $data = [];
-       $rows = DB::table('history')->where('user1', base64_decode($_GET['id']))->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->orderBy('history.history_id', 'desc')->get();
+       $data = [];
+
+        $rows = DB::table('history as history')
+            ->leftJoin('documents as documents', 'documents.tracking_number', '=', 'history.t_number')
+            ->leftJoin('users as users', 'users.user_id', '=', 'history.user2')
+            ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+            ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
+                     'documents.document_id as document_id','users.user_type as user_type',
+                     'document_types.type_name as type_name', 'history.release_date as release_date',
+                     'history.history_id as history_id','history.remarks as remarks',
+                     DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
+            ->where('user1', base64_decode($_GET['id']))
+            ->where('received_status', NULL)
+            ->where('status', 'torec')
+            ->where('release_status',NULL )
+            ->orderBy('received_date', 'desc')->get();
+
+
+       // $rows = DB::table('history')->where('user1', base64_decode($_GET['id']))->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->orderBy('history.history_id', 'desc')->get();
 
 
        foreach ($rows as $value => $key) {
 
-            $type               = DB::table('document_types')->where('type_id', $key->doc_type)->get();
+
         
 
             $data[] = array(
 
                     'tracking_number'   => $key->tracking_number,
                     'document_name'     => $key->document_name,
-                    'type_name'         => $type[0]->type_name,
-                    'released_date'     => $key->release_date,
-                    'forwarded_to'      => $key->first_name .' '.$key->middle_name.' '.$key->last_name.' '.$key->extension,
+                    'type_name'         => $key->type_name,
+                    'released_date'     => date('M d Y - h:i a', strtotime($key->release_date)) ,
+                    'forwarded_to'      => $key->name,
                     'document_id'       => $key->document_id,
                     'remarks'           => $key->remarks,
             );
@@ -407,21 +436,35 @@ class DocumentController extends Controller
       public function get_incoming_documents(){
 
         $data = [];
-       $rows = DB::table('history')->where('user2', base64_decode($_GET['id']))->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user1')->get();
+
+        $rows = DB::table('history as history')
+            ->leftJoin('documents as documents', 'documents.tracking_number', '=', 'history.t_number')
+            ->leftJoin('users as users', 'users.user_id', '=', 'history.user1')
+            ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+            ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
+                     'documents.document_id as document_id','users.user_type as user_type',
+                     'document_types.type_name as type_name', 'history.release_date as release_date',
+                     'history.history_id as history_id','history.remarks as remarks',
+                     DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
+            ->where('user2', base64_decode($_GET['id']))
+            ->where('received_status', NULL)
+            ->where('status', 'torec')
+            ->where('release_status',NULL )
+            ->orderBy('received_date', 'desc')->get();
+       // $rows = DB::table('history')->where('user2', base64_decode($_GET['id']))->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user1')->get();
 
 
        foreach ($rows as $value => $key) {
 
-            $type               = DB::table('document_types')->where('type_id', $key->doc_type)->get();
-        
+          
 
             $data[] = array(
 
                     'tracking_number'   => $key->tracking_number,
                     'document_name'     => $key->document_name,
-                    'type_name'         => $type[0]->type_name,
-                    'released_date'     => $key->release_date,
-                    'from'              => $key->first_name .' '.$key->middle_name.' '.$key->last_name.' '.$key->extension,
+                    'type_name'         => $key->type_name,
+                    'released_date'     => date('M d Y - h:i a', strtotime($key->release_date)) ,
+                    'from'              => $key->name,
                     'document_id'       => $key->document_id,
                     'history_id'        => $key->history_id,
                     'remarks'           => $key->remarks,
@@ -438,11 +481,14 @@ class DocumentController extends Controller
 
         // print_r($request->all());
 
+         $now = new \DateTime();
+        $now->setTimezone(new \DateTimezone('Asia/Manila'));
+
         $id    = $request->input('id');
 
         $update_receive     = DB::table('history')
                     ->where('history.history_id', $id)
-                    ->update(array('status' => 'received','received_status'=> 1, 'received_date' => date('Y-m-d H:i:s', time())));
+                    ->update(array('status' => 'received','received_status'=> 1, 'received_date' => $now->format('Y-m-d H:i:s')));
 
          if($update_receive) {
 
@@ -643,7 +689,15 @@ class DocumentController extends Controller
 
       public function get_all_documents(){
 
-          $rows = DB::table('documents')->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users','users.user_id','=','documents.u_id',)->orderBy('documents.document_id', 'desc')->get();
+          $rows = DB::table('documents as documents')
+                    ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+                    ->leftJoin('users as users', 'users.user_id', '=', 'documents.u_id')
+                    ->select('documents.created as created','documents.tracking_number as tracking_number', 
+                             'documents.document_name as   document_name', 'documents.document_id as document_id', 
+                             'document_types.type_name',  DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
+                    ->orderBy('documents.document_id', 'desc')->get();
+
+          // $rows = DB::table('documents')->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users','users.user_id','=','documents.u_id',)->orderBy('documents.document_id', 'desc')->get();
         $data = [];
         foreach ($rows as $value => $key) {
 
@@ -658,7 +712,7 @@ class DocumentController extends Controller
                     'created'           => $key->created,
                     'a'                 => $delete_button,
                     'document_id'       => $key->document_id,
-                    'created_by'        => $key->first_name.' '.$key->middle_name.' '.$key->last_name.' '.$key->extension
+                    'created_by'        => $key->name
             );
         }
 

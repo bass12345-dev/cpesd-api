@@ -44,15 +44,13 @@ class FinalActionsController extends Controller
      //POST
     public function add_action(Request $request){
 
-    date_default_timezone_set('Asia/Manila');
-
+     $now = new \DateTime();
+    $now->setTimezone(new \DateTimezone('Asia/Manila'));
     
-
-  
     $items = array(
 
         'action_name'    => $request->input('type'),
-        'created'       =>  Carbon::now()->toDateTimeString(),
+        'created'       =>  $now->format('Y-m-d H:i:s')
     );
 
 
