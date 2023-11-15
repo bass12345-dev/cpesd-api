@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/api/public'),
+    'url' => env('APP_URL', 'http://localhost/cpesd-api/public'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -119,7 +119,8 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    // 'key' => env('APP_KEY'),
+    'key' => '29F5F7BE86CD65C7FFCB96E85D97A',
 
     'cipher' => 'AES-256-CBC',
 
