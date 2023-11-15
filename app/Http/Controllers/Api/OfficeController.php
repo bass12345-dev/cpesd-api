@@ -132,6 +132,10 @@ class OfficeController extends Controller
 
     public function update_office(Request $request, $id){
 
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
+
 
     $items = array(
 
@@ -154,6 +158,12 @@ class OfficeController extends Controller
 
 
         }
+
+        }else {
+
+         $data = array('message' => 'Request Unauthorized' , 'response' => false );
+
+    }
        
        return response()->json($data);
 

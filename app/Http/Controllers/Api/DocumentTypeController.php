@@ -12,13 +12,21 @@ class DocumentTypeController extends Controller
 {
     
     public $type;
+    public $app_key;
     public function __construct()
     {
         $this->type   = new TypeModel;
+        $this->app_key   = config('app.key');
     }
+
 
     //POST
     public function add_document_type(Request $request){
+
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
 
     $now = new \DateTime();
     $now->setTimezone(new \DateTimezone('Asia/Manila'));
@@ -49,6 +57,11 @@ class DocumentTypeController extends Controller
         $data = array('message' => 'Empty Field' , 'response' => false );
 
     }
+
+    }else {
+
+             $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
        
        return response()->json($data);
 
@@ -82,7 +95,9 @@ class DocumentTypeController extends Controller
     public function delete_type(Request $request, $id)
     {
         
-      
+        $authorization = $request->header('Authorization');
+
+         if ($authorization == $this->app_key) {
 
         $check = DB::table('documents')->where('doc_type', $id)->count();
 
@@ -100,8 +115,11 @@ class DocumentTypeController extends Controller
                     $data = array('message' => 'Error', 'response' => false);
                 }
 
+        }
 
+         }else {
 
+             $data = array('message' => 'Request Unauthorized' , 'response' => false );
         }
 
      
@@ -112,6 +130,11 @@ class DocumentTypeController extends Controller
 
 
     public function update_type(Request $request, $id){
+
+    $authorization = $request->header('Authorization');
+
+
+    if ($authorization == $this->app_key) {
 
 
     $items = array(
@@ -134,6 +157,11 @@ class DocumentTypeController extends Controller
             $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
 
 
+        }
+
+    }else {
+
+             $data = array('message' => 'Request Unauthorized' , 'response' => false );
         }
        
        return response()->json($data);

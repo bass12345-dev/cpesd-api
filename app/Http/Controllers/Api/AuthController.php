@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Route;
 use App\Models\UserModel;
 class AuthController extends Controller
 {
+
+    public $app_key;
+    public function __construct()
+    {
+        $this->app_key   = config('app.key');
+    }
     public function verify_code(Request $request){
 
 
@@ -80,6 +86,10 @@ class AuthController extends Controller
 
     public function verify_user(Request $request){
 
+         $authorization = $request->header('Authorization');
+
+         if ($authorization == $this->app_key) {
+
 
             $username = $request->input('username');
             $password = $request->input('password');
@@ -109,11 +119,21 @@ class AuthController extends Controller
 
                 return response()->json(['message'=>'invalid Username.','response'=> false]);
             }
+
+              }else {
+
+             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
+        }
+   
    
     }
 
 
     public function verify_admin(Request $request){
+
+         $authorization = $request->header('Authorization');
+
+         if ($authorization == $this->app_key) {
 
 
             $username = $request->input('username');
@@ -144,6 +164,11 @@ class AuthController extends Controller
 
                 return response()->json(['message'=>'invalid Username.','response'=> false]);
             }
+
+             }else {
+
+             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
+        }
    
     }
 

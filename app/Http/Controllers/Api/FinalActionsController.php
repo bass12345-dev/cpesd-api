@@ -12,12 +12,17 @@ class FinalActionsController extends Controller
 {
 
     public $actions;
+    public $app_key;
     public function __construct()
     {
         $this->actions   = new FinalActionsModel;
+        $this->app_key   = config('app.key');
     }
     //GET
-    public function get_final_actions(){
+    public function get_final_actions(Request $request){
+
+
+     
 
         $items = DB::table('final_actions')->get();
 
@@ -34,8 +39,12 @@ class FinalActionsController extends Controller
             // code...
         }
 
+         return response()->json($data);
 
-        return response()->json($data);
+       
+
+
+       
 
     }
 
@@ -44,7 +53,11 @@ class FinalActionsController extends Controller
      //POST
     public function add_action(Request $request){
 
-     $now = new \DateTime();
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
+
+    $now = new \DateTime();
     $now->setTimezone(new \DateTimezone('Asia/Manila'));
     
     $items = array(
@@ -74,6 +87,12 @@ class FinalActionsController extends Controller
         $data = array('message' => 'Empty Field' , 'response' => false );
 
     }
+
+
+    }else {
+
+             $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
        
        return response()->json($data);
 
@@ -84,6 +103,10 @@ class FinalActionsController extends Controller
         //Delete
     public function delete_action(Request $request, $id)
     {
+
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
 
 
         $check = DB::table('history')->where('final_action_taken', $id)->count();
@@ -106,11 +129,22 @@ class FinalActionsController extends Controller
 
             }
 
+
+         }else {
+
+             $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
+
         echo json_encode($data);
     }
 
 
     public function update_action(Request $request, $id){
+
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
 
 
     $items = array(
@@ -133,6 +167,12 @@ class FinalActionsController extends Controller
             $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
 
 
+        }
+
+
+         }else {
+
+             $data = array('message' => 'Request Unauthorized' , 'response' => false );
         }
        
        return response()->json($data);
