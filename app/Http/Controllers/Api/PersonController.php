@@ -19,10 +19,12 @@ class PersonController extends Controller
 
     public $person;
     public $record;
+    public $app_key;
     public function __construct()
     {
         $this->person   = new PersonModel;
         $this->record   = new RecordModel;
+        $this->app_key   = config('app.key');
     }
 
     public function index()
@@ -41,9 +43,20 @@ class PersonController extends Controller
 
     public function get_records(){
 
-         $items = [];
+        $data = [];
         $items = DB::table('records')->where('p_id', $_GET['id'])->get();
-        return response()->json($items);
+        foreach ($items as $row) {
+            
+            $data[] = array(
+
+                    'created_at'            => date('M d Y - h:i a', strtotime($row->created_at)),
+                    'record_description'    => $row->record_description,
+                    'p_id'                  => $row->p_id,
+                    'record_id'             => $row->record_id
+
+            );
+        }
+        return response()->json($data);
 
     }
 
@@ -68,6 +81,9 @@ class PersonController extends Controller
     public function add(Request $request)
     {
       
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
         
      $items = array(
 
@@ -94,6 +110,11 @@ class PersonController extends Controller
 
 
         }
+
+    }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    }
        
        return response()->json($data);
 
@@ -157,6 +178,10 @@ class PersonController extends Controller
      public function remove(Request $request, $id)
     {
 
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
+
         $update = DB::table('persons')
                     ->where('persons.person_id', $id)
                     ->update(array('status'=> 'inactive'));
@@ -172,12 +197,21 @@ class PersonController extends Controller
 
         }
        
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
+       
        return response()->json($data);
     }
 
 
          public function set_active(Request $request, $id)
     {
+
+         $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
 
         $update = DB::table('persons')
                     ->where('person_id', $id)
@@ -194,12 +228,21 @@ class PersonController extends Controller
 
         }
        
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
+       
        return response()->json($data);
     }
 
 
     public function delete(Request $request, $id)
     {
+
+         $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
         
         $delete =  PersonModel::where('person_id', $id)->delete();
                 if($delete) {
@@ -210,12 +253,21 @@ class PersonController extends Controller
                     $data = array('message' => 'Error', 'response' => 'false');
                 }
 
-        echo json_encode($data);
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
+       
+       return response()->json($data);
     }
 
 
     public function delete_record(Request $request, $id)
     {
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
         
         $delete =  RecordModel::where('record_id', $id)->delete();
                 if($delete) {
@@ -226,7 +278,12 @@ class PersonController extends Controller
                     $data = array('message' => 'Error', 'response' => 'false');
                 }
 
-        echo json_encode($data);
+         }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
+       
+       return response()->json($data);
     }
 
     public function person_info(){
@@ -242,11 +299,20 @@ class PersonController extends Controller
     public function add_record(Request $request, $id){
 
 
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
+
+    $now = new \DateTime();
+    $now->setTimezone(new \DateTimezone('Asia/Manila'));
+
+
     $items = array(
 
         'record_description'  => $request->input('record_description'),
         'p_id'                => $id,
-        'created_at'          => '2023-06-19 13:35:39',
+        'created_at'          => $now->format('Y-m-d H:i:s')
         
     );
 
@@ -254,7 +320,7 @@ class PersonController extends Controller
 
       if ($add) {
 
-             $data = array('message' => 'Add Successfully' , 'response' => true );
+             $data = array('message' => 'Added Successfully' , 'response' => true );
 
         }else {
 
@@ -263,6 +329,11 @@ class PersonController extends Controller
 
         }
        
+    }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    }
+       
        return response()->json($data);
 
     }
@@ -270,6 +341,10 @@ class PersonController extends Controller
 
     public function update_record(Request $request, $id){
 
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
 
     $items = array(
 
@@ -293,12 +368,21 @@ class PersonController extends Controller
 
         }
        
+       }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
+       
        return response()->json($data);
 
     }
 
 
     public function update_person_info(Request $request, $id){
+
+     $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
 
      $items = array(
 
@@ -324,6 +408,11 @@ class PersonController extends Controller
             $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
 
 
+        }
+       
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
         }
        
        return response()->json($data);
@@ -353,7 +442,7 @@ class PersonController extends Controller
     {
       
 
-
+    
 
     $search = $request->input('first_name').' '.$request->input('last_name');
 
@@ -361,6 +450,7 @@ class PersonController extends Controller
                        ->where(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$search."%")
                        ->get();
     return json_encode($users);
+
 
 
     }

@@ -17,6 +17,9 @@ class AuthController extends Controller
     }
     public function verify_code(Request $request){
 
+         $authorization = $request->header('Authorization');
+
+         if ($authorization == $this->app_key) {
 
     	 $key = DB::table('security')->where('us_id', 8);
     	 
@@ -34,6 +37,12 @@ class AuthController extends Controller
     	 }else {
              return response()->json(['message'=>'ID not found Please Contact Developer','response'=> false]);
          }
+
+
+       }else {
+
+             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
+        }
     	 
     }
 
@@ -174,17 +183,26 @@ class AuthController extends Controller
 
     public function change_code(Request $request){
 
-        $key = DB::table('security')->where('us_id', $_GET['id']);
+
+        $authorization = $request->header('Authorization');
+
+         if ($authorization == $this->app_key) {
+
+        $id =  base64_decode($_GET['id']);
+        $new = $request->input('new');
+        $old = $request->input('old');
+
+        $key = DB::table('security')->where('us_id', $id);
 
         if ($key->count() > 0) {
 
-            $verify_code = password_verify($request->input('old'),$key->get()[0]->security_code); 
+            $verify_code = password_verify($old,$key->get()[0]->security_code); 
 
             if ($verify_code) {
 
                 $update     = DB::table('security')
-                    ->where('us_id', $_GET['id'])
-                    ->update(array('security_code'=> password_hash($request->input('new'), PASSWORD_DEFAULT) ));
+                    ->where('us_id', $id)
+                    ->update(array('security_code'=> password_hash($new, PASSWORD_DEFAULT) ));
 
 
                  if ($update) {
@@ -211,6 +229,12 @@ class AuthController extends Controller
              return response()->json(['message'=>'ID not found','response'=> false]);
 
 
+        }
+
+
+         }else {
+
+             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
         }
 
 
