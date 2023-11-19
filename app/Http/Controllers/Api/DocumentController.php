@@ -300,34 +300,109 @@ class DocumentController extends Controller
 
 
      //Delete
-    public function delete_my_document(Request $request, $id)
+    public function delete_my_document(Request $request)
     {
 
 
-    $authorization = $request->header('Authorization');
+        $id = $request->input('id');
 
-    if ($authorization == $this->app_key) {
-       
-        $delete =  DocumentModel::where('document_id', $id);
-        $tracking_number =  $delete->get()[0]->tracking_number;
+
+        if (is_array($id)) {
+
+            foreach ($id as $row) {
+
+                $delete =  DocumentModel::where('document_id', $row);
+                $tracking_number =  $delete->get()[0]->tracking_number;
 
                 if($delete->delete()) {
-
-                    DB::table('history')->where('t_number', $tracking_number)->delete();
-
-                    $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
-
-                }else {
-                    $data = array('message' => 'Error', 'response' => 'false');
+                DB::table('history')->where('t_number', $tracking_number)->delete();
                 }
 
-         }else {
+            }
 
-        $data = array('message' => 'Request Unauthorized' , 'response' => false );
-    
+            $data = array('message' => 'Deleted Succesfully' , 'response' => true );
+           
+        }else {
+
+            $delete =  DocumentModel::where('document_id', $id);
+            $tracking_number =  $delete->get()[0]->tracking_number;
+
+            if($delete->delete()) {
+
+                DB::table('history')->where('t_number', $tracking_number)->delete();
+                $data = array('message' => 'Deleted Succesfully' , 'response' => true );
+
+            }else {
+                
+                    $data = array('message' => 'Error', 'response' => false);
+            }
+
+            
+
+           
         }
+
+        return response()->json($data);
+
+
+
+    // $authorization = $request->header('Authorization');
+
+    // if ($authorization == $this->app_key) {
+
+    //         if (is_array($id)) {
+
+    //             if(count($id) > 1) {
+
+    //                 foreach ($id as $row) {
+
+    //                     $delete =  DocumentModel::where('document_id', $id);
+    //                     $tracking_number =  $delete->get()[0]->tracking_number;
+
+    //                     if($delete->delete()) {
+
+    //                         DB::table('history')->where('t_number', $tracking_number)->delete();
+    //                     }
+    //                 }
+
+    //                   $data = array('message' => 'Deleted Succesfully' , 'response' => true );
+
+
+    //             }else {
+
+
+    //                 $delete =  DocumentModel::where('document_id', $id);
+    //                 $tracking_number =  $delete->get()[0]->tracking_number;
+
+    //                 if($delete->delete()) {
+
+    //                     DB::table('history')->where('t_number', $tracking_number)->delete();
+
+    //                     $data = array('message' => 'Deleted Succesfully' , 'response' => true );
+
+    //                 }else {
+    //                     $data = array('message' => 'Error', 'response' => false);
+    //                 }
+
+
+    //             }
+
+
+    //         }else {
+
+    //              $data = array('message' => 'Something Wrong' , 'response' => false );
+                
+    //         }
        
-       return response()->json($data);
+        
+
+    //      }else {
+
+    //     $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    
+    //     }
+       
+    //    return response()->json($data);
     }
 
     public function forward_document(Request $request){
