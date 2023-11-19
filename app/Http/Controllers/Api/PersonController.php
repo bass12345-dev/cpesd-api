@@ -62,7 +62,31 @@ class PersonController extends Controller
 
     public function data_per_year(){
 
-        
+        $year =  $_GET['year'];
+
+        $months = array();
+        $active = array();
+
+        for ($m = 1; $m <= 12; $m++) {
+
+             $count = DB::table('persons')
+             ->whereMonth('created_at', $m)
+             ->whereYear('created_at', $year)
+             ->where('status', 'active')
+             ->count();
+            array_push($active, $count);
+
+
+             $month =  date('M', mktime(0, 0, 0, $m, 1));
+            array_push($months, $month);
+
+        }
+
+
+         $data['label'] = $months;
+         $data['active'] = $active;
+
+         return response()->json($data);
     }
 
 
