@@ -12,9 +12,11 @@ class UserController extends Controller
 {
     
     public $user;
+    public $app_key;
     public function __construct()
     {
         $this->user   = new UserModel;
+        $this->app_key   = config('app.key');
     }
 
     public function get_users(){
@@ -58,7 +60,12 @@ class UserController extends Controller
     public function register(Request $request){
 
 
+        $authorization = $request->header('Authorization');
 
+        if ($authorization == $this->app_key) {
+
+         $now = new \DateTime();
+        $now->setTimezone(new \DateTimezone('Asia/Manila'));
         $items = array(
                 'first_name'        => $request->input('first_name'),   
                 'last_name'         => $request->input('last_name'),   
@@ -70,7 +77,7 @@ class UserController extends Controller
                 'username'          => $request->input('user_name'),
                 'password'          => $request->input('password'),
                 'off_id'            => $request->input('office'),
-                'user_created'      => date('Y-m-d H:i:s', time()),
+                'user_created'      => $now->format('Y-m-d H:i:s'),
                 'user_status'       => 'active',
                 'work_status'       => NULL,
                 'user_type'         => 'user'
@@ -102,7 +109,12 @@ class UserController extends Controller
 
  
 
-        echo json_encode($data);
+           }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    }
+       
+       return response()->json($data);
 
     }
 

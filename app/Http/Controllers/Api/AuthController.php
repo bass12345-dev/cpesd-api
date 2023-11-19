@@ -49,6 +49,11 @@ class AuthController extends Controller
 
     public function verify_b_user(Request $request){
 
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
+
       $id = $request->input('id');
       $key = DB::table('security')->where('us_id', $id);
 
@@ -58,12 +63,21 @@ class AuthController extends Controller
              return response()->json(['response'=> false]);
          }
 
+           }else {
+             return response()->json(['response'=> false]);
+        }
+       
+
 
 
     }
 
 
     public function verify_dt_user(Request $request){
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
 
       $id = $request->input('id');
       $key = DB::table('users')->where('user_id', $id);
@@ -74,6 +88,9 @@ class AuthController extends Controller
              return response()->json(['response'=> false]);
          }
          
+          }else {
+             return response()->json(['response'=> false]);
+        }
 
 
     }

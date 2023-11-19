@@ -13,9 +13,11 @@ use DateTime;
 class DocumentController extends Controller
 {
     public $user;
+    public $app_key;
     public function __construct()
     {
         $this->document   = new DocumentModel;
+        $this->app_key   = config('app.key');
     }
 
 
@@ -111,6 +113,11 @@ class DocumentController extends Controller
         //POST
     public function add_document(Request $request){
 
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
+
      $now = new \DateTime();
     $now->setTimezone(new \DateTimezone('Asia/Manila'));
     $items = array(
@@ -171,6 +178,12 @@ class DocumentController extends Controller
 
 
         }
+       
+       }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    
+    }
        
        return response()->json($data);
 
@@ -289,6 +302,11 @@ class DocumentController extends Controller
      //Delete
     public function delete_my_document(Request $request, $id)
     {
+
+
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
        
         $delete =  DocumentModel::where('document_id', $id);
         $tracking_number =  $delete->get()[0]->tracking_number;
@@ -303,12 +321,22 @@ class DocumentController extends Controller
                     $data = array('message' => 'Error', 'response' => 'false');
                 }
 
-        echo json_encode($data);
+         }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    
+        }
+       
+       return response()->json($data);
     }
 
     public function forward_document(Request $request){
 
- 
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
+
+
         //update history release_status to 1
         $id                 = $request->input('history_id');
         $tracking_number    = $request->input('tracking_number');
@@ -378,7 +406,13 @@ class DocumentController extends Controller
         }
         
         
-       return response()->json($data); 
+      }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    
+        }
+       
+       return response()->json($data);
     }
 
 
@@ -481,6 +515,10 @@ class DocumentController extends Controller
 
         // print_r($request->all());
 
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
+
          $now = new \DateTime();
         $now->setTimezone(new \DateTimezone('Asia/Manila'));
 
@@ -503,12 +541,22 @@ class DocumentController extends Controller
         }
         
         
-       return response()->json($data); 
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    
+        }
+       
+       return response()->json($data);
 
       }
 
 
       public function complete_document(Request $request){
+
+         $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
 
         $id    = $request->input('id');
 
@@ -529,7 +577,13 @@ class DocumentController extends Controller
         }
         
         
-       return response()->json($data); 
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    
+        }
+       
+       return response()->json($data);
 
       }
 
@@ -699,13 +753,14 @@ class DocumentController extends Controller
 
           // $rows = DB::table('documents')->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users','users.user_id','=','documents.u_id',)->orderBy('documents.document_id', 'desc')->get();
         $data = [];
+        $i = 1;
         foreach ($rows as $value => $key) {
 
             $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
 
 
             $data[] = array(
-
+                    'number'            => $i++,
                     'tracking_number'   => $key->tracking_number,
                     'document_name'     => $key->document_name,
                     'type_name'         => $key->type_name,
@@ -726,6 +781,11 @@ class DocumentController extends Controller
 
 
       public function update_document(Request $request, $id){
+
+
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
 
         $id    = $request->input('t_number');
 
@@ -753,7 +813,13 @@ class DocumentController extends Controller
         }
         
         
-       return response()->json($data); 
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    
+        }
+       
+       return response()->json($data);
 
       }
 }

@@ -84,6 +84,9 @@ class PersonController extends Controller
     $authorization = $request->header('Authorization');
 
     if ($authorization == $this->app_key) {
+
+    $now = new \DateTime();
+    $now->setTimezone(new \DateTimezone('Asia/Manila'));
         
      $items = array(
 
@@ -94,7 +97,7 @@ class PersonController extends Controller
         'phone_number'               => $request->input('phoneNumber'),
         'address'                    => $request->input('address'),
         'email_address'              => $request->input('emailAddress'),
-        'created_at'                 => '2023-06-19 13:35:39',
+        'created_at'                 => $now->format('Y-m-d H:i:s'),
         'status'                     => 'active'
     );
 
