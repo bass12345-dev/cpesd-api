@@ -343,66 +343,6 @@ class DocumentController extends Controller
         }
 
         return response()->json($data);
-
-
-
-    // $authorization = $request->header('Authorization');
-
-    // if ($authorization == $this->app_key) {
-
-    //         if (is_array($id)) {
-
-    //             if(count($id) > 1) {
-
-    //                 foreach ($id as $row) {
-
-    //                     $delete =  DocumentModel::where('document_id', $id);
-    //                     $tracking_number =  $delete->get()[0]->tracking_number;
-
-    //                     if($delete->delete()) {
-
-    //                         DB::table('history')->where('t_number', $tracking_number)->delete();
-    //                     }
-    //                 }
-
-    //                   $data = array('message' => 'Deleted Succesfully' , 'response' => true );
-
-
-    //             }else {
-
-
-    //                 $delete =  DocumentModel::where('document_id', $id);
-    //                 $tracking_number =  $delete->get()[0]->tracking_number;
-
-    //                 if($delete->delete()) {
-
-    //                     DB::table('history')->where('t_number', $tracking_number)->delete();
-
-    //                     $data = array('message' => 'Deleted Succesfully' , 'response' => true );
-
-    //                 }else {
-    //                     $data = array('message' => 'Error', 'response' => false);
-    //                 }
-
-
-    //             }
-
-
-    //         }else {
-
-    //              $data = array('message' => 'Something Wrong' , 'response' => false );
-                
-    //         }
-       
-        
-
-    //      }else {
-
-    //     $data = array('message' => 'Request Unauthorized' , 'response' => false );
-    
-    //     }
-       
-    //    return response()->json($data);
     }
 
     public function forward_document(Request $request){

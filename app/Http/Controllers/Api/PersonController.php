@@ -40,6 +40,31 @@ class PersonController extends Controller
         return response()->json($items);
     }
 
+    public function data_per_barangay(){
+
+
+        $active     = array();
+        $barangay   = config('app.barangay');
+
+        foreach ($barangay as $row) {
+
+            $count = DB::table('persons')->where('status', 'active')->where('address', $row)->count();
+            array_push($active, $count);
+
+        }
+
+
+        $data['label'] = $barangay;
+        $data['active'] = $active;
+
+        return response()->json($data);
+    }
+
+    public function data_per_year(){
+
+        
+    }
+
 
     public function get_records(){
 

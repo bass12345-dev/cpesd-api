@@ -53,6 +53,8 @@ Route::get('get_records', 'App\Http\Controllers\Api\PersonController@get_records
 Route::get('count_all', 'App\Http\Controllers\Api\PersonController@count_all');
 Route::get('check_person', 'App\Http\Controllers\Api\PersonController@check_person');
 
+Route::get('data-per-barangay', 'App\Http\Controllers\Api\PersonController@data_per_barangay');
+Route::get('data-per-year', 'App\Http\Controllers\Api\PersonController@data_per_year');
 
 
 //Delete
