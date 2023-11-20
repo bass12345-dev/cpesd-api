@@ -28,6 +28,8 @@ Route::post('/verify-admin', 'App\Http\Controllers\Api\AuthController@verify_adm
 Route::post('/change-code', 'App\Http\Controllers\Api\AuthController@change_code');
 
 
+Route::get('qr', 'App\Http\Controllers\Api\DocumentController@qr');
+
 //Blacklisted
 
 //POST

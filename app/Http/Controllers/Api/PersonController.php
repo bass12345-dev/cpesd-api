@@ -382,7 +382,21 @@ class PersonController extends Controller
 
         $person_data = DB::table('persons')->where('person_id', $_GET['id'])->first();
 
-        return response()->json($person_data);
+        $data = array(
+
+                        'address'           => $person_data->address,
+                        'created_at'        => date('M d Y - h:i a', strtotime($person_data->created_at)) ,
+                        'email_address'     => $person_data->email_address,
+                        'first_name'        => $person_data->first_name,
+                        'middle_name'       => $person_data->middle_name,
+                        'last_name'         => $person_data->last_name,
+                        'extension'         => $person_data->extension,
+                        'person_id'         => $person_data->person_id,
+                        'phone_number'      => $person_data->phone_number,
+                        'status'            => $person_data->status
+        );
+
+        return response()->json($data);
 
     
     }

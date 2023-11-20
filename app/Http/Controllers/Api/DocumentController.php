@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Illuminate\Support\Facades\Storage;
 
 
 class DocumentController extends Controller
@@ -18,6 +19,34 @@ class DocumentController extends Controller
     {
         $this->document   = new DocumentModel;
         $this->app_key   = config('app.key');
+    }
+
+
+    public function qr(){
+
+
+
+    $path = '/img/qr-code/';
+
+    if(!\File::exists(public_path($path))) {
+        \File::makeDirectory(public_path($path));
+    }
+
+
+    $image =    \QrCode::format('png')
+
+
+                 // ->merge('/peso_logo.png', 0.1, true)
+                 ->size(200)->errorCorrection('H')
+                 ->generate('A simple example of QR code!');
+    // $data['image'] = $image;             
+    // return view('welcome')->with($data);
+
+    $output_file = $path . time() . '.png';
+    Storage::disk('local')->put($output_file, $image); 
+
+    // storage/app/public/img/qr-code/img-1557309130.png
+
     }
 
 
@@ -112,6 +141,7 @@ class DocumentController extends Controller
 
         //POST
     public function add_document(Request $request){
+
 
 
     $authorization = $request->header('Authorization');
