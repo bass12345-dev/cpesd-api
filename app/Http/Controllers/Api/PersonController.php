@@ -227,83 +227,123 @@ class PersonController extends Controller
     }
 
 
-     public function remove(Request $request, $id)
+     public function remove(Request $request)
+    {
+
+    
+    $authorization = $request->header('Authorization');
+
+    if ($authorization == $this->app_key) {
+
+    $id         = $request->input('id');
+    $status     = $request->input('status');
+
+
+            if (is_array($id)) {
+                foreach ($id as $row) {
+
+                $update = DB::table('persons')
+                        ->where('persons.person_id', $row)
+                        ->update(array('status'=> $status));
+                }
+
+                $data = array('message' => 'Removed Successfully' , 'response' => true );
+            }else {
+
+                $update = DB::table('persons')
+                        ->where('persons.person_id', $id)
+                        ->update(array('status'=> $status));
+            if ($update) {
+
+                 $data = array('message' => 'Removed Successfully' , 'response' => true );
+
+            }else {
+
+                $data = array('message' => 'Something Wrong/Data is not updated' , 'response' => false );
+            }
+        }
+
+    }else {
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    }
+ 
+       return response()->json($data);
+    }
+
+
+         public function set_active(Request $request)
     {
 
         $authorization = $request->header('Authorization');
 
         if ($authorization == $this->app_key) {
 
-        $update = DB::table('persons')
-                    ->where('persons.person_id', $id)
-                    ->update(array('status'=> 'inactive'));
+        $id = $request->input('id');
+        $status     = $request->input('status');
 
-        if ($update) {
+        if (is_array($id)) {
 
-             $data = array('message' => 'Removed Successfully' , 'response' => true );
+             foreach ($id as $row) {
 
-        }else {
+                $update = DB::table('persons')
+                            ->where('person_id', $row)
+                            ->update(array('status'=> $status));
 
-            $data = array('message' => 'Something Wrong/Data is not updated' , 'response' => false );
+                }
 
+                if ($update) {
 
-        }
-       
-        }else {
-
-        $data = array('message' => 'Request Unauthorized' , 'response' => false );
-        }
-       
-       return response()->json($data);
-    }
-
-
-         public function set_active(Request $request, $id)
-    {
-
-         $authorization = $request->header('Authorization');
-
-        if ($authorization == $this->app_key) {
-
-        $update = DB::table('persons')
-                    ->where('person_id', $id)
-                    ->update(array('status'=> 'active'));
-
-        if ($update) {
-
-             $data = array('message' => 'Updated Successfully' , 'response' => true );
-
-        }else {
-
-            $data = array('message' => 'Something Wrong/Data is not updated' , 'response' => false );
-
-
-        }
-       
-        }else {
-
-        $data = array('message' => 'Request Unauthorized' , 'response' => false );
-        }
-       
-       return response()->json($data);
-    }
-
-
-    public function delete(Request $request, $id)
-    {
-
-         $authorization = $request->header('Authorization');
-
-        if ($authorization == $this->app_key) {
-        
-        $delete =  PersonModel::where('person_id', $id)->delete();
-                if($delete) {
-                    RecordModel::where('p_id', $id)->delete();
-                    $data = array('message' => 'Deleted Succesfully' , 'response' => 'true ');
+                     $data = array('message' => 'Set Successfully' , 'response' => true );
 
                 }else {
-                    $data = array('message' => 'Error', 'response' => 'false');
+
+                    $data = array('message' => 'Something Wrong/Data is not updated' , 'response' => false );
+
+
+            }
+        }else {
+
+            $data = array('message' => 'Error' , 'response' => false );
+        }
+       
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+
+        }
+       
+       return response()->json($data);
+    }
+
+
+    public function delete(Request $request)
+    {
+
+         $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
+
+            $id = $request->input('id');
+
+            if (is_array($id)) {
+
+                foreach ($id as $row) {
+
+                $delete =  PersonModel::where('person_id', $row)->delete();
+                if($delete) {
+                    RecordModel::where('p_id', $row)->delete();
+                    }
+
                 }
+
+                $data = array('message' => 'Deleted Succesfully' , 'response' => true);
+
+            }else{
+                 $data = array('message' => 'Error' , 'response' => false );
+            }
+
+        
+        
 
         }else {
 

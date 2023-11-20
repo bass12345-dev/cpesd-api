@@ -37,12 +37,13 @@ Route::post('/verify-b-user', 'App\Http\Controllers\Api\AuthController@verify_b_
 Route::apiResource('person', PersonController::class);
 Route::post('/add', 'App\Http\Controllers\Api\PersonController@add');
 Route::post('/search-query', 'App\Http\Controllers\Api\PersonController@search_query');
-
+Route::post('remove','App\Http\Controllers\Api\PersonController@remove');
+Route::post('set-active','App\Http\Controllers\Api\PersonController@set_active');
+Route::post('delete', 'App\Http\Controllers\Api\PersonController@delete');
 
 //Update
 Route::put('update/{id}','App\Http\Controllers\Api\PersonController@update');
-Route::put('remove/{id}','App\Http\Controllers\Api\PersonController@remove');
-Route::put('set-active/{id}','App\Http\Controllers\Api\PersonController@set_active');
+
 Route::put('add_record/{id}', 'App\Http\Controllers\Api\PersonController@add_record');
 Route::put('update_record/{id}', 'App\Http\Controllers\Api\PersonController@update_record');
 Route::put('update-person-info/{id}', 'App\Http\Controllers\Api\PersonController@update_person_info');
@@ -58,7 +59,7 @@ Route::get('data-per-year', 'App\Http\Controllers\Api\PersonController@data_per_
 
 
 //Delete
-Route::delete('delete/{id}', 'App\Http\Controllers\Api\PersonController@delete');
+
 Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@delete_record');
 
 

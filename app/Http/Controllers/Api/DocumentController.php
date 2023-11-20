@@ -302,6 +302,9 @@ class DocumentController extends Controller
      //Delete
     public function delete_my_document(Request $request)
     {
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
 
 
         $id = $request->input('id');
@@ -341,6 +344,11 @@ class DocumentController extends Controller
 
            
         }
+
+    }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+    }
 
         return response()->json($data);
     }
