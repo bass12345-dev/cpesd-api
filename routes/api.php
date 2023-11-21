@@ -73,6 +73,7 @@ Route::post('/verify-dt-admin', 'App\Http\Controllers\Api\AuthController@verify_
 
 //Dashboard
 Route::get('count-doc-t', 'App\Http\Controllers\Api\DocumentController@countmydoc_dash');
+Route::get('get-transaction-today', 'App\Http\Controllers\Api\DocumentController@get_transaction_today');
 //Get 
 
 //Users

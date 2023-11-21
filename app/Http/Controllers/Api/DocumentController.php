@@ -90,6 +90,89 @@ class DocumentController extends Controller
         echo json_encode($data);
     }
 
+    public function get_transaction_today(){
+
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimezone('Asia/Manila'));
+        $id =  base64_decode($_GET['id']);
+        $day = $now->format('d');
+        $month = $now->format('m');
+        $year = $now->format('Y');
+         $index = 1;
+
+
+
+        $rows = DB::table('documents as documents')
+                ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+                ->select('documents.created as d_created','documents.tracking_number as tracking_number', 'documents.document_name as document_name', 'documents.document_id as document_id', 'document_types.type_name')
+                ->where('u_id', $id)
+                ->whereYear('documents.created', $year)
+                ->whereMonth('documents.created', $month)
+                ->whereDay('documents.created', $day)
+                ->orderBy('documents.document_id', 'desc')
+                ->get();
+
+       
+        $data = [];
+        foreach ($rows as $value => $key) {
+
+            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+           
+            $data['created_today'][] = array(
+                    'index'             => $index++,
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $key->type_name,
+                    
+                    
+                    
+            );
+        }
+
+
+
+          $rows1 = DB::table('history as history')
+            ->leftJoin('documents as documents', 'documents.tracking_number', '=', 'history.t_number')
+            ->leftJoin('users as users', 'users.user_id', '=', 'history.user2')
+            ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+            ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
+                     'documents.document_id as document_id','users.user_type as user_type',
+                     'document_types.type_name as type_name', 'history.received_date as received_date',
+                     'history.history_id as history_id','history.remarks as remarks')
+            ->where('user2', base64_decode($_GET['id']))
+            ->whereYear('received_date', $year)
+            ->whereMonth('received_date', $month)
+            ->whereDay('received_date', $day)
+            ->where('received_status', 1)
+            ->where('release_status',NULL )
+            ->where('status' , 'received')
+            ->orderBy('received_date', 'desc')->get();
+
+
+       // $rows = DB::table('history')->where('user2', base64_decode($_GET['id']))->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->leftJoin('documents', 'documents.tracking_number', '=', 'history.t_number')->leftJoin('users', 'users.user_id', '=', 'history.user2')->get();
+
+
+       foreach ($rows1 as $value => $key) {
+
+         
+            $data['received_today'][] = array(
+                    'index'             => $index++,
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $key->type_name,
+                   
+            );
+        }
+
+
+     
+       
+
+        return response()->json($data);
+
+
+    }
+
 
     public function get_last(){
 
@@ -116,7 +199,7 @@ class DocumentController extends Controller
              $l = date('Ymd', time()).'001';
         }
 
-       echo json_encode(array('number'=> $l,'y'=> date('Y', time()), 'm' => date('m', time()), 'd' => date('d', time()) ));
+       return response()->json((array('number'=> $l,'y'=> date('Y', time()), 'm' => date('m', time()), 'd' => date('d', time()) )));
     }
 
     function l($l){
