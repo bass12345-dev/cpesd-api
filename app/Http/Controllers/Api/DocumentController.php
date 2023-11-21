@@ -409,7 +409,7 @@ class DocumentController extends Controller
                     'document_type'     => $row->type_name,
                     'type_id'           => $row->type_id,
                     'description'       => $row->document_description,
-                    'qr'                => env('APP_URL').'storage/app/img/qr-code/'.$row->tracking_number.'.png',
+                    'qr'                => env('APP_URL').'/storage/app/img/qr-code/'.$row->tracking_number.'.png',
                     'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? false : true
         );
 
