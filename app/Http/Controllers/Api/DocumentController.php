@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 use Illuminate\Support\Facades\Storage;
-
+ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class DocumentController extends Controller
 {
@@ -24,23 +24,49 @@ class DocumentController extends Controller
 
     public function qr(){
 
+        $from = [255, 0, 0];
+        $to = [0, 0, 255];
+
+
+        // return QrCode::size(200)
+        // ->format('png')
+        // ->merge('/storage/app/peso_logo.png')
+        // ->errorCorrection('M')
+        // ->style('dot')
+        // ->eye('circle')
+        // ->gradient($from[0], $from[1], $from[2], $to[0], $to[1], $to[2], 'diagonal')
+        // ->margin(1)
+        // ->generate(
+        //     'Hello, World!',
+        // );
 
 
     $path = '/img/qr-code/';
 
-    if(!\File::exists(public_path($path))) {
-        \File::makeDirectory(public_path($path));
-    }
+    // if(!\File::exists(public_path($path))) {
+    //     \File::makeDirectory(public_path($path));
+    // }
 
 
-    $image =    \QrCode::format('png')
+    // $image =    \QrCode::format('png')
 
 
-                 // ->merge('/peso_logo.png', 0.1, true)
-                 ->size(200)->errorCorrection('H')
-                 ->generate('A simple example of QR code!');
-    // $data['image'] = $image;             
-    // return view('welcome')->with($data);
+    //              // ->merge('/peso_logo.png', 0.1, true)
+    //              ->size(200)->errorCorrection('H')
+    //              ->generate('A simple example of QR code!');
+
+    $image = QrCode::size(200)
+        ->format('png')
+        ->merge('/storage/app/peso_logo.png')
+        ->errorCorrection('M')
+        ->style('dot')
+        ->eye('circle')
+        ->gradient($from[0], $from[1], $from[2], $to[0], $to[1], $to[2], 'diagonal')
+        ->margin(1)
+        ->generate(
+            'Hello, World!',
+        );
+
 
     $output_file = $path . time() . '.png';
     Storage::disk('local')->put($output_file, $image); 
@@ -52,13 +78,13 @@ class DocumentController extends Controller
 
     public function countmydoc_dash(){
 
-        // echo $_GET['id'];
+        $id = base64_decode($_GET['id']);
         $data = array(
 
-                'count_documents'    => DB::table('documents')->where('u_id', base64_decode($_GET['id']))->count(),
-                'incoming'          => DB::table('history')->where('user2', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count(),
-                'received'          => DB::table('history')->where('user2', $_GET['id'])->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->count(),
-                'forwarded'         => DB::table('history')->where('user1', $_GET['id'])->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count()
+                'count_documents'    => DB::table('documents')->where('u_id',$id)->count(),
+                'incoming'          => DB::table('history')->where('user2', $id)->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count(),
+                'received'          => DB::table('history')->where('user2', $id)->where('received_status', 1)->where('release_status',NULL )->where('status' , 'received')->count(),
+                'forwarded'         => DB::table('history')->where('user1', $id)->where('received_status', NULL)->where('status', 'torec')->where('release_status',NULL )->count()
         );
 
         echo json_encode($data);
@@ -138,6 +164,32 @@ class DocumentController extends Controller
     }
 
 
+    private function create_qr_code($tracking_number){
+
+
+        $from = [255, 0, 0];
+        $to = [0, 0, 255];
+        $path = '/img/qr-code/';
+        $image = QrCode::size(200)
+        ->format('png')
+        // ->merge('/storage/app/peso_logo.png')
+        ->errorCorrection('M')
+        // ->style('dot')
+        // ->eye('circle')
+        // ->gradient($from[0], $from[1], $from[2], $to[0], $to[1], $to[2], 'diagonal')
+        // ->margin(0)
+        ->generate(
+            $tracking_number,
+        );
+
+
+        $output_file = $path .$tracking_number. '.png';
+        Storage::disk('local')->put($output_file, $image); 
+
+
+    }
+
+
 
         //POST
     public function add_document(Request $request){
@@ -192,6 +244,8 @@ class DocumentController extends Controller
             $add1 = DB::table('history')->insert($items1);
 
             if ($add1) {
+
+                $this->create_qr_code($items['tracking_number']);
                 
               $data = array('message' => 'Add Successfully' , 'response' => true );
 
@@ -236,10 +290,11 @@ class DocumentController extends Controller
                     'document_type'     => $row->type_name,
                     'type_id'           => $row->type_id,
                     'description'       => $row->document_description,
+                    'qr'                => env('APP_URL').'storage/app/img/qr-code/'.$row->tracking_number.'.png',
                     'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? false : true
         );
 
-        return json_encode($data);
+        return response()->json($data);
     }
 
 
