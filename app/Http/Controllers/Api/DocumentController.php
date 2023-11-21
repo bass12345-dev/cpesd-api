@@ -165,7 +165,42 @@ class DocumentController extends Controller
         }
 
 
-     
+         $rows2 = DB::table('history as history')
+            ->leftJoin('documents as documents', 'documents.tracking_number', '=', 'history.t_number')
+            ->leftJoin('users as users', 'users.user_id', '=', 'history.user2')
+            ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+            ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
+                     'documents.document_id as document_id','users.user_type as user_type',
+                     'document_types.type_name as type_name', 'history.release_date as release_date',
+                     'history.history_id as history_id','history.remarks as remarks',
+                     DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
+            ->where('user1', base64_decode($_GET['id']))
+            ->whereYear('received_date', $year)
+            ->whereMonth('received_date', $month)
+            ->whereDay('received_date', $day)
+            ->where('received_status', NULL)
+            ->where('status', 'torec')
+            ->where('release_status',NULL )
+            ->orderBy('received_date', 'desc')->get();
+
+
+       foreach ($rows2 as $value => $key) {
+
+         
+            $data['forwarded_today'][] = array(
+                    'index'             => $index++,
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $key->type_name,
+                   
+            );
+        }
+
+
+
+  
+
+       
        
 
         return response()->json($data);
