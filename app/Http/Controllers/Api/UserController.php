@@ -132,7 +132,7 @@ class UserController extends Controller
 
       if ($update) {
 
-             $data = array('message' => 'Removed Successfully' , 'response' => true );
+             $data = array('message' => 'Status Updated Successfully' , 'response' => true );
 
         }else {
 
@@ -142,6 +142,36 @@ class UserController extends Controller
         }
        
        return response()->json($data);
+
+    }
+
+
+    public function delete_user(Request $request, $id){
+
+
+
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
+
+            $delete =  UserModel::where('user_id', $id)->delete();
+
+                if($delete) {
+
+                    $data = array('message' => 'Deleted Succesfully' , 'response' => true );
+
+                }else {
+                    $data = array('message' => 'Error', 'response' => false);
+                }
+        
+
+    }else {
+
+         $data = array('message' => 'Request Unauthorized' , 'response' => false );
+
+    }
+
+        echo json_encode($data);
 
     }
 
