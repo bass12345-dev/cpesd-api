@@ -29,6 +29,13 @@ class PersonController extends Controller
 
     public function index()
     {
+
+
+        // $authorization = $request->header('Authorization');
+
+        // if ($authorization == $this->app_key) {
+
+
         $items = [];
 
         if ($_GET['type'] == 'active') {
@@ -37,7 +44,7 @@ class PersonController extends Controller
             $items = DB::table('persons')->where('status', 'inactive')->get();
         }
 
-        return response()->json($items);
+        return response()->json(base64_encode($items));
     }
 
     public function data_per_barangay(){
