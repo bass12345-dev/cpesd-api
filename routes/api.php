@@ -60,6 +60,11 @@ Route::get('data-per-barangay', 'App\Http\Controllers\Api\PersonController@data_
 Route::get('data-per-year', 'App\Http\Controllers\Api\PersonController@data_per_year');
 
 
+//Programs
+Route::post('add-program', 'App\Http\Controllers\Api\ProgramController@add_program');
+Route::get('get-programs', 'App\Http\Controllers\Api\ProgramController@get_programs');
+Route::delete('delete-program/{id}', 'App\Http\Controllers\Api\ProgramController@delete_program');
+Route::put('update_program/{id}', 'App\Http\Controllers\Api\ProgramController@update_program');
 //Delete
 
 Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@delete_record');
@@ -88,6 +93,8 @@ Route::get('get-document-types', 'App\Http\Controllers\Api\DocumentTypeControlle
 Route::post('add-document-type', 'App\Http\Controllers\Api\DocumentTypeController@add_document_type');
 Route::delete('delete-type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@delete_type');
 Route::put('update_type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@update_type');
+
+
 
 //Final Actions
 Route::get('get-actions', 'App\Http\Controllers\Api\FinalActionsController@get_final_actions');

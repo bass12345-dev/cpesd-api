@@ -471,7 +471,8 @@ class DocumentController extends Controller
         $data = [];
         foreach ($rows as $value => $key) {
 
-            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+            $delete_button  = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+            // $status         = DB::table('history')->where('t_number', $key->tracking_number)->where('status', 'completed')->count() > 0 ? 'Completed' : 'Pending';
 
             $data[] = array(
 
@@ -480,7 +481,10 @@ class DocumentController extends Controller
                     'type_name'         => $key->type_name,
                     'created'           => date('M d Y - h:i a', strtotime($key->d_created)),
                     'a'                 => $delete_button,
-                    'document_id'       => $key->document_id
+                    'document_id'       => $key->document_id,
+                     'is'                =>  DB::table('history')->where('t_number', $key->tracking_number)->where('status','completed')->count() == 1 ? '<button class="btn btn-rounded btn-danger">Pending</button>' : '<button class="btn btn-rounded btn-primary">Completed</button>'
+                    // 'status'            => $status
+
             );
         }
 
