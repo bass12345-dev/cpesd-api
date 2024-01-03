@@ -109,7 +109,7 @@ Route::get('get-my-documents', 'App\Http\Controllers\Api\DocumentController@get_
 Route::post('delete-my-document', 'App\Http\Controllers\Api\DocumentController@delete_my_document');
 Route::put('update_document/{id}', 'App\Http\Controllers\Api\DocumentController@update_document');
 
-
+Route::post('filter-by-date', 'App\Http\Controllers\Api\DocumentController@filter_by_date');
 
 
 //Offices

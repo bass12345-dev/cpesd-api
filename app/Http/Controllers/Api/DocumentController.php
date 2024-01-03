@@ -90,6 +90,16 @@ class DocumentController extends Controller
         echo json_encode($data);
     }
 
+    public function filter_by_date(Request $request){
+
+
+    
+        $start = date('M d Y - h:i a', strtotime($request->input('start')));
+        $end  = date('M d Y - h:i a', strtotime($request->input('end')));
+        echo $start.' - '.$end;
+
+    }
+
     public function get_transaction_today(){
 
         $now = new \DateTime();
