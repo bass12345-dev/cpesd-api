@@ -20,6 +20,7 @@ class PersonModel extends Model
         'address',
         'email_address',
         'status',
+        'age',
         'created_at',
         
     ];

@@ -65,6 +65,11 @@ Route::post('add-program', 'App\Http\Controllers\Api\ProgramController@add_progr
 Route::get('get-programs', 'App\Http\Controllers\Api\ProgramController@get_programs');
 Route::delete('delete-program/{id}', 'App\Http\Controllers\Api\ProgramController@delete_program');
 Route::put('update_program/{id}', 'App\Http\Controllers\Api\ProgramController@update_program');
+
+Route::post('save-person-program', 'App\Http\Controllers\Api\ProgramController@save_person_program');
+Route::get('get-person-programs', 'App\Http\Controllers\Api\ProgramController@get_person_programs');
+
+
 //Delete
 
 Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@delete_record');
@@ -130,7 +135,6 @@ Route::post('complete-document', 'App\Http\Controllers\Api\DocumentController@co
 
 Route::get('get-history', 'App\Http\Controllers\Api\DocumentController@get_history');
 Route::get('get-document-data', 'App\Http\Controllers\Api\DocumentController@get_document_data');
-
 
 
 Route::get('track-document', 'App\Http\Controllers\Api\DocumentController@track_document');

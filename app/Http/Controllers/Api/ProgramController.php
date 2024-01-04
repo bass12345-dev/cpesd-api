@@ -109,7 +109,7 @@ class ProgramController extends Controller
         //GET
     public function get_programs(){
 
-        $items = DB::table('programs')->get();
+        $items = DB::table('programs')->orderBy('program', 'asc')->get();
 
         $data = [];
         foreach ($items as $row) {
@@ -129,6 +129,9 @@ class ProgramController extends Controller
         return response()->json($data);
 
     }
+
+
+
 
 
 
@@ -171,4 +174,85 @@ class ProgramController extends Controller
        return response()->json($data);
 
     }
+
+
+
+
+    public function save_person_program(Request $request){
+
+        $ids = $request->input('id');
+        $person_id = $request->input('person_id');
+        $authorization = $request->header('Authorization');
+
+
+         if ($authorization == $this->app_key) {
+
+        if (is_array($ids)) {
+
+            $delete = DB::table('program_block')->where('person_id',$person_id)->delete();
+
+            foreach ($ids as $row) {
+                
+                $item = array(
+
+                        'person_id' => $person_id,
+                        'program_id' => $row,
+                        'created' => date('Y-m-d H:i:s', time())
+                );
+
+
+
+            $add = DB::table('program_block')->insert($item);
+
+        }
+
+         $data = array('message' => 'Added Succesfully' , 'response' => true);
+    }else {
+
+          $data = array('message' => 'Error' , 'response' => false );
+    }
+
+
+    }else {
+
+       $data = array('message' => 'Request Unauthorized' , 'response' => false );
+
+    }
+
+     return response()->json($data);
+
+ }
+
+
+ public function get_person_programs(){
+
+
+
+        $items = DB::table('programs')->orderBy('program', 'asc')->get();
+        $person_id = $_GET['id'];
+
+        $data = [];
+        foreach ($items as $row) {
+
+            $program_id = $row->program_id;
+            $x = DB::table('program_block')->where('person_id',$person_id)->where('program_id',$program_id)->count();
+
+
+
+            $data[] = array(
+
+                    'program' => $row->program,
+                    'program_id'   => $row->program_id,
+                    'x' => $x == 1 ? true : null
+            );
+        }
+
+
+        return response()->json($data);
+
+
+ }
+
+
+
 }
