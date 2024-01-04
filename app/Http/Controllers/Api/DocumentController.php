@@ -92,11 +92,43 @@ class DocumentController extends Controller
 
     public function filter_by_date(Request $request){
 
+    $start = date('Y-m-d', strtotime($request->input('start')));
+    $end  = date('Y-m-d', strtotime($request->input('end')));
 
-    
-        $start = date('M d Y - h:i a', strtotime($request->input('start')));
-        $end  = date('M d Y - h:i a', strtotime($request->input('end')));
-        echo $start.' - '.$end;
+    $rows = DB::table('documents as documents')
+                    ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+                    ->leftJoin('users as users', 'users.user_id', '=', 'documents.u_id')
+                    ->select('documents.created as created','documents.tracking_number as tracking_number', 
+                             'documents.document_name as   document_name', 'documents.document_id as document_id', 
+                             'document_types.type_name',  DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
+                    ->whereBetween('documents.created', [$start, $end])
+                    ->orderBy('documents.document_id', 'desc')->get();
+
+        $data = [];
+        $i = 1;
+        foreach ($rows as $value => $key) {
+
+            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+
+
+            $data[] = array(
+                    'number'            => $i++,
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $key->type_name,
+                    'created'           => $key->created,
+                    'a'                 => $delete_button,
+                    'document_id'       => $key->document_id,
+                    'created_by'        => $key->name
+            );
+        }
+
+
+     
+       
+
+        return response()->json($data);
+
 
     }
 
