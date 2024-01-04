@@ -29,6 +29,13 @@ class PersonController extends Controller
 
     public function index()
     {
+
+
+        // $authorization = $request->header('Authorization');
+
+        // if ($authorization == $this->app_key) {
+
+
         $items = [];
 
         if ($_GET['type'] == 'active') {
@@ -37,7 +44,7 @@ class PersonController extends Controller
             $items = DB::table('persons')->where('status', 'inactive')->get();
         }
 
-        return response()->json($items);
+        return response()->json(base64_encode($items));
     }
 
     public function data_per_barangay(){
@@ -111,7 +118,6 @@ class PersonController extends Controller
 
     public function count_all(){
         $data = [];
-
         $active = DB::table('persons')->where('status', 'active')->count();
         $inactive = DB::table('persons')->where('status', 'inactive')->count();
         $data[] = array('active' => $active , 'inactive' => $inactive);
@@ -147,14 +153,15 @@ class PersonController extends Controller
         'address'                    => $request->input('address'),
         'email_address'              => $request->input('emailAddress'),
         'created_at'                 => $now->format('Y-m-d H:i:s'),
-        'status'                     => 'active'
+        'status'                     => 'active',
+        'age'                        => $request->input('age')
     );
 
      $add = DB::table('persons')->insert($items);
 
       if ($add) {
 
-             $data = array('message' => 'Added Successfully' , 'response' => true );
+             $data = array('id' => DB::getPdo()->lastInsertId() ,'message' => 'Added Successfully' , 'response' => true );
 
         }else {
 
@@ -393,7 +400,8 @@ class PersonController extends Controller
                         'extension'         => $person_data->extension,
                         'person_id'         => $person_data->person_id,
                         'phone_number'      => $person_data->phone_number,
-                        'status'            => $person_data->status
+                        'status'            => $person_data->status,
+                        'age'               => $person_data->age
         );
 
         return response()->json($data);
@@ -499,6 +507,7 @@ class PersonController extends Controller
         'phone_number'               => $request->input('phoneNumber'),
         'address'                    => $request->input('address'),
         'email_address'              => $request->input('emailAddress'),
+        'age'                        => $request->input('age'),
     );
 
      $update = DB::table('persons')

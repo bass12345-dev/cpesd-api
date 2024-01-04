@@ -90,6 +90,48 @@ class DocumentController extends Controller
         echo json_encode($data);
     }
 
+    public function filter_by_date(Request $request){
+
+    $start = date('Y-m-d', strtotime($request->input('start')));
+    $end  = date('Y-m-d', strtotime($request->input('end')));
+
+    $rows = DB::table('documents as documents')
+                    ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+                    ->leftJoin('users as users', 'users.user_id', '=', 'documents.u_id')
+                    ->select('documents.created as created','documents.tracking_number as tracking_number', 
+                             'documents.document_name as   document_name', 'documents.document_id as document_id', 
+                             'document_types.type_name',  DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
+                    ->whereBetween('documents.created', [$start, $end])
+                    ->orderBy('documents.document_id', 'desc')->get();
+
+        $data = [];
+        $i = 1;
+        foreach ($rows as $value => $key) {
+
+            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+
+
+            $data[] = array(
+                    'number'            => $i++,
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $key->type_name,
+                    'created'           => $key->created,
+                    'a'                 => $delete_button,
+                    'document_id'       => $key->document_id,
+                    'created_by'        => $key->name
+            );
+        }
+
+
+     
+       
+
+        return response()->json($data);
+
+
+    }
+
     public function get_transaction_today(){
 
         $now = new \DateTime();
@@ -189,6 +231,41 @@ class DocumentController extends Controller
 
          
             $data['forwarded_today'][] = array(
+                    'index'             => $index++,
+                    'tracking_number'   => $key->tracking_number,
+                    'document_name'     => $key->document_name,
+                    'type_name'         => $key->type_name,
+                   
+            );
+        }
+
+
+         $IncomingRows = DB::table('history as history')
+            ->leftJoin('documents as documents', 'documents.tracking_number', '=', 'history.t_number')
+            ->leftJoin('users as users', 'users.user_id', '=', 'history.user2')
+            ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
+            ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
+                     'documents.document_id as document_id','users.user_type as user_type',
+                     'document_types.type_name as type_name', 'history.received_date as received_date',
+                     'history.history_id as history_id','history.remarks as remarks')
+            ->where('user2', base64_decode($_GET['id']))
+            ->whereYear('release_date', $year)
+            ->whereMonth('release_date', $month)
+            ->whereDay('release_date', $day)
+            ->where('received_status', NULL)
+            ->where('status', 'torec')
+            ->where('release_status',NULL )
+            ->orderBy('received_date', 'desc')->get();
+
+
+
+            
+
+
+       foreach ($IncomingRows as $value => $key) {
+
+         
+            $data['incoming_today'][] = array(
                     'index'             => $index++,
                     'tracking_number'   => $key->tracking_number,
                     'document_name'     => $key->document_name,
@@ -436,7 +513,8 @@ class DocumentController extends Controller
         $data = [];
         foreach ($rows as $value => $key) {
 
-            $delete_button = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+            $delete_button  = DB::table('history')->where('t_number', $key->tracking_number)->count() > 1 ? true : false;
+            // $status         = DB::table('history')->where('t_number', $key->tracking_number)->where('status', 'completed')->count() > 0 ? 'Completed' : 'Pending';
 
             $data[] = array(
 
@@ -445,7 +523,10 @@ class DocumentController extends Controller
                     'type_name'         => $key->type_name,
                     'created'           => date('M d Y - h:i a', strtotime($key->d_created)),
                     'a'                 => $delete_button,
-                    'document_id'       => $key->document_id
+                    'document_id'       => $key->document_id,
+                     'is'                =>  DB::table('history')->where('t_number', $key->tracking_number)->where('status','completed')->count() == 1 ? '<button class="btn btn-rounded btn-danger">Pending</button>' : '<button class="btn btn-rounded btn-primary">Completed</button>'
+                    // 'status'            => $status
+
             );
         }
 

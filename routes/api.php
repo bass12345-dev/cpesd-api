@@ -60,6 +60,16 @@ Route::get('data-per-barangay', 'App\Http\Controllers\Api\PersonController@data_
 Route::get('data-per-year', 'App\Http\Controllers\Api\PersonController@data_per_year');
 
 
+//Programs
+Route::post('add-program', 'App\Http\Controllers\Api\ProgramController@add_program');
+Route::get('get-programs', 'App\Http\Controllers\Api\ProgramController@get_programs');
+Route::delete('delete-program/{id}', 'App\Http\Controllers\Api\ProgramController@delete_program');
+Route::put('update_program/{id}', 'App\Http\Controllers\Api\ProgramController@update_program');
+
+Route::post('save-person-program', 'App\Http\Controllers\Api\ProgramController@save_person_program');
+Route::get('get-person-programs', 'App\Http\Controllers\Api\ProgramController@get_person_programs');
+
+
 //Delete
 
 Route::delete('delete-record/{id}', 'App\Http\Controllers\Api\PersonController@delete_record');
@@ -89,6 +99,8 @@ Route::post('add-document-type', 'App\Http\Controllers\Api\DocumentTypeControlle
 Route::delete('delete-type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@delete_type');
 Route::put('update_type/{id}', 'App\Http\Controllers\Api\DocumentTypeController@update_type');
 
+
+
 //Final Actions
 Route::get('get-actions', 'App\Http\Controllers\Api\FinalActionsController@get_final_actions');
 Route::post('add-action', 'App\Http\Controllers\Api\FinalActionsController@add_action');
@@ -102,7 +114,7 @@ Route::get('get-my-documents', 'App\Http\Controllers\Api\DocumentController@get_
 Route::post('delete-my-document', 'App\Http\Controllers\Api\DocumentController@delete_my_document');
 Route::put('update_document/{id}', 'App\Http\Controllers\Api\DocumentController@update_document');
 
-
+Route::post('filter-by-date', 'App\Http\Controllers\Api\DocumentController@filter_by_date');
 
 
 //Offices
@@ -123,7 +135,6 @@ Route::post('complete-document', 'App\Http\Controllers\Api\DocumentController@co
 
 Route::get('get-history', 'App\Http\Controllers\Api\DocumentController@get_history');
 Route::get('get-document-data', 'App\Http\Controllers\Api\DocumentController@get_document_data');
-
 
 
 Route::get('track-document', 'App\Http\Controllers\Api\DocumentController@track_document');
