@@ -115,7 +115,7 @@ Route::post('delete-my-document', 'App\Http\Controllers\Api\DocumentController@d
 Route::put('update_document/{id}', 'App\Http\Controllers\Api\DocumentController@update_document');
 
 Route::post('filter-by-date', 'App\Http\Controllers\Api\DocumentController@filter_by_date');
-
+Route::get('data-per-year-document', 'App\Http\Controllers\Api\DocumentController@data_per_year_document');
 
 //Offices
 Route::post('add-office', 'App\Http\Controllers\Api\OfficeController@add_office');

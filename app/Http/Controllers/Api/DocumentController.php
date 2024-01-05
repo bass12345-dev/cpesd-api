@@ -76,6 +76,59 @@ class DocumentController extends Controller
     }
 
 
+    public function data_per_year_document(){
+
+         $year      =  $_GET['year'];
+
+        $months     = array();
+        $pending    = array();
+        $completed  = array();
+
+        for ($m = 1; $m <= 12; $m++) {
+
+             $count_completed = DB::table('documents')
+            
+             ->whereMonth('created', $m)
+             ->whereYear('created', $year)
+             ->where('doc_status', 'completed')
+            
+             ->count();
+
+             array_push($completed, $count_completed);
+
+
+
+              $count_pending = DB::table('documents')
+            
+             ->whereMonth('created', $m)
+             ->whereYear('created', $year)
+             ->where('doc_status', 'pending' )
+             
+             ->count();
+
+             array_push($pending, $count_pending);
+
+
+             $month =  date('M', mktime(0, 0, 0, $m, 1));
+            array_push($months, $month);
+
+        }
+
+
+         $data['label']     = $months;
+         $data['pending']   = $pending;
+         $data['completed'] = $completed;
+
+         return response()->json($data);
+
+
+       
+
+        return response()->json($data);
+
+    }
+
+
     public function countmydoc_dash(){
 
         $id = base64_decode($_GET['id']);
@@ -406,7 +459,8 @@ class DocumentController extends Controller
         'offi_id'    				=> $request->input('office_id'),
         'doc_type'    				=> $request->input('document_type'),
         'document_description'    	=> $request->input('description'),
-        'created'       	        =>  $now->format('Y-m-d H:i:s')
+        'created'       	        =>  $now->format('Y-m-d H:i:s'),
+        'doc_status'                   => 'pending'
     );
 
 
@@ -866,12 +920,17 @@ class DocumentController extends Controller
         if ($authorization == $this->app_key) {
 
         $id    = $request->input('id');
+        $tracking_number    = $request->input('t_number');
 
         $update_receive     = DB::table('history')
                     ->where('history.history_id', $id)
                     ->update(array('status' => 'completed','final_action_taken' => $request->input('final_action_taken'), 'remarks' => $request->input('remarks1') ));
 
          if($update_receive) {
+
+            $update_receive     = DB::table('documents')
+                    ->where('tracking_number', $tracking_number)
+                    ->update(array('doc_status' => 'completed'));
 
 
             $data = array('message' => 'Completed Succesfully' , 'response' => true );
