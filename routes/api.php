@@ -92,6 +92,8 @@ Route::get('get-user-data', 'App\Http\Controllers\Api\UserController@get_user_da
 Route::post('register', 'App\Http\Controllers\Api\UserController@register');
 Route::put('remove-user/{id}', 'App\Http\Controllers\Api\UserController@remove_user');
 Route::delete('delete-user/{id}', 'App\Http\Controllers\Api\UserController@delete_user');
+Route::put('update_profile/{id}', 'App\Http\Controllers\Api\UserController@update_profile');
+
 
 //Document types
 Route::get('get-document-types', 'App\Http\Controllers\Api\DocumentTypeController@get_document_types');

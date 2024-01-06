@@ -176,7 +176,52 @@ class UserController extends Controller
 
     }
 
-     
+  
+
+  public  function update_profile(Request $request, $id){
+
+    $authorization = $request->header('Authorization');
+
+    $id =  base64_decode($id);
+
+    if ($authorization == $this->app_key) {
+
+      $items = array(
+                'first_name'        => $request->input('first_name'),   
+                'last_name'         => $request->input('last_name'),   
+                'middle_name'       => $request->input('middle_name'),   
+                'extension'         => $request->input('extension'),  
+                'address'           => $request->input('address'),     
+                'contact_number'    => $request->input('contact_number'),   
+                'email_address'     => $request->input('email'),  
+                'username'          => $request->input('user_name'),
+                'off_id'            => $request->input('office'),
+                
+        );
+
+
+     $update = DB::table('users')
+                    ->where('user_id', $id)
+                    ->update($items);
+
+      if ($update) {
+
+             $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+        }else {
+
+            $data = array('message' => 'Something Wrong/No Changes Apply' , 'response' => false );
+
+
+        }
+       
+        }else {
+
+        $data = array('message' => 'Request Unauthorized' , 'response' => false );
+        }
+       
+       return response()->json($data);
+  }   
 
 
     
