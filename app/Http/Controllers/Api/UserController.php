@@ -50,7 +50,8 @@ class UserController extends Controller
                 'extension' => $row[0]->extension,  
                 'address' => $row[0]->address,     
                 'contact_number' => $row[0]->contact_number,   
-                'email_address' => $row[0]->email_address,                        
+                'email_address' => $row[0]->email_address,     
+                'username'      => $row[0]->username                   
         );
 
         return response()->json($items);
