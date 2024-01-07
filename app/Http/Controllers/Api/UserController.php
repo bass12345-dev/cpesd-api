@@ -92,6 +92,9 @@ class UserController extends Controller
             $data = array('message' => 'Username is Taken' , 'response' => false);
         }else {
 
+
+            if (strlen($items['password']) >= 5) {
+
             $add = DB::table('users')->insert($items);
 
                 if ($add) {
@@ -104,6 +107,10 @@ class UserController extends Controller
 
 
                 }
+
+            }else {
+                 $data = array('message' => 'Password is too short' , 'response' => false );
+            }
 
 
         }
@@ -222,6 +229,123 @@ class UserController extends Controller
        
        return response()->json($data);
   }   
+
+
+
+  public  function update_password_to_default(Request $request, $id){
+
+      $authorization = $request->header('Authorization');
+
+
+
+
+        if ($authorization == $this->app_key) {
+
+            $id =  $id;
+            $key = DB::table('users')->where('user_id', $id);
+
+            if ($key->count() > 0) {
+
+
+                $update     = DB::table('users')
+                    ->where('user_id', $id)
+                    ->update(array('password'=> password_hash($key->get()[0]->username, PASSWORD_DEFAULT) ));
+
+
+                 if ($update) {
+                    
+                  $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+                }else {
+
+                  $data = array('message' => 'Something Wrong' , 'response' => false );
+                }
+
+                return response()->json($data);
+
+            }else {
+
+                  return response()->json(['message'=>'Invalid Old Security Code','response'=> false]);
+            }
+
+
+        }else {
+
+             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
+        }
+
+
+  }
+
+
+   public  function update_password(Request $request, $id){
+
+        $authorization = $request->header('Authorization');
+
+        if ($authorization == $this->app_key) {
+
+        $id =  base64_decode($id);
+        $new = $request->input('new_password');
+        $old = $request->input('old_password');
+
+
+        if (strlen($new) >= 5) {
+            // code...
+    
+
+        $key = DB::table('users')->where('user_id', $id);
+
+        if ($key->count() > 0) {
+
+            $verify_password = password_verify($old,$key->get()[0]->password); 
+
+            if ($verify_password) {
+
+                $update     = DB::table('users')
+                    ->where('user_id', $id)
+                    ->update(array('password'=> password_hash($new, PASSWORD_DEFAULT) ));
+
+
+                 if ($update) {
+                    
+                  $data = array('message' => 'Updated Successfully' , 'response' => true );
+
+                }else {
+
+                  $data = array('message' => 'Something Wrong' , 'response' => false );
+                }
+
+                return response()->json($data);
+
+                // code...
+            }else {
+
+                  return response()->json(['message'=>'Invalid Old Security Code','response'=> false]);
+            }
+
+           
+
+        }else{
+
+             return response()->json(['message'=>'ID not found','response'=> false]);
+
+
+        }
+
+    }else{
+
+        return response()->json(['message'=>'New Password is too short','response'=> false]);
+    }
+
+
+         }else {
+
+             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
+        }
+
+
+
+   }
 
 
     

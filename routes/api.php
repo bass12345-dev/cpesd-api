@@ -93,8 +93,8 @@ Route::post('register', 'App\Http\Controllers\Api\UserController@register');
 Route::put('remove-user/{id}', 'App\Http\Controllers\Api\UserController@remove_user');
 Route::delete('delete-user/{id}', 'App\Http\Controllers\Api\UserController@delete_user');
 Route::put('update_profile/{id}', 'App\Http\Controllers\Api\UserController@update_profile');
-
-
+Route::put('update_password/{id}', 'App\Http\Controllers\Api\UserController@update_password');
+Route::put('update_password_to_default/{id}', 'App\Http\Controllers\Api\UserController@update_password_to_default');
 //Document types
 Route::get('get-document-types', 'App\Http\Controllers\Api\DocumentTypeController@get_document_types');
 Route::post('add-document-type', 'App\Http\Controllers\Api\DocumentTypeController@add_document_type');
