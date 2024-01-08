@@ -1114,7 +1114,7 @@ class DocumentController extends Controller
                     ->leftJoin('users as users', 'users.user_id', '=', 'documents.u_id')
                     ->select('documents.created as created','documents.tracking_number as tracking_number', 
                              'documents.document_name as   document_name', 'documents.document_id as document_id', 
-                             'document_types.type_name',  DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
+                             'document_types.type_name', 'users.first_name as first_name', 'users.middle_name as middle_name', 'users.last_name as last_name', 'users.extension as extension', DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
                     ->orderBy('documents.document_id', 'desc')->get();
 
           // $rows = DB::table('documents')->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users','users.user_id','=','documents.u_id',)->orderBy('documents.document_id', 'desc')->get();
@@ -1135,7 +1135,7 @@ class DocumentController extends Controller
                     'created'           => $key->created,
                     'a'                 => $delete_button,
                     'document_id'       => $key->document_id,
-                    'created_by'        => $key->name,
+                    'created_by'        => $key->first_name.' '.$key->middle_name.' '.$key->last_name.' '.$key->extension,
                     'is'                => $status
             );
         }
