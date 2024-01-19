@@ -541,7 +541,7 @@ class DocumentController extends Controller
                     'type_id'           => $row->type_id,
                     'description'       => $row->document_description,
                     'qr'                => env('APP_URL').'/storage/app/img/qr-code/'.$row->tracking_number.'.png',
-                    'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? false : true
+                    'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? true : false
         );
 
         return response()->json($data);
@@ -790,7 +790,7 @@ class DocumentController extends Controller
             ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
                      'documents.document_id as document_id','users.user_type as user_type',
                      'document_types.type_name as type_name', 'history.release_date as release_date',
-                     'history.history_id as history_id','history.remarks as remarks',
+                     'history.history_id as history_id','history.remarks as remarks','users.first_name as first_name', 'users.middle_name as middle_name', 'users.last_name as last_name', 'users.extension as extension',
                      DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
             ->where('user1', base64_decode($_GET['id']))
             ->where('received_status', NULL)
@@ -813,7 +813,9 @@ class DocumentController extends Controller
                     'document_name'     => $key->document_name,
                     'type_name'         => $key->type_name,
                     'released_date'     => date('M d Y - h:i a', strtotime($key->release_date)) ,
-                    'forwarded_to'      => $key->name,
+                    // 'forwarded_to'      => $key->name,
+
+                    'forwarded_to'              => $key->first_name.' '.$key->middle_name.' '.$key->last_name.' '.$key->extension,
                     'document_id'       => $key->document_id,
                     'remarks'           => $key->remarks,
             );
@@ -839,7 +841,7 @@ class DocumentController extends Controller
             ->select('documents.tracking_number as tracking_number','documents.document_name as document_name',
                      'documents.document_id as document_id','users.user_type as user_type',
                      'document_types.type_name as type_name', 'history.release_date as release_date',
-                     'history.history_id as history_id','history.remarks as remarks',
+                     'history.history_id as history_id','history.remarks as remarks', 'users.first_name as first_name', 'users.middle_name as middle_name', 'users.last_name as last_name', 'users.extension as extension',
                      DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
             ->where('user2', base64_decode($_GET['id']))
             ->where('received_status', NULL)
@@ -859,7 +861,8 @@ class DocumentController extends Controller
                     'document_name'     => $key->document_name,
                     'type_name'         => $key->type_name,
                     'released_date'     => date('M d Y - h:i a', strtotime($key->release_date)) ,
-                    'from'              => $key->name,
+                    // 'from'              => $key->name,
+                    'from'              => $key->first_name.' '.$key->middle_name.' '.$key->last_name.' '.$key->extension,
                     'document_id'       => $key->document_id,
                     'history_id'        => $key->history_id,
                     'remarks'           => $key->remarks,

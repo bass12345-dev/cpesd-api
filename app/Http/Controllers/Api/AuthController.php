@@ -118,7 +118,7 @@ class AuthController extends Controller
 
 
             $username = $request->input('username');
-            $password = $request->input('password');
+            $password = base64_decode($request->input('password'));
 
             $user = DB::table('users')->where('username', $request->input('username'));
 
