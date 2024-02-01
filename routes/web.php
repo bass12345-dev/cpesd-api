@@ -14,5 +14,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+  echo 'welcome';
 });
+
+Route::get('/dts', function () {
+    return view('auth.login');
+});
+
+
+
+Route::prefix('dts/admin')->group(function  () {
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+}); 
+
+Route::prefix('dts/user')->group(function  () {
+    Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index']);
+}); 
