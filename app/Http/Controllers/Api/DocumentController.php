@@ -444,7 +444,7 @@ class DocumentController extends Controller
     public function add_document(Request $request){
 
 
-
+     
     $authorization = $request->header('Authorization');
 
     if ($authorization == $this->app_key) {
@@ -460,7 +460,8 @@ class DocumentController extends Controller
         'doc_type'    				=> $request->input('document_type'),
         'document_description'    	=> $request->input('description'),
         'created'       	        =>  $now->format('Y-m-d H:i:s'),
-        'doc_status'                   => 'pending'
+        'doc_status'                => 'pending',
+        'destination_type'          => $request->input('type'),
     );
 
 

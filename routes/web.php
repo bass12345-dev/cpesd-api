@@ -22,11 +22,21 @@ Route::get('/dts', function () {
 });
 
 
-
+//ADMIN ROUTES//
 Route::prefix('dts/admin')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
 }); 
 
+
+
+//USER ROUTES//
 Route::prefix('dts/user')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index']);
+    Route::get('/add-document', [App\Http\Controllers\User\AddDocumentController::class, 'index']);
 }); 
+
+
+
+
+
+

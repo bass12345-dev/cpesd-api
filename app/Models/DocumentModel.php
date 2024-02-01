@@ -20,6 +20,7 @@ class DocumentModel extends Model
         'doc_type',
         'document_description',
         'doc_status',
+        'destination_type',
         'created'
     
         
