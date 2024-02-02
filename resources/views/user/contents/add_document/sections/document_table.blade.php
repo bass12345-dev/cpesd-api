@@ -1,8 +1,8 @@
-<div class="card flex-fill">
+<div class="card flex-fill p-3">
          <div class="card-header">
             <h5 class="card-title mb-0">Documents</h5>
          </div>
-         <table class="table table-hover my-0" id="documents">
+         <table class="table table-hover  " id="datatables-buttons" style="width: 100%; "  >
             <thead>
                <tr>
                 

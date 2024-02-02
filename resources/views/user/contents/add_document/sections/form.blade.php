@@ -13,12 +13,12 @@
                   <input type="hidden" name="office_id" value="<?php echo $user_data['office_id']; ?>" class="form-control"  >
                    <div class="form-group col-md-12 mb-2">
                      <label for="inputEmail4">Document name</label>
-                     <input type="text" name="document_name" class="form-control"  >
+                     <input type="text" name="document_name" class="form-control" required >
                   </div>
 
                   <div class="form-group col-md-12 mb-2">
                      <label for="inputEmail4">Document Type</label>
-                     <select class="form-control" name="document_type">
+                     <select class="form-control" name="document_type" required>
                         <option value="">Select Document Type</option>
                         <?php
                            foreach ($document_types as $row) :
@@ -32,7 +32,7 @@
 
                   <div class="form-group col-md-12 mb-2">
                      <label for="inputEmail4" >Description</label>
-                     <textarea class="form-control" name="description"></textarea>
+                     <textarea class="form-control" name="description" required></textarea>
                   </div>
 
                   <div class="form-group col-md-12 mb-2">

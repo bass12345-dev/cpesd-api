@@ -1,14 +1,12 @@
 @extends('user.layout.user_master')
-<!-- @section('title', 'Dashboard') -->
+@section('title', 'Add Document')
 @section('content')
-<div class="mb-3">
-   <h1 class="h3 d-inline align-middle">Add Document</h1>
-</div>
+@include('includes.title')
 <div class="row">
-   <div class="col-12 col-lg-6 col-xxl-6 d-flex">
+   <div class="col-12  col-md-7 ">
       @include('user.contents.add_document.sections.document_table')
    </div>
-   <div class="col-12 col-lg-6">
+   <div class="col-12 col-md-5">
      @include('user.contents.add_document.sections.form')
    </div>
 </div>
@@ -17,7 +15,25 @@
 @section('js')
 <script type="text/javascript">
 
-   $('#documents').dataTable();
+         document.addEventListener("DOMContentLoaded", function() {
+         // Datatables with Buttons
+         var datatablesButtons = $("#datatables-buttons").DataTable({
+            responsive: true,
+            lengthChange: !1,
+            buttons: [
+            {
+            extend:'print',
+            title:'All Documents'
+            },
+            {
+            extend:'csv',
+            }
+
+            ],
+            scrollX: true
+         });
+         datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+         });
 
    function get_last(){
 
@@ -44,7 +60,10 @@
       })
 
    }
+
+   $( document ).ready(function() {
    get_last();
+   });
 
    $('#add_document').on('submit', function(e){
       e.preventDefault();
@@ -62,9 +81,16 @@
          }, 
          success : function(data){
             Swal.close();
-            if (data.response) {
+            if (data.response) {   
 
-               alert(data.message)
+               Swal.fire({
+                 position: "top-end",
+                 icon: "success",
+                 title: data.message,
+                 showConfirmButton: false,
+                 timer: 1500
+               });
+               setTimeout(reload_page, 3000)
 
             }else {
 
@@ -78,5 +104,11 @@
          
       });
    });
+
+   function reload_page(){
+      location.reload();
+   }
+
+
 </script>
 @endsection

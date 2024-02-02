@@ -22,8 +22,6 @@ class DocumentModel extends Model
         'doc_status',
         'destination_type',
         'created'
-    
-        
     ];
 
     public $timestamps = false;

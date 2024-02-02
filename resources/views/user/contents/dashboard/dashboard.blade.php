@@ -1,5 +1,5 @@
 @extends('user.layout.user_master')
-<!-- @section('title', 'Dashboard') -->
+@section('title', 'Dashboard')
 @section('content')
 <h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
 

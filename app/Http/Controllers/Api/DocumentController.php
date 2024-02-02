@@ -498,7 +498,7 @@ class DocumentController extends Controller
 
                 $this->create_qr_code($items['tracking_number']);
                 
-              $data = array('message' => 'Add Successfully' , 'response' => true );
+              $data = array('message' => 'Added Successfully' , 'response' => true );
 
             }else {
 
