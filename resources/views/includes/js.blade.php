@@ -10,5 +10,10 @@
 <script src="
 https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js
 "></script>
+<script type="text/javascript">
+	function reload_page() {
+   location.reload();
+}
+</script>
 
 

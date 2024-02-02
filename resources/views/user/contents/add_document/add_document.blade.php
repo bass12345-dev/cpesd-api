@@ -15,99 +15,67 @@
 @section('js')
 <script type="text/javascript">
 
-         document.addEventListener("DOMContentLoaded", function() {
-         // Datatables with Buttons
-         var datatablesButtons = $("#datatables-buttons").DataTable({
-            responsive: true,
-            lengthChange: !1,
-            buttons: [
-            {
-            extend:'print',
-            title:'All Documents'
-            },
-            {
-            extend:'csv',
-            }
-
-            ],
-            scrollX: true
-         });
-         datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
-         });
-
-   function get_last(){
-
-      $.ajax({
-         url : base_url + '/api/get-last',
-         method : 'GET',
-         dataType: 'json',
-         headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-         }, 
-         beforeSend : function(){
-            Swal.showLoading()
-         }, 
-         success : function(data){
-            Swal.close();
-            $('input[name=tracking_number]').val(data.number);
+   document.addEventListener("DOMContentLoaded", function () {
+   // Datatables with Buttons
+   var datatablesButtons = $("#datatables-buttons").DataTable({
+      responsive: true,
+      lengthChange: !1,
+      buttons: [{
+            extend: 'print',
+            title: 'All Documents'
          },
-         error : function(){
+         {
+            extend: 'csv',
+         }
 
-            alert('Please Reload the page or adtoa and developer')
+      ],
+      scrollX: true
+   });
+   datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+});
+
+
+$('#add_document').on('submit', function (e) {
+   e.preventDefault();
+   $.ajax({
+      url: base_url + '/api/add-document',
+      method: 'POST',
+      data: $(this).serialize(),
+      dataType: 'json',
+      beforeSend: function () {
+         Swal.showLoading()
+      },
+      headers: {
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+         'Authorization': '<?php echo config('app.key') ?>'
+      },
+      success: function (data) {
+         Swal.close();
+         if (data.response) {
+
+            Swal.fire({
+               position: "top-end",
+               icon: "success",
+               title: data.message,
+               showConfirmButton: false,
+               timer: 1500
+            });
+            setTimeout(reload_page, 3000)
+
+         } else {
+
+            alert(data.message)
 
          }
-         
-      })
+      },
+      error: function () {
 
-   }
+      }
 
-   $( document ).ready(function() {
-   get_last();
    });
+});
 
-   $('#add_document').on('submit', function(e){
-      e.preventDefault();
-      $.ajax({
-         url : base_url + '/api/add-document',
-         method : 'POST',
-         data : $(this).serialize(),
-         dataType: 'json',
-         beforeSend : function(){
-            Swal.showLoading()
-         }, 
-         headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                  'Authorization': '<?php echo config('app.key') ?>'
-         }, 
-         success : function(data){
-            Swal.close();
-            if (data.response) {   
 
-               Swal.fire({
-                 position: "top-end",
-                 icon: "success",
-                 title: data.message,
-                 showConfirmButton: false,
-                 timer: 1500
-               });
-               setTimeout(reload_page, 3000)
-
-            }else {
-
-               alert(data.message)
-
-            }
-         },
-         error : function(){
-
-         }
-         
-      });
-   });
-
-   function reload_page(){
-      location.reload();
-   }
 
 
 </script>

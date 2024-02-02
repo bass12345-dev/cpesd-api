@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class AddDocumentController extends Controller
 {
 
-	  public $type;
+	public $type;
     public $app_key;
     public function __construct()
     {
@@ -22,16 +22,17 @@ class AddDocumentController extends Controller
 	
 	public function index(){
 
-		$data['title'] = 'Add Document';
-		$data['document_types'] = DB::table('document_types')->get();
-    $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
-    $data['documents'] = $this->get_all_documents();
-    return view('user.contents.add_document.add_document')->with($data);
+	    $data['title'] = 'Add Document';
+	    $data['document_types'] = DB::table('document_types')->get();
+        $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
+        $data['documents'] = $this->get_all_documents();
+        $data['reference_number']  = $this->get_last();
+        return view('user.contents.add_document.add_document')->with($data);
 
 	}
 
 
-    function get_all_documents(){
+  function get_all_documents(){
 
           $rows = DB::table('documents as documents')
                     ->leftJoin('document_types as document_types', 'document_types.type_id', '=', 'documents.doc_type')
@@ -43,7 +44,84 @@ class AddDocumentController extends Controller
 
         return $rows;
 
-      }
+  }
+
+
+  public function get_last(){
+
+        $l = '';
+        $verify = DB::table('documents')->count();
+        if($verify) {
+
+            if(date('Y', time()) > date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created)))
+                {      
+                     $l = date('Ymd', time()).'001';
+
+                }else if (date('Y', time()) < date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created))) {
+
+                    $l = DB::table('documents')->whereRaw("YEAR(documents.created) = '".date('Y-m-d', time())."' ")->orderBy('created', 'desc')->get()[0]->tracking_number +  1;
+                    // $l = $this->put_zeros($x);
+                    
+                }else if (date('Y', time()) === date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created))){
+
+                    $x = DB::table('documents')->whereRaw("YEAR(documents.created) = '".date('Y', time())."' ")->orderBy('created', 'desc')->get()[0]->tracking_number +  1;
+                    $l = $this->put_zeros($x);
+                   
+                }
+        }else {
+             $l = date('Ymd', time()).'001';
+        }
+
+    
+
+        return $l;
+        // response()->json((array('number'=> $l,'y'=> date('Y', time()), 'm' => date('m', time()), 'd' => date('d', time()) )));
+    }
+
+    function l($l){
+
+        $x = $this->addOne();
+        $l = $this->put_zeros($x);
+
+        return $l;
+
+    }
+
+    function addOne(){
+
+        return DB::table('documents')->whereRaw("YEAR(documents.created) = '".date('Y', time())."' ")->get()[0]->tracking_number +  1;
+
+    }
+
+     function get_created(){
+
+        return date('Y', strtotime( DB::table('documents')->orderBy('created', 'desc')->get()[0]->created));
+
+    }
+
+
+    function put_zeros($x){
+
+        $l = '';
+           if ($x  < 10) {
+
+                        $l = '00'.$x;
+                      
+                    }else if($x < 100 ) {
+
+                        $l = '0'.$x;
+                       
+
+                    }else {
+
+
+                         $l = $x;
+                        
+                    }
+
+                    return $l;
+
+    }
 
 
 

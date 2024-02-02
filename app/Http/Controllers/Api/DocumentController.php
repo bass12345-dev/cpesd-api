@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 use Illuminate\Support\Facades\Storage;
- use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class DocumentController extends Controller
 {
@@ -877,8 +877,6 @@ class DocumentController extends Controller
 
 
       public function receive_document(Request $request){
-
-        // print_r($request->all());
 
         $authorization = $request->header('Authorization');
 

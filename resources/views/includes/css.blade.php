@@ -13,5 +13,8 @@
 		i{
 			font-size: 20px;
 		}
+		.dropdown-item {
+			font-size: 18px;
+		}
 	</style>
 
