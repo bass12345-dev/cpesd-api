@@ -37,13 +37,14 @@
 
 $('a#forward_icon').on('click', function(){
    $('input[name=history_id]').val($(this).data('history-id'));
-   $('input[name=tracking_number]').val($(this).data('tracking-number'))
+   $('input[name=tracking_number]').val($(this).data('tracking-number'));
+   $('.offcanvas-title').text('Forward Document #' +$(this).data('tracking-number') )
 })
 
 $('#forward_form').on('submit', function (e) {
    e.preventDefault();
    $.ajax({
-      url: base_url + '/api/receive-document',
+      url: base_url + '/api/forward-document',
       method: 'POST',
       data: $(this).serialize(),
       dataType: 'json',

@@ -37,6 +37,7 @@ Route::prefix('dts/user')->group(function  () {
     Route::get('/incoming', [App\Http\Controllers\User\IncomingController::class, 'index']);
     Route::get('/received', [App\Http\Controllers\User\ReceivedController::class, 'index']);
     Route::get('/forwarded', [App\Http\Controllers\User\ForwardedController::class, 'index']);
+    Route::get('/view', [App\Http\Controllers\User\ViewDocumentController::class, 'index']);
 }); 
 
 

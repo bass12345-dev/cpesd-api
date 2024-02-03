@@ -8,6 +8,7 @@
       @include('user.contents.forwarded.sections.forwarded_table')
    </div>
 </div>
+
 @endsection
 @section('js')
 

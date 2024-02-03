@@ -449,7 +449,7 @@ class DocumentController extends Controller
 
     if ($authorization == $this->app_key) {
 
-     $now = new \DateTime();
+    $now = new \DateTime();
     $now->setTimezone(new \DateTimezone('Asia/Manila'));
     $items = array(
 
@@ -473,7 +473,7 @@ class DocumentController extends Controller
 
             $where = array('document_id' => DB::getPdo()->lastInsertId());
             $row = DB::table('documents')->where($where)->get()[0];
-
+            $receiver = DB::table('users')->where('is_receiver','yes')->get()[0];
 
 
             $items1 = array(
@@ -486,15 +486,36 @@ class DocumentController extends Controller
                                 'status'           =>  'received',
                                 'received_status'  =>  '1',
                                 'received_date'    => $now->format('Y-m-d H:i:s'),
-                                'release_date'     => NULL,  
                                 'release_status'   => NULL,
                                 'release_date'     => NULL, 
                 );
 
+            
+
+            $items2 = array(
+                                't_number'          =>  $row->tracking_number,
+                                'user1'            =>  $row->u_id,
+                                'office1'          =>  $row->offi_id,
+                                'user2'            =>  $receiver->user_id,
+                                'office2'          =>  $row->offi_id,
+                                'status'           =>  'torec',
+                                'received_status'  =>  NULL,
+                                'received_date'    =>  NULL,
+                                'release_status'   =>  NULL,
+                                'release_date'     =>  $now->format('Y-m-d H:i:s'), 
+
+            );
+
 
             $add1 = DB::table('history')->insert($items1);
 
+           
+
             if ($add1) {
+
+                 if ($row->destination_type == 'simple') {
+                    DB::table('history')->insert($items2);
+                }
 
                 $this->create_qr_code($items['tracking_number']);
                 

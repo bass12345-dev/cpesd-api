@@ -25,6 +25,7 @@ class UserModel extends Model
         'work_status',
         'username',
         'password',
+        'is_receiver',
         'user_created',
         
     ];

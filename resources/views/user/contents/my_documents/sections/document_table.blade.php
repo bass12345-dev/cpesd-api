@@ -29,7 +29,7 @@
                            <div class="btn-group dropstart">
                              <i class="fa fa-ellipsis-v " class="dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"></i>
                              <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item" href="#">View </a></li>
+                                  <li><a class="dropdown-item" href="{{url('/dts/user/view?tn='.$row['tracking_number'])}}">View </a></li>
                                   <li><a class="dropdown-item" href="#">Update</a></li>
                                   <li><a class="dropdown-item" href="#">Remove</a></li>
                                 </ul>

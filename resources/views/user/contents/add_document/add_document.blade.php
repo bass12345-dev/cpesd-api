@@ -20,6 +20,7 @@
    var datatablesButtons = $("#datatables-buttons").DataTable({
       responsive: true,
       lengthChange: !1,
+      search : false,
       buttons: [{
             extend: 'print',
             title: 'All Documents'

@@ -1,6 +1,6 @@
 <div class="offcanvas offcanvas-end" style="width: 50%" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
   <div class="offcanvas-header">
-    <h3 class="offcanvas-title" id="offcanvasExampleLabel">Forward</h3>
+    <h3 class="offcanvas-title"></h3>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
