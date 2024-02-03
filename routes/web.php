@@ -25,6 +25,11 @@ Route::get('/dts', function () {
 //ADMIN ROUTES//
 Route::prefix('dts/admin')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+    Route::get('/all-documents', [App\Http\Controllers\Admin\AllDocumentsController::class, 'index']);
+    Route::get('/offices', [App\Http\Controllers\Admin\OfficesController::class, 'index']);
+    Route::get('/doc-types', [App\Http\Controllers\Admin\DocTypesController::class, 'index']);
+    Route::get('/final-actions', [App\Http\Controllers\Admin\FinalActionsController::class, 'index']);
+    Route::get('/manage-users', [App\Http\Controllers\Admin\ManageUsersController::class, 'index']);
 }); 
 
 

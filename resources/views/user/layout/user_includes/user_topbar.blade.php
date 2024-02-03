@@ -5,6 +5,9 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
+						<li class="nav-item ">
+							<a href="{{ url('/dts/admin/dashboard') }}" class="btn btn-primary">Admin Dashboard</a>
+						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 								<div class="position-relative">
