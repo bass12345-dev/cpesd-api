@@ -15,7 +15,6 @@ class OfficesController extends Controller
 
         $data['title'] = 'Manage Offices';
         $data['offices'] = $this->offices();
-        $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
         return view('admin.contents.offices.offices')->with($data);
     }
 

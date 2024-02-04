@@ -37,6 +37,55 @@
          });
          datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
          });
+
+
+$('a#remove').on('click', function(){
+   var id = $(this).data('id');
+   var url = '/api/delete-type/';
+   delete_item(id,url);
+});
+
+
+
+$('a#update').on('click', function(){
+   var id = $(this).data('id');
+   var item_name = $(this).data('name');
+   $('input[name=id]').val(id);
+   $('input[name=type]').val(item_name);
+   $('#add_form').find('button.submit').text('Update');
+   $('#add_form').find('button.cancel_update').attr('hidden', false);
+   $('.card-title').text('Update '+item_name+ ' Type');
+});
+
+$('#add_form').find('button.cancel_update').on('click', function(){
+   $(this).attr('hidden',true);
+   $('input[name=id]').val('');
+   $('input[name=type]').val('');
+   $('#add_form').find('button.submit').text('Submit');
+    $('.card-title').text('Add Document Type');
+});
+
+
+
+$('#add_form').on('submit', function (e) {
+   e.preventDefault();
+   var form = $(this).serialize();
+   var id = $('input[name=id]').val();
+
+   if (!id) {
+     var url = '/api/add-document-type';
+     add_item(form,url);
+   }else {
+      var url = '/api/update_type/';
+      update_item(id,form,url);
+      
+   }
+
+});
+
+
+
+
 </script>
 
 @endsection

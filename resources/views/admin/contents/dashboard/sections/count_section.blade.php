@@ -34,7 +34,7 @@
 													</div>
 												</div>
 												<h1 class="mt-1 mb-3">{{$count['count_document_types']}}</h1>
-												<
+								
 											</div>
 										</div>
 									</div>
@@ -82,7 +82,7 @@
 							<div class="card flex-fill w-100">
 								<div class="card-header">
 
-									<h5 class="card-title mb-0">Recent Movement</h5>
+									<h5 class="card-title mb-0"></h5>
 								</div>
 								<div class="card-body py-3">
 									<div class="chart chart-sm">

@@ -6,10 +6,10 @@
             <thead>
                <tr>
                 
-                  <th class="d-none d-xl-table-cell">Office</th>
-                  <th class="d-none d-xl-table-cell">Created</th>
+                  <th >Office</th>
+                  <th >Created</th>
                 
-                  <th class="d-none d-md-table-cell">Action</th>
+                  <th >Action</th>
                </tr>
             </thead>
             <tbody>
@@ -17,15 +17,14 @@
                    $i = 1;
                    foreach ($offices as $office) :?>
                      <tr>
-                        <td class="d-none d-xl-table-cell">{{$office['office']}}</td>
-                        <td class="d-none d-xl-table-cell">{{$office['created']}}}</td>
+                        <td class="">{{$office['office']}}</td>
+                        <td class="">{{$office['created']}}}</td>
                         <td>    
                            <div class="btn-group dropstart">
                              <i class="fa fa-ellipsis-v " class="dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"></i>
                              <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item" href="">View </a></li>
-                                  <li><a class="dropdown-item" href="#">Update</a></li>
-                                  <li><a class="dropdown-item" href="#">Remove</a></li>
+                                  <li><a class="dropdown-item" id="update_office" href="javascript:;" data-id="{{$office['office_id']}}" data-office="{{$office['office']}}">Update</a></li>
+                                  <li><a class="dropdown-item" id="remove_office" href="javascript:;" data-id="{{$office['office_id']}}">Remove</a></li>
                                 </ul>
                            </div>
                         </td>

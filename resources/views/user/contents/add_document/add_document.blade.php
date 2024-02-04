@@ -21,6 +21,7 @@
       responsive: true,
       lengthChange: !1,
       search : false,
+       "ordering": false,
       buttons: [{
             extend: 'print',
             title: 'All Documents'

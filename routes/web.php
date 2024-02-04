@@ -17,25 +17,24 @@ Route::get('/', function () {
   echo 'welcome';
 });
 
-Route::get('/dts', function () {
-    return view('auth.login');
-});
-
+Route::get('/dts', [App\Http\Controllers\Web\AuthController::class, 'index'])->middleware(['UsersCheck']);
+  
 
 //ADMIN ROUTES//
-Route::prefix('dts/admin')->group(function  () {
+Route::middleware(['AuthGuard'])->prefix('dts/admin')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
     Route::get('/all-documents', [App\Http\Controllers\Admin\AllDocumentsController::class, 'index']);
     Route::get('/offices', [App\Http\Controllers\Admin\OfficesController::class, 'index']);
     Route::get('/doc-types', [App\Http\Controllers\Admin\DocTypesController::class, 'index']);
     Route::get('/final-actions', [App\Http\Controllers\Admin\FinalActionsController::class, 'index']);
     Route::get('/manage-users', [App\Http\Controllers\Admin\ManageUsersController::class, 'index']);
+    Route::get('/view', [App\Http\Controllers\Admin\ViewDocumentController::class, 'index']);
 }); 
 
 
 
 //USER ROUTES//
-Route::prefix('dts/user')->group(function  () {
+Route::middleware(['AuthGuard'])->prefix('dts/user')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index']);
     Route::get('/my-documents', [App\Http\Controllers\User\MyDocumentsController::class, 'index']);
     Route::get('/add-document', [App\Http\Controllers\User\AddDocumentController::class, 'index']);
@@ -47,6 +46,8 @@ Route::prefix('dts/user')->group(function  () {
 
 
 
+Route::post('/verify-user', [App\Http\Controllers\Web\AuthController::class, 'verify_user']);
+Route::get('/logout', [App\Http\Controllers\Web\AuthController::class, 'logout']);
 
 
 

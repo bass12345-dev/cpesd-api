@@ -2,9 +2,11 @@
 <!-- @section('title', 'Dashboard') -->
 @section('content')
 @include('includes.title')
-
-
-
+<div class="row">
+   <div class="col-md-12">
+    @include('admin.contents.manage_users.sections.users_table')
+   </div>
+</div>
 
 @endsection
 @section('js')

@@ -3,19 +3,19 @@
             <h5 class="card-title mb-0">Add Office</h5>
          </div>
          <div class="card-body">
-            <form id="add_document">
+            <form id="add_office">
                <div class="form-row mb-2">
-                 
-                  <input type="hidden" name="user_id" value="<?php echo base64_encode($user_data['user_id']) ?>" class="form-control"  >
-                  <input type="hidden" name="office_id" value="<?php echo $user_data['office_id']; ?>" class="form-control"  >
+               
                    <div class="form-group col-md-12 mb-3">
                      <label for="inputEmail4">Office Name</label>
-                     <input type="text" name="document_name" class="form-control" required >
+                     <input type="hidden" name="office_id">
+                     <input type="text" name="office" class="form-control" required >
                   </div>
                   
 
                </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
+               <button type="submit" class="btn btn-primary submit" >Submit</button>
+               <button type="button" class="btn btn-danger cancel_update" hidden >Cancel update</button>
             </form>
          </div>
       </div>

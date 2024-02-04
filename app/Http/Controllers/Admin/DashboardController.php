@@ -11,10 +11,12 @@ use DateTime;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
         $data['title'] = 'Admin Dashboard';
         $data['count'] = $this->countadmindoc_dash();
+
+        // echo $request->session()->get('user_id');
         return view('admin.contents.dashboard.dashboard')->with($data);
     }
 

@@ -17,6 +17,7 @@
          var datatablesButtons = $("#datatables-buttons").DataTable({
             responsive: false,
             lengthChange: !1,
+            "ordering": false
  
             buttons: [
             {

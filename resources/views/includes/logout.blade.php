@@ -1,0 +1,1 @@
+<a class="dropdown-item text-danger" href="{{url('/logout')}}">Log out</a>

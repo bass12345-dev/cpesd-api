@@ -6,7 +6,7 @@
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
 						<li class="nav-item ">
-							<a href="{{ url('/dts/user/dashboard') }}" class="btn btn-primary">User Dashboard</a>
+							<a href="{{ url('/dts/user/dashboard') }}" class="btn btn-primary">User Panel</a>
 						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
@@ -86,7 +86,7 @@
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
 					
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item text-danger" href="{{url('/dts')}}">Log out</a>
+								@include('includes.logout')
 							</div>
 						</li>
 					</ul>

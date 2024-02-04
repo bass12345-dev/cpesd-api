@@ -23,15 +23,15 @@ class ManageUsersController extends Controller
 
 
         $data['title'] = 'Manage Users';
-        $data['active_users'] = $this->get_users_active();
+        $data['users'] = $this->get_users();
         $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
         return view('admin.contents.manage_users.manage_users')->with($data);
     }
 
 
-    public function get_users_active(){
+    public function get_users(){
 
-            $items = DB::table('users')->where('user_status', 'active')->get();       
+            $items = DB::table('users')->get();       
             return $items;
 
     }

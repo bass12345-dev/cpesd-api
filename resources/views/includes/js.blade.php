@@ -13,10 +13,145 @@ https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.j
 function reload_page() {
    location.reload();
 }
-
 $('a#view_remarks').on('click', function(){
    $('.remarks').text($(this).data('remarks'));
-})
+});
+
+function add_item(form,url){
+
+      $.ajax({
+      url: base_url + url,
+      method: 'POST',
+      data: form,
+      dataType: 'json',
+      beforeSend: function () {
+         Swal.showLoading()
+      },
+      headers: {
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+         'Authorization': '<?php echo config('app.key') ?>'
+      },
+      success: function (data) {
+         Swal.close();
+         if (data.response) {
+
+            Swal.fire({
+               position: "top-end",
+               icon: "success",
+               title: data.message,
+               showConfirmButton: false,
+               timer: 1500
+            });
+            setTimeout(reload_page, 3000)
+
+         } else {
+
+            alert(data.message)
+
+         }
+      },
+      error: function () {
+         alert('something Wrong')
+      }
+
+   });
+
+}
+
+
+function update_item(id,form,url){
+
+   $.ajax({
+      url: base_url +url+id,
+      method: 'PUT',
+      dataType: 'json',
+      data : form,
+      beforeSend: function () {
+         Swal.showLoading()
+      },
+      headers: {
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+         'Authorization': '<?php echo config('app.key') ?>'
+      },
+      success: function (data) {
+         Swal.close();
+         if (data.response) {
+
+            Swal.fire({
+               position: "top-end",
+               icon: "success",
+               title: data.message,
+               showConfirmButton: false,
+               timer: 1500
+            });
+            setTimeout(reload_page, 3000)
+
+         } else {
+
+            alert(data.message)
+
+         }
+      },
+      error: function () {
+         alert('something Wrong')
+      }
+
+   });
+
+}
+
+function delete_item(id,url){
+
+Swal.fire({
+  title: "Are you sure?",
+  text: "",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+
+       $.ajax({
+      url: base_url +url+id,
+      method: 'DELETE',
+      dataType: 'json',
+      beforeSend: function () {
+         Swal.showLoading()
+      },
+      headers: {
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+         'Authorization': '<?php echo config('app.key') ?>'
+      },
+      success: function (data) {
+         Swal.close();
+         if (data.response) {
+
+            Swal.fire({
+               position: "top-end",
+               icon: "success",
+               title: data.message,
+               showConfirmButton: false,
+               timer: 1500
+            });
+            setTimeout(reload_page, 3000)
+
+         } else {
+
+            alert(data.message)
+
+         }
+      },
+      error: function () {
+         alert('something Wrong')
+      }
+
+   });
+  }
+});
+
+}
 </script>
 
 
