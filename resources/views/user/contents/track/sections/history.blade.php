@@ -1,6 +1,6 @@
 <div class="card flex-fill p-3">
          <div class="card-header">
-            <h5 class="card-title mb-0">Documents</h5>
+            <h5 class="card-title mb-0">History</h5>
          </div>
          <table class="table table-hover table-striped " id="datatables-buttons" style="width: 100%; "  >
             <thead>
@@ -12,6 +12,7 @@
                   <th >User</th>
                   <th>Duration   </th>
                   <th>Remarks</th>
+                  <th>Final Action</th>
 
                </tr>
             </thead>
@@ -24,7 +25,8 @@
                   <td>{{$row['date_received']}}</td>
                   <td>{{$row['user2']}}</td>
                   <td>{{$row['duration']}}</td>
-                  <td><a href="javascript:;">View Remarks</a></td>
+                   <td><a href="javascript:;" id="view_remarks" data-remarks="{{$row['remarks']}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop">View Remarks</a></td>
+                   <td><?php echo $row['final_action_taken'] == NULL ? ' - ' : '<span class="badge p-2 bg-primary">'.$row['final_action_taken'].'</span>'  ?></td>
                </tr>
             <?php endforeach; ?>
             </tbody>

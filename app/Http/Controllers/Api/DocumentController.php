@@ -465,6 +465,8 @@ class DocumentController extends Controller
     );
 
 
+
+
     $add = DB::table('documents')->insert($items);
 
 
@@ -487,6 +489,7 @@ class DocumentController extends Controller
                                 'received_status'  =>  '1',
                                 'received_date'    => $now->format('Y-m-d H:i:s'),
                                 'release_status'   => NULL,
+                                'to_receiver'      => 'no',
                                 'release_date'     => NULL, 
                 );
 
@@ -502,7 +505,9 @@ class DocumentController extends Controller
                                 'received_status'  =>  NULL,
                                 'received_date'    =>  NULL,
                                 'release_status'   =>  NULL,
+                                'to_receiver'      => 'yes',
                                 'release_date'     =>  $now->format('Y-m-d H:i:s'), 
+                                'remarks'          => ''
 
             );
 
@@ -713,7 +718,17 @@ class DocumentController extends Controller
         return response()->json($data);
     }
 
+
+    function get_receiver(){
+
+         $items = DB::table('users')->where('user_status', 'active')->where('is_receiver','yes')->get()[0];
+         return $items->user_id;
+
+    }
+
     public function forward_document(Request $request){
+
+                  
 
         $authorization = $request->header('Authorization');
 
@@ -724,8 +739,10 @@ class DocumentController extends Controller
         $id                 = $request->input('history_id');
         $tracking_number    = $request->input('tracking_number');
         $remarks            = $request->input('remarks');
-        $forward_to         = $request->input('forward');
+        $forward_to         = $request->input('forward') == 'fr' ? $this->get_receiver() : $request->input('forward') ;
         $user_id            = $request->input('id');
+
+        $f                  =   $request->input('forward');
 
         
 
@@ -734,24 +751,13 @@ class DocumentController extends Controller
 
         $count = DB::table('history')->where('t_number', $tracking_number)->count();
 
-        // if($count == 1) {
+
 
         $update_release     = DB::table('history')
                     ->where('history_id', $id)
                     ->where('received_status', 1)
                     ->update(array('release_status'=> 1));
 
-
-
-        // }else {
-
-        
-        // $update_release     = DB::table('history')
-        //             ->where('history_id', $id)
-        //             ->where('received_status', 1)
-        //             ->update(array('release_status'=> 1, 'release_date' => date('Y-m-d H:i:s', time())));
-
-        // }
 
         if($update_release) {
 
@@ -766,10 +772,12 @@ class DocumentController extends Controller
                                     'received_status'   => NULL,
                                     'received_date'     => NULL,
                                     'release_status'    => NULL,
+                                    'to_receiver'       => $f == 'fr' ? 'yes' : 'no',
                                     'release_date'      => date('Y-m-d H:i:s', time()),
                                     'remarks'           => $remarks
 
                     );
+
 
                     $add1 = DB::table('history')->insert($info);
 
@@ -938,7 +946,7 @@ class DocumentController extends Controller
 
       public function complete_document(Request $request){
 
-         $authorization = $request->header('Authorization');
+        $authorization = $request->header('Authorization');
 
         if ($authorization == $this->app_key) {
 
@@ -1186,6 +1194,7 @@ class DocumentController extends Controller
                     'document_name'         => $request->input('document_name'),
                     'doc_type'              => $request->input('document_type'),
                     'document_description'  => $request->input('description'),
+                    // 'destination_type'      => $request->input('type'),
         );
 
         $update     = DB::table('documents')

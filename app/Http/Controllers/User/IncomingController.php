@@ -35,9 +35,10 @@ class IncomingController extends Controller
                      'document_types.type_name as type_name', 'history.release_date as release_date',
                      'history.history_id as history_id','history.remarks as remarks', 'users.first_name as first_name', 'users.middle_name as middle_name', 'users.last_name as last_name', 'users.extension as extension',
                      DB::Raw("CONCAT(users.first_name, ' ', users.middle_name , ' ', users.last_name,' ',users.extension) as name"))
-            ->where('user2', 9)
+            ->where('user2', session('_id'))
             ->where('received_status', NULL)
             ->where('status', 'torec')
+            ->where('to_receiver', 'no')
             ->where('release_status',NULL )
             ->orderBy('received_date', 'desc')->get();
    

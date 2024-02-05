@@ -17,6 +17,15 @@ $('a#view_remarks').on('click', function(){
    $('.remarks').text($(this).data('remarks'));
 });
 
+$('select[name=type]').on('change', function(){
+
+   if ($(this).val() == 'simple') {
+      $('#remarks').attr('hidden',false);
+   }else {
+      $('#remarks').attr('hidden',true);
+   }
+});
+
 function add_item(form,url){
 
       $.ajax({

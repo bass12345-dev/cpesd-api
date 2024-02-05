@@ -22,7 +22,8 @@ class ReceivedController extends Controller
     public function index(){
 
 	    $data['title'] = 'Received Documents';
-        $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
+        $user = DB::table('users')->where('user_id', session('_id'))->get()[0];
+        $data['user_data'] = array('user_id' => session('_id'), 'office_id' => $user->off_id );
 	    $data['received_documents'] = $this->get_received_documents();
         $data['users'] = $this->get_users();
         return view('user.contents.received.received')->with($data);
@@ -51,10 +52,12 @@ class ReceivedController extends Controller
                      'documents.document_id as document_id','users.user_type as user_type',
                      'document_types.type_name as type_name', 'history.received_date as received_date',
                      'history.history_id as history_id','history.remarks as remarks')
-            ->where('user2', 9)
+            ->where('user2', session('_id'))
             ->where('received_status', 1)
             ->where('release_status',NULL )
             ->where('status' , 'received')
+            ->where('documents.destination_type', 'complex')
+            ->where('to_receiver' , 'no')
             ->orderBy('received_date', 'desc')->get();
 
        foreach ($rows as $value => $key) {

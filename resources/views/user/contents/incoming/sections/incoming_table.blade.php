@@ -29,7 +29,7 @@
                            <div class="btn-group dropstart">
                              <i class="fa fa-ellipsis-v " class="dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"></i>
                              <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item" id="received_document" href="#" data-id="{{$row['history_id']}}">Received</a></li>
+                                  <li><a class="dropdown-item received_document"  href="#" data-id="{{$row['history_id']}}">Received</a></li>
                                   <li><a class="dropdown-item" href="{{url('/dts/user/view?tn='.$row['tracking_number'])}}">View Information</a></li>
                                 </ul>
                            </div>

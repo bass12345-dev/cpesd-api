@@ -24,7 +24,6 @@ class AllDocumentsController extends Controller
 
         $data['title'] = 'All Documents';
         $data['document_types'] = DB::table('document_types')->get();
-        $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
         $data['documents'] = $this->get_all_documents();
         return view('admin.contents.all_documents.all_documents')->with($data);
     }

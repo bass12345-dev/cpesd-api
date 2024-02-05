@@ -6,10 +6,10 @@
             <thead>
                <tr>
                 
-                  <th class="d-none d-xl-table-cell">Type</th>
-                  <th class="d-none d-xl-table-cell">Created</th>
+                  <th >Type</th>
+                  <th >Created</th>
                 
-                  <th class="d-none d-md-table-cell">Action</th>
+                  <th >Action</th>
                </tr>
             </thead>
             <tbody>
@@ -17,8 +17,8 @@
                    $i = 1;
                    foreach ($types as $row) :?>
                      <tr>
-                        <td class="d-none d-xl-table-cell">{{$row['type_name']}}</td>
-                        <td class="d-none d-xl-table-cell">{{$row['created']}}}</td>
+                        <td >{{$row['type_name']}}</td>
+                        <td>{{$row['created']}}</td>
                         <td>    
                            <div class="btn-group dropstart">
                              <i class="fa fa-ellipsis-v " class="dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"></i>

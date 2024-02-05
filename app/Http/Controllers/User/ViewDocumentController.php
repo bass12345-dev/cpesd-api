@@ -22,8 +22,10 @@ class ViewDocumentController extends Controller
             $data['history'] = $this->get_history($tn);
             return view('user.contents.track.track')->with($data);
         }else {
-         
-         return redirect('/dts/user/my-documents');
+         echo '<script>alert("Tracking Number Not Found")
+                history.back();
+         </script>';
+         // return back();
         }
 
        
@@ -32,7 +34,8 @@ class ViewDocumentController extends Controller
 
    public function get_document_data($tn){
 
-        $row = DB::table('documents')->where('tracking_number', $tn)->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users', 'users.user_id', '=', 'documents.u_id')->leftJoin('offices', 'offices.office_id', '=', 'documents.offi_id')->get()[0];
+        $row = DB::table('documents')->where('tracking_number', $tn)->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users', 'users.user_id', '=', 'documents.u_id')->leftJoin('offices', 'offices.office_id', '=', 'users.off_id')->get()[0];
+
 
         $data = array(
 
@@ -44,7 +47,9 @@ class ViewDocumentController extends Controller
                     'type_id'           => $row->type_id,
                     'description'       => $row->document_description,
                     'qr'                => env('APP_URL').'/storage/app/img/qr-code/'.$row->tracking_number.'.png',
-                    'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? true : false
+                    'is'                =>  DB::table('history')->where('t_number', $row->tracking_number)->where('status','completed')->count() == 1 ? true : false,
+           
+
         );
 
         return $data;
@@ -102,7 +107,7 @@ class ViewDocumentController extends Controller
                             'date_received'     => $row->received_date != NULL ? date('M d Y', strtotime($row->received_date)).' - '.date('h:i a', strtotime($row->received_date)) : ' - ',
                             // 'duration' => $row['received_date'] != '0000-00-00 00:00:00' ?   $this->duration($interval) : ' - ',
 
- 
+                            
                             'duration'          => $row->received_date != NULL ?   $display_month.' '.$display_day.' '.$display_hour.' '.$display_min: ' - ',
                             'remarks'           => empty($row->remarks) ? 'no remarks' : $row->remarks,
                             'final_action_taken'=> $row->action_name

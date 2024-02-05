@@ -17,7 +17,9 @@
             <tbody>
                   <?php
                    $i = 1;
-                   foreach ($documents as $row) :?>
+                   foreach ($documents as $row) :
+                     $delete_button  = DB::table('history')->where('t_number', $row['tracking_number'])->count() > 1 ? true : false;
+                     ?>
                      <tr>
                        
                         <td><?php echo $row['tracking_number']; ?></td>
@@ -30,8 +32,18 @@
                              <i class="fa fa-ellipsis-v " class="dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"></i>
                              <ul class="dropdown-menu">
                                   <li><a class="dropdown-item" href="{{url('/dts/user/view?tn='.$row['tracking_number'])}}">View </a></li>
-                                  <li><a class="dropdown-item" href="#">Update</a></li>
-                                  <li><a class="dropdown-item" href="#">Remove</a></li>
+                                  <?php if ($delete_button == false) {
+                                     echo '<li><a class="dropdown-item update_document" 
+                                     data-tracking-number="'.$row['tracking_number'].'" 
+                                     data-name="'.$row['document_name'].'" 
+                                     data-type="'.$row['doc_type'].'" 
+                                     data-description="'.$row['description'].'" 
+                                     data-destination="'.$row['destination_type'].'" 
+                                     href="javascript:;" class="" data-bs-toggle="modal" data-bs-target="#update_document">Update</a></li>
+                                       <li><a class="dropdown-item remove_document" href="javascript:;" data-id="'.$row['document_id'].'" data-track="'.$row['tracking_number'].'"  >Remove</a></li>';
+                                  } ?>
+                                  
+                                  
                                 </ul>
                            </div>
                         </td>

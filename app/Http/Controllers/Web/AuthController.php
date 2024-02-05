@@ -49,7 +49,12 @@ class AuthController extends Controller
 
                      
 
-                     $request->session()->put(array('user_id', $user->get()[0]->user_id,'isLoggedIn' => true));
+                     $request->session()->put(array(
+                        'name' => $user->get()[0]->first_name,
+                        '_id' => $user->get()[0]->user_id,
+                        'isLoggedIn' => true,
+                        'user_type' =>$user->get()[0]->user_type, 
+                        'is_receiver' => $user->get()[0]->is_receiver  ));
 
                      return response()->json(['message'=>'Success.','response'=> true]);
 

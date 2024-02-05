@@ -24,14 +24,14 @@ class ManageUsersController extends Controller
 
         $data['title'] = 'Manage Users';
         $data['users'] = $this->get_users();
-        $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
+       
         return view('admin.contents.manage_users.manage_users')->with($data);
     }
 
 
     public function get_users(){
 
-            $items = DB::table('users')->get();       
+            $items = DB::table('users')->where('user_type','user')->get();       
             return $items;
 
     }

@@ -38,9 +38,14 @@
                   <div class="form-group col-md-12 mb-3">
                      <label for="inputEmail4">Type</label>
                      <select class="form-control" name="type" >
-                     	<option>Simple</option>
-                     	<option>Complex</option>
+                     	<option value="complex">Complex</option>
+                        <option value="simple">Simple</option>
                      </select>
+                  </div>
+
+                  <div class="form-group col-md-12 mb-3" id= "remarks" hidden>
+                     <label for="inputEmail4" >Remarks</label>
+                     <textarea class="form-control" name="remarks" style="height: 10rem;" ></textarea>
                   </div>
 
                </div>

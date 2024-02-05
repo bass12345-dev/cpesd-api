@@ -52,9 +52,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/api/public'),
+    'url' => env('APP_URL', 'http://localhost/api'),
 
-    'asset_url' => env('ASSET_URL', 'http://localhost/api/public/'),
+    'asset_url' => env('ASSET_URL', 'http://localhost/api'),
 
     /*
     |--------------------------------------------------------------------------

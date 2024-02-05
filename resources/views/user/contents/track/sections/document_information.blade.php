@@ -38,6 +38,10 @@
          <td><span class="{{$doc_data['is'] == true ? 'bg-success' : 'bg-danger' }} p-2 text-black badge " style="font-size: 17px;">{{ $doc_data['is'] == true? 'Completed' : 'Pending' }}</span></td>
       </tr>
 
+
+   
+      </tr>
+
    </table>      
 
 </div>

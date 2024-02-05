@@ -20,16 +20,16 @@
 				<div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
 					<div class="d-table-cell align-middle">
 
-						<div class="text-center mt-4">
-							<h1 class="h2 text-white">Welcome back!</h1>
-							<p class="lead text-white">
-								Sign in to your account to continue
-
-							</p>
-						</div>
 
 						<div class="card">
 							<div class="card-body">
+								<div class="text-center mt-4">
+									<h1 class="h2 text-black">Welcome back!</h1>
+									<p class="lead text-black">
+										Sign in to your account to continue
+
+									</p>
+								</div>
 								<div class="m-sm-3">
 									<form id="login_form">
 										<div class="mb-3">
@@ -47,16 +47,16 @@
 
 										</div>
 
-										<div class="d-grid gap-2 mt-1">
-											<a href="index.html" class="btn btn-lg btn-success">Track Documents</a>
-										</div>
+										<!-- <div class="d-grid gap-2 mt-1">
+											<a href="{{url('/dts/track')}}" class="btn btn-lg btn-success">Track Documents</a>
+										</div> -->
 									</form>
 								</div>
 							</div>
 						</div>
 						
 						<div class="text-center mb-3 text-white">
-							Don't have an account? <a href="pages-sign-up.html">Sign up</a>
+							Don't have an account? <a href="{{url('/dts/register')}}">Sign up</a>
 						</div>
 					</div>
 				</div>

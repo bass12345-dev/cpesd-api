@@ -24,7 +24,8 @@ class AddDocumentController extends Controller
 
 	    $data['title'] = 'Add Document';
 	    $data['document_types'] = DB::table('document_types')->get();
-        $data['user_data'] = array('user_id' => '9', 'office_id' => '21' );
+        $user = DB::table('users')->where('user_id', session('_id'))->get()[0];
+        $data['user_data'] = array('user_id' => session('_id'), 'office_id' => $user->off_id );
         $data['documents'] = $this->get_all_documents();
         $data['reference_number']  = $this->get_last();
         return view('user.contents.add_document.add_document')->with($data);

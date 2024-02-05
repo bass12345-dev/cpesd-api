@@ -12,6 +12,7 @@
                   <th >User</th>
                   <th>Duration   </th>
                   <th>Remarks</th>
+                  <th>Final Action</th>
 
                </tr>
             </thead>
@@ -25,6 +26,7 @@
                   <td>{{$row['user2']}}</td>
                   <td>{{$row['duration']}}</td>
                   <td><a href="javascript:;">View Remarks</a></td>
+                  <td><?php echo $row['final_action_taken'] == NULL ? ' - ' : '<span class="badge p-2 bg-primary">'.$row['final_action_taken'].'</span>'  ?></td>
                </tr>
             <?php endforeach; ?>
             </tbody>

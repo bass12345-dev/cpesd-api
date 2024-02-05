@@ -6,14 +6,14 @@
             <thead>
                <tr>
                 
-                  <th class="d-none d-xl-table-cell">#</th>
-                  <th class="d-none d-xl-table-cell">Name</th>
+                  <th >#</th>
+                  <th >Name</th>
                 
-                  <th class="d-none d-md-table-cell">Address</th>
-                  <th class="d-none d-md-table-cell">Email</th>
-                  <th class="d-none d-md-table-cell">Phone Number</th>
-                   <th class="d-none d-md-table-cell">Status</th>
-                  <th class="d-none d-md-table-cell">Actions</th>
+                  <th >Address</th>
+                  <th >Email</th>
+                  <th >Phone Number</th>
+                   <th >Status</th>
+                  <th >Actions</th>
                  
                </tr>
             </thead>
@@ -21,8 +21,9 @@
                <?php $i = 1;  foreach($users as $row) : 
                $status = $row->user_status == 'active' ? '<span class="badge bg-success p-2">Active</span>' : '<span class="badge bg-danger p-2">Inactive</span>';
 
-               $button1 = $row->user_status == 'active' ? '<a class="btn btn-warning"><i class="fas fa-close"></i></a>' : '';
-               $button3 = $row->user_status != 'active' ? '<a class="btn btn-danger"><i class="fas fa-trash"></i></a>' : '';
+               $button1 = $row->user_status == 'active' ? '<a class="btn btn-warning set-inactive" 
+               data-id="'.$row->user_id.'" ><i class="fas fa-close"></i></a>' : '';
+               $button3 = $row->user_status != 'active' ? '<a class="btn btn-danger delete" data-id="'.$row->user_id.'"><i class="fas fa-trash"></i></a> <a class="btn btn-success set-active" data-id="'.$row->user_id.'" ><i class="fas fa-check"></i></a>' : '';
                 ?>
                   <tr>
                      <td>{{$i++}}</td>
@@ -33,7 +34,7 @@
                      <td><?php echo $status ?></td>
                      <td >
                         <?php echo $button1; ?>
-                        <a class="btn btn-success"><i  class="fas fa-key" ></i></a>
+                        <a class="btn btn-primary"><i  class="fas fa-key" ></i></a>
                         <?php echo $button3; ?>
                      </td>
                   </tr>

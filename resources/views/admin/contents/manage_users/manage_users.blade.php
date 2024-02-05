@@ -32,6 +32,27 @@
          });
          datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
          });
+
+
+$('a.set-inactive').on('click', function(){
+var id = $(this).data('id');
+let data = {status: 'inactive'}
+var url = '/api/remove-user/';
+update_item(id,data,url);
+});
+
+$('a.set-active').on('click', function(){
+var id = $(this).data('id');
+let data = {status: 'active'}
+var url = '/api/remove-user/';
+update_item(id,data,url);
+});
+
+$('a.delete').on('click', function(){
+var id = $(this).data('id');
+var url = '/api/delete-user/';
+delete_item(id,url)
+});
 </script>
 
 @endsection

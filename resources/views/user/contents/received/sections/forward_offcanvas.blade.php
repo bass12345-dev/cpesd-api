@@ -11,12 +11,14 @@
                   <input type="hidden" name="tracking_number">
                    <div class="form-group col-md-12 mb-2">
                      <label for="inputEmail4">To : </label>
-                     <select class="form-control" name="forward">
+                     <select class="form-control" name="forward" required>
                        <option value="">Select..</option>
+                       <option value="fr" class="bg-danger text-white">To Final Receiver</option>
                        <?php  foreach ($users as $row) : ?>
                         <?php $is_disabled = $row->user_id == $user_data['user_id'] ? 'disabled' : ''   ?>
                         <option value="{{$row->user_id}}" {{$is_disabled}} >{{$row->first_name}} {{$row->middle_name}} {{$row->last_name}} {{$row->extension}}  </option>
                        <?php endforeach; ?>
+
                        </select>
                      </select>
                   </div>

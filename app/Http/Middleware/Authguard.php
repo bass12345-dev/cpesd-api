@@ -14,6 +14,9 @@ class Authguard
         if (!Session::has('isLoggedIn')) {
             return redirect('/dts');
         }
+        // if (session('user_type') != 'admin') {
+        //     return redirect('/dts/user/dashboard');
+        // }
 
         return $next($request);
     }

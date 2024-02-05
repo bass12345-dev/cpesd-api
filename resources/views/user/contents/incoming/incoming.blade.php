@@ -33,7 +33,7 @@
          });
 
 
-$('#received_document').on('click', function(){
+$('a.received_document').on('click', function(){
 
    var id = $(this).data('id');
    Swal.fire({
@@ -52,42 +52,11 @@ $('#received_document').on('click', function(){
 });
 
 function received_document(id){
-      $.ajax({
-      url: base_url + '/api/receive-document',
-      method: 'POST',
-      data: {id : id},
-      dataType: 'json',
-      beforeSend: function () {
-         Swal.showLoading()
-      },
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-         'Authorization': '<?php echo config('app.key') ?>'
-      },
-      success: function (data) {
-         Swal.close();
-         if (data.response) {
-
-            Swal.fire({
-               position: "top-end",
-               icon: "success",
-               title: data.message,
-               showConfirmButton: false,
-               timer: 1500
-            });
-            setTimeout(reload_page, 2000)
-
-         } else {
-
-            alert(data.message)
-
-         }
-      },
-      error: function () {
-         alert('something wrong')
-      }
-
-   });
+      let form = {
+                  id : id
+                  }
+      var url = '/api/receive-document';
+      add_item(form,url);
 }
 </script>
 

@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $data['title'] = 'Admin Dashboard';
         $data['count'] = $this->countadmindoc_dash();
 
-        // echo $request->session()->get('user_id');
+
         return view('admin.contents.dashboard.dashboard')->with($data);
     }
 

@@ -14,14 +14,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-  echo 'welcome';
+   return view('welcome.welcome');
 });
 
 Route::get('/dts', [App\Http\Controllers\Web\AuthController::class, 'index'])->middleware(['UsersCheck']);
-  
+Route::get('/dts/track', [App\Http\Controllers\Web\TrackController::class, 'index']);
+
+Route::get('/dts/register', function () {
+  return view('auth.register');
+});
 
 //ADMIN ROUTES//
-Route::middleware(['AuthGuard'])->prefix('dts/admin')->group(function  () {
+Route::middleware(['AuthGuard','IsAdmin'])->prefix('dts/admin')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
     Route::get('/all-documents', [App\Http\Controllers\Admin\AllDocumentsController::class, 'index']);
     Route::get('/offices', [App\Http\Controllers\Admin\OfficesController::class, 'index']);
@@ -42,6 +46,21 @@ Route::middleware(['AuthGuard'])->prefix('dts/user')->group(function  () {
     Route::get('/received', [App\Http\Controllers\User\ReceivedController::class, 'index']);
     Route::get('/forwarded', [App\Http\Controllers\User\ForwardedController::class, 'index']);
     Route::get('/view', [App\Http\Controllers\User\ViewDocumentController::class, 'index']);
+    Route::get('/track', function () {
+     $data['title'] = 'Search';
+     return view('user.contents.search.search')->with($data);
+    });
+}); 
+
+
+//Receiver ROUTES//
+Route::middleware(['AuthGuard','IsReceiver'])->prefix('dts/receiver')->group(function  () {
+    Route::get('/dashboard', [App\Http\Controllers\Receiver\DashboardController::class, 'index']);
+    Route::get('/pending', [App\Http\Controllers\Receiver\PendingController::class, 'index']);
+    Route::get('/all-documents', [App\Http\Controllers\Receiver\ReceivedDocumentsController::class, 'index']);
+    Route::get('/incoming', [App\Http\Controllers\Receiver\IncomingController::class, 'index']);
+    Route::get('/received', [App\Http\Controllers\Receiver\ReceivedController::class, 'index']);
+    
 }); 
 
 
