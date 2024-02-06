@@ -81,6 +81,9 @@ $('#add_form').on('submit', function (e) {
       
    }
 
+
+    $('#add_office').find('button').attr('disabled',true);
+
 });
 
 </script>

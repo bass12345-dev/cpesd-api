@@ -43,42 +43,10 @@ $('a#forward_icon').on('click', function(){
 
 $('#forward_form').on('submit', function (e) {
    e.preventDefault();
-   $.ajax({
-      url: base_url + '/api/forward-document',
-      method: 'POST',
-      data: $(this).serialize(),
-      dataType: 'json',
-      beforeSend: function () {
-         Swal.showLoading()
-      },
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-         'Authorization': '<?php echo config('app.key') ?>'
-      },
-      success: function (data) {
-         Swal.close();
-         if (data.response) {
-
-            Swal.fire({
-               position: "top-end",
-               icon: "success",
-               title: data.message,
-               showConfirmButton: false,
-               timer: 1500
-            });
-            setTimeout(reload_page, 3000)
-
-         } else {
-
-            alert(data.message)
-
-         }
-      },
-      error: function () {
-
-      }
-
-   });
+   var url = '/api/forward-document';
+   var form = $(this).serialize();
+   add_item(form,url);
+    $('#forward_form').find('button').attr('disabled',true);
 });
 
 

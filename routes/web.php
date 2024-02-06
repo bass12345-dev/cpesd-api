@@ -25,7 +25,7 @@ Route::get('/dts/register', function () {
 });
 
 //ADMIN ROUTES//
-Route::middleware(['AuthGuard','IsAdmin'])->prefix('dts/admin')->group(function  () {
+Route::middleware(['SessionGuard','IsAdmin'])->prefix('dts/admin')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
     Route::get('/all-documents', [App\Http\Controllers\Admin\AllDocumentsController::class, 'index']);
     Route::get('/offices', [App\Http\Controllers\Admin\OfficesController::class, 'index']);
@@ -38,7 +38,7 @@ Route::middleware(['AuthGuard','IsAdmin'])->prefix('dts/admin')->group(function 
 
 
 //USER ROUTES//
-Route::middleware(['AuthGuard'])->prefix('dts/user')->group(function  () {
+Route::middleware(['SessionGuard'])->prefix('dts/user')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index']);
     Route::get('/my-documents', [App\Http\Controllers\User\MyDocumentsController::class, 'index']);
     Route::get('/add-document', [App\Http\Controllers\User\AddDocumentController::class, 'index']);
@@ -54,7 +54,7 @@ Route::middleware(['AuthGuard'])->prefix('dts/user')->group(function  () {
 
 
 //Receiver ROUTES//
-Route::middleware(['AuthGuard','IsReceiver'])->prefix('dts/receiver')->group(function  () {
+Route::middleware(['SessionGuard','IsReceiver'])->prefix('dts/receiver')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\Receiver\DashboardController::class, 'index']);
     Route::get('/pending', [App\Http\Controllers\Receiver\PendingController::class, 'index']);
     Route::get('/all-documents', [App\Http\Controllers\Receiver\ReceivedDocumentsController::class, 'index']);

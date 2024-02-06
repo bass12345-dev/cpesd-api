@@ -28,9 +28,36 @@ class AddDocumentController extends Controller
         $data['user_data'] = array('user_id' => session('_id'), 'office_id' => $user->off_id );
         $data['documents'] = $this->get_all_documents();
         $data['reference_number']  = $this->get_last();
+        $data['offices'] = $this->offices();
         return view('user.contents.add_document.add_document')->with($data);
 
 	}
+
+
+
+    public function offices(){
+
+        $items = DB::table('offices')->get();
+
+        $data = [];
+        foreach ($items as $row) {
+
+            $data[] = array(
+
+
+                    'office'        => $row->office,
+                    'office_id'     => $row->office_id,
+                    'created'       => date('M d Y - h:i a', strtotime($row->created))
+            );
+            // code...
+        }
+
+
+        return $data;
+
+     
+
+    }
 
 
   function get_all_documents(){

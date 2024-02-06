@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'UsersCheck' => \App\Http\Middleware\UsersCheck::class,
         'IsAdmin' => \App\Http\Middleware\IsAdmin::class,
         'IsReceiver' => \App\Http\Middleware\IsReceiver::class,
+        'SessionGuard' => \App\Http\Middleware\SessionGuard::class,
 
     ];
 }

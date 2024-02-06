@@ -34,7 +34,7 @@ class ViewDocumentController extends Controller
 
    public function get_document_data($tn){
 
-        $row = DB::table('documents')->where('tracking_number', $tn)->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users', 'users.user_id', '=', 'documents.u_id')->leftJoin('offices', 'offices.office_id', '=', 'users.off_id')->get()[0];
+        $row = DB::table('documents')->where('tracking_number', $tn)->leftJoin('document_types', 'document_types.type_id', '=', 'documents.doc_type')->leftJoin('users', 'users.user_id', '=', 'documents.u_id')->leftJoin('offices', 'offices.office_id', '=', 'documents.offi_id')->get()[0];
 
 
         $data = array(

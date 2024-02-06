@@ -41,7 +41,24 @@ $('#add_document').on('submit', function (e) {
    e.preventDefault();
    var url = '/api/add-document';
    var form = $(this).serialize();
-   add_item(form,url);
+
+
+      Swal.fire({
+     title: "Review First Before Submitting",
+     text: "",
+     icon: "warning",
+     showCancelButton: true,
+     confirmButtonColor: "#3085d6",
+     cancelButtonColor: "#d33",
+     confirmButtonText: "Submit"
+   }).then((result) => {
+     if (result.isConfirmed) {
+        add_item(form,url);
+         $('#add_document').find('button').attr('disabled',true);
+     }
+   });
+
+  
 });
 
 
