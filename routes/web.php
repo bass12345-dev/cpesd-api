@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-   return view('welcome.welcome');
+   $data['title'] = 'Welcome';
+   return view('welcome.welcome')->with($data);
 });
 
 Route::get('/dts', [App\Http\Controllers\Web\AuthController::class, 'index'])->middleware(['UsersCheck']);
@@ -65,7 +66,15 @@ Route::middleware(['SessionGuard','IsReceiver'])->prefix('dts/receiver')->group(
 
 
 
+//USER ROUTES//
+Route::prefix('watchlisted/admin')->group(function  () {
+    Route::get('/dashboard', [App\Http\Controllers\Watchlisted\DashboardController::class, 'index']);
+    
+}); 
+
+
 Route::post('/verify-user', [App\Http\Controllers\Web\AuthController::class, 'verify_user']);
+Route::post('/verify-code', [App\Http\Controllers\Web\AuthController::class, 'verify_code']);
 Route::get('/logout', [App\Http\Controllers\Web\AuthController::class, 'logout']);
 
 

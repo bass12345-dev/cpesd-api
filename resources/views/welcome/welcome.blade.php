@@ -27,7 +27,7 @@
 /* Padding below the footer and lighter body text */
 
 body {
-  padding-top: 1rem;
+  padding-top: 3rem;
 /*  padding-bottom: 3rem;*/
   color: #5a5a5a;
 }
@@ -256,16 +256,18 @@ p {
         <span>PMAS/RFA</span>
         <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>    </a>
         <!-- data-bs-toggle="modal" data-bs-target="#exampleModal"  -->
-      <!-- a class="card l-bg-cherry" (click)="open_()">
-        <mat-icon>remove_red_eye</mat-icon>
-        <span class="mr-2">Watchlisted</span>
+      <a class="card l-bg-cherry" id="watchlisted" >
+        <i class="fas fa-eye"></i>
+        <span class="mr-2">Watchlisted </span>
         <svg  class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-      </a> -->
+      </a>
       <a class="card l-bg-blue-dark" href="{{url('/dts')}}">
         <i class="fas fa-search"></i>
-        <span>Document Tracker</span>
+        <span>Document Tracker </span>
         <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
       </a>
+
+      
     <!--   <a class="card l-bg-blue-dark" (click)="open_labor()">
        
         <span>Labor Localization</span>
@@ -275,7 +277,7 @@ p {
       </a> -->
 </div>
 
-  <div id="myCarousel"  class="carousel slide" data-bs-ride="carousel">
+<!--   <div id="myCarousel"  class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -301,7 +303,7 @@ p {
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
-
+ -->
 
 
 
@@ -310,5 +312,85 @@ p {
 
 
  @include('includes.js')
+ <script type="text/javascript">
+   $('a#watchlisted').on('click', function(e) {
+
+
+        var ses = '<?php echo Session::has('isLoggedInWatch') ?>';
+
+        if (!ses) {
+
+                      Swal.fire({
+                  title: "Submit Code",
+                  html:
+                  '<input type="password" id="swal-input2" class="swal2-input" #abc>',
+                  inputAttributes: {
+                    autocapitalize: "off"
+                  },
+                  showCancelButton: true,
+                  confirmButtonText: "Submit",
+                  showLoaderOnConfirm: true,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                   let params = {'code' :  (document.getElementById('swal-input2')).value};
+                    var url = '/verify-code/';
+
+                    if (!params['code']) {
+
+                      alert('Please Input Code');
+
+                    }else {
+
+                       $.ajax({
+                          url: base_url + url,
+                          method: 'POST',
+                          data: params,
+                          dataType: 'json',
+                          beforeSend: function () {
+                             Swal.showLoading()
+                          },
+                          headers: {
+                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                             'Authorization': '<?php echo config('app.key') ?>'
+                          },
+                          success: function (data) {
+                             Swal.close();
+                             if (data.response) {
+
+                                Swal.fire({
+                                   position: "top-end",
+                                   icon: "success",
+                                   title: data.mes,
+                                   showConfirmButton: false,
+                                   timer: 1500
+                                });
+                               window.location.href = base_url + '/watchlisted/admin/dashboard';
+
+                             } else {
+
+                                alert(data.message)
+
+                             }
+                          },
+                          error: function () {
+                             alert('something Wrong')
+                          }
+
+                       });
+
+                    }
+           
+
+                  }
+                });
+
+        }else {
+         window.location.href = base_url + '/watchlisted/admin/dashboard';
+        }
+
+
+
+   });
+ </script>
  </body>
  </html>

@@ -72,5 +72,7 @@ class Kernel extends HttpKernel
         'IsReceiver' => \App\Http\Middleware\IsReceiver::class,
         'SessionGuard' => \App\Http\Middleware\SessionGuard::class,
 
+        'WatchAdminCheck' => \App\Http\Middleware\WatchAdminCheck::class,
+
     ];
 }

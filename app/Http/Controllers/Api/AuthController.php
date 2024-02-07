@@ -30,7 +30,7 @@ class AuthController extends Controller
                 if ($verify_code) {
 
         	 	$user = $key->get()[0];
-        	 	return response()->json(['message'=>$user->us_id,'response' => true]);
+        	 	return response()->json(['message'=>$user->us_id,'mes' => 'Success','response' => true]);
         	 }else {
         	 	return response()->json(['message'=>'Invalid Security Code', 'response' => false]);
              }

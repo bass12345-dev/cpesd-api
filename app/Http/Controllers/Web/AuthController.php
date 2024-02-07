@@ -75,4 +75,44 @@ class AuthController extends Controller
              return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
         }
     }
+
+
+
+    public function verify_code(Request $request){
+
+         $authorization = $request->header('Authorization');
+
+         if ($authorization == $this->app_key) {
+
+       $key = DB::table('security')->where('us_id', 8);
+       
+       if ($key->count() > 0) {
+            
+         $verify_code = password_verify($request->input('code'),$key->get()[0]->security_code); 
+
+                if ($verify_code) {
+
+            $user = $key->get()[0];
+              $request->session()->put(array(
+                       
+                        'watch_id' => $user->us_id,
+                        'isLoggedInWatch' => true,
+                        
+                      ));
+            return response()->json(['message'=>$user->us_id,'mes' => 'Success','response' => true]);
+           }else {
+            return response()->json(['message'=>'Invalid Security Code', 'response' => false]);
+             }
+       }else {
+             return response()->json(['message'=>'ID not found Please Contact Developer','response'=> false]);
+         }
+
+
+       }else {
+
+             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
+        }
+       
+    }
+
 }
