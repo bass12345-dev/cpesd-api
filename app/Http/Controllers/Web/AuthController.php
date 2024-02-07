@@ -97,6 +97,7 @@ class AuthController extends Controller
                        
                         'watch_id' => $user->us_id,
                         'isLoggedInWatch' => true,
+                        'name' => 'Administrator',
                         
                       ));
             return response()->json(['message'=>$user->us_id,'mes' => 'Success','response' => true]);

@@ -1,6 +1,6 @@
 @extends('watchlisted.layout.watchlisted_master')
-@section('title', 'Dashboard')
+@section('title', 'Restore')
 @section('content')
 @include('includes.title')
-@include('watchlisted.contents.dashboard.sections.count')
+@include('watchlisted.contents.restore.sections.restore_table')
 @endsection

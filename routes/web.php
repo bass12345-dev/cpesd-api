@@ -67,9 +67,15 @@ Route::middleware(['SessionGuard','IsReceiver'])->prefix('dts/receiver')->group(
 
 
 //USER ROUTES//
-Route::prefix('watchlisted/admin')->group(function  () {
+Route::middleware(['WatchAdminCheck'])->prefix('watchlisted/admin')->group(function  () {
     Route::get('/dashboard', [App\Http\Controllers\Watchlisted\DashboardController::class, 'index']);
-    
+    Route::get('/list', [App\Http\Controllers\Watchlisted\ActiveListController::class, 'index']);
+    Route::get('/add', [App\Http\Controllers\Watchlisted\AddWatchController::class, 'index']);
+    Route::get('/restore', [App\Http\Controllers\Watchlisted\RestoreListController::class, 'index']);
+    Route::get('/search', [App\Http\Controllers\Watchlisted\SearchController::class, 'index']);
+    Route::get('/manage-program', [App\Http\Controllers\Watchlisted\ManageProgramController::class, 'index']);
+    Route::get('/change-code', [App\Http\Controllers\Watchlisted\ChangeSecurityController::class, 'index']);
+    Route::get('/view_profile', [App\Http\Controllers\Watchlisted\ViewProfileController::class, 'index']);
 }); 
 
 

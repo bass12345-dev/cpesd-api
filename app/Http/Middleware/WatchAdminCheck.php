@@ -11,8 +11,8 @@ class WatchAdminCheck
 {
     public function handle(Request $request, Closure $next)
     {
-         if (Session::has('isLoggedInWatch')) {
-             return redirect('/watchlisted/admin/dashboard');
+         if (!Session::has('watch_id')) {
+             return redirect('/');
         }
 
         return $next($request);

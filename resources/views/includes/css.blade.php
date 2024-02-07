@@ -73,5 +73,10 @@
         background: blue;
 
        }
+
+         .l-bg-cherry {
+            background: linear-gradient(to left, #493240, #f09) !important;
+            color: #fff;
+        }
 	</style>
 
