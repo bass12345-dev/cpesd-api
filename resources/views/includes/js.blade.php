@@ -51,7 +51,7 @@ function add_item(form,url){
                showConfirmButton: false,
                timer: 1500
             });
-            setTimeout(reload_page, 3000)
+            setTimeout(reload_page, 2000)
 
          } else {
 
@@ -93,7 +93,7 @@ function update_item(id,form,url){
                showConfirmButton: false,
                timer: 1500
             });
-            setTimeout(reload_page, 3000)
+            setTimeout(reload_page, 2000)
 
          } else {
 
@@ -144,7 +144,7 @@ Swal.fire({
                showConfirmButton: false,
                timer: 1500
             });
-            setTimeout(reload_page, 3000)
+            setTimeout(reload_page, 2000)
 
          } else {
 

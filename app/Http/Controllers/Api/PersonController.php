@@ -404,7 +404,7 @@ class PersonController extends Controller
                         'age'               => $person_data->age
         );
 
-        return response()->json($data);
+        return json_encode($data);
 
     
     }
@@ -561,10 +561,10 @@ class PersonController extends Controller
 
     $search = $request->input('first_name').' '.$request->input('last_name');
 
-     $users = PersonModel::select("person_id", "first_name", "last_name", "middle_name", "address", "email_address", "phone_number")
+     $users = PersonModel::select("person_id", "first_name", "last_name", "middle_name", "address", "email_address", "phone_number", "age","extension")
                        ->where(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$search."%")
                        ->get();
-    return json_encode($users);
+    return response()->json($users);
 
 
 

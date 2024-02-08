@@ -82,6 +82,6 @@ Route::middleware(['WatchAdminCheck'])->prefix('watchlisted/admin')->group(funct
 Route::post('/verify-user', [App\Http\Controllers\Web\AuthController::class, 'verify_user']);
 Route::post('/verify-code', [App\Http\Controllers\Web\AuthController::class, 'verify_code']);
 Route::get('/logout', [App\Http\Controllers\Web\AuthController::class, 'logout']);
-
+Route::get('/logout_admin', [App\Http\Controllers\Web\AuthController::class, 'logout_admin_watchlisted']);
 
 

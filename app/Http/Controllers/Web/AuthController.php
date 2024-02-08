@@ -26,6 +26,11 @@ class AuthController extends Controller
          return redirect('/dts');
     }
 
+    public function logout_admin_watchlisted(Request $request){
+         $request->session()->flush();
+         return redirect('/');
+    }
+
 
     public function verify_user(Request $request){
 

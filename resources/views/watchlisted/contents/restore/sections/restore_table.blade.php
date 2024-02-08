@@ -1,8 +1,8 @@
 <div class="card flex-fill p-3">
          <div class="card-header">
             <h5 class="card-title mb-2">Documents</h5>
-            <button class="btn btn-danger"> Delete</button>
-            <button class="btn btn-success"> Set to active</button>
+            <button class="btn btn-danger" id="delete"> Delete</button>
+            <button class="btn btn-success" id="restore"> Set to active</button>
          </div>
          
 
@@ -25,7 +25,7 @@
                    $i = 1;
                    foreach ($list as $row) :?>
                      <tr>
-                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox" name="person_id" value="{{$row->person_id}}"></td>
                         <td><?php echo $i++; ?></td>
                         <td><?php echo $row->first_name; ?></td>
                         <td><?php echo $row->age; ?></td>
