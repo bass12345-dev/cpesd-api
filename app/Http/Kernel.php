@@ -73,6 +73,6 @@ class Kernel extends HttpKernel
         'SessionGuard' => \App\Http\Middleware\SessionGuard::class,
 
         'WatchAdminCheck' => \App\Http\Middleware\WatchAdminCheck::class,
-
+        'WatchLoginCheck' => \App\Http\Middleware\WatchLoginCheck::class,
     ];
 }

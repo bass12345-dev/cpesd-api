@@ -107,7 +107,7 @@ class ProgramController extends Controller
 
 
         //GET
-    public function get_programs(){
+    public static function get_programs(){
 
         $items = DB::table('programs')->orderBy('program', 'asc')->get();
 

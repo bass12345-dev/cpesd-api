@@ -11,7 +11,7 @@
 
 	function load_chart(){
 			   $.ajax({
-			      url: base_url + '/api/data-per-barangay',
+			      url: base_url + '/web/data-per-barangay',
 			      method: 'GET',
 			      dataType: 'json',
 			      success: function (data) {
@@ -68,11 +68,11 @@
 
 }
 
-load_chart();
+
 
 
 	document.addEventListener("DOMContentLoaded", function() {
-			
+			load_chart();
 		});
 </script>
 

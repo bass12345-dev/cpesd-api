@@ -1,5 +1,5 @@
 @extends('user.layout.user_master')
-@section('title', 'Add Document')
+@section('title', $title)
 @section('content')
 @include('includes.title')
 <div class="row">

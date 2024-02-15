@@ -10,9 +10,34 @@
 https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js
 "></script>
 <script type="text/javascript">
+
 function reload_page() {
    location.reload();
 }
+
+
+      document.addEventListener("DOMContentLoaded", function() {
+         // Datatables with Buttons
+         var datatablesButtons = $("#datatables-buttons").DataTable({
+            responsive: false,
+            lengthChange: !1,
+ 
+            buttons: [
+            {
+            extend:'print',
+            title:'All Documents'
+            },
+            {
+            extend:'csv',
+            }
+
+            ],
+            scrollX: true
+         });
+         datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+         });
+
+
 $('a#view_remarks').on('click', function(){
    $('.remarks').text($(this).data('remarks'));
 });
@@ -38,7 +63,6 @@ function add_item(form,url){
       },
       headers: {
          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-         'Authorization': '<?php echo config('app.key') ?>'
       },
       success: function (data) {
          Swal.close();

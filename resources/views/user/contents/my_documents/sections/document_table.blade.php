@@ -5,13 +5,13 @@
          <table class="table table-hover table-striped " id="datatables-buttons" style="width: 100%; "  >
             <thead>
                <tr>
-                
-                  <th class="">Tracking Number</th>
-                  <th class="">Document Name</th>
-                  <th class="">Document Type</th>
-                  <th class="">Created</th>
-                  <th class="">Status</th>
-                  <th class="">Actions</th>
+                  <th >#</th>
+                  <th >Tracking Number</th>
+                  <th >Document Name</th>
+                  <th >Document Type</th>
+                  <th >Created</th>
+                  <th >Status</th>
+                  <th >Actions</th>
                </tr>
             </thead>
             <tbody>
@@ -21,7 +21,7 @@
                      $delete_button  = DB::table('history')->where('t_number', $row['tracking_number'])->count() > 1 ? true : false;
                      ?>
                      <tr>
-                       
+                        <td>{{$i++}}</td>
                         <td><?php echo $row['tracking_number']; ?></td>
                         <td><?php echo $row['document_name']; ?></td>
                         <td><?php echo $row['type_name']; ?></td>

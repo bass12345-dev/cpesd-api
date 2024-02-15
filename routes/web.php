@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
    $data['title'] = 'Welcome';
-   return view('welcome.welcome')->with($data);
-});
 
+   return redirect('http://cpesd-infosys.wuaze.com/');
+   // return view('welcome.welcome')->with($data);
+});
+Route::get('/watchlisted', [App\Http\Controllers\Web\AuthController::class, 'code_login'])->middleware(['WatchLoginCheck']);
 Route::get('/dts', [App\Http\Controllers\Web\AuthController::class, 'index'])->middleware(['UsersCheck']);
 Route::get('/dts/track', [App\Http\Controllers\Web\TrackController::class, 'index']);
 
@@ -34,6 +36,10 @@ Route::middleware(['SessionGuard','IsAdmin'])->prefix('dts/admin')->group(functi
     Route::get('/final-actions', [App\Http\Controllers\Admin\FinalActionsController::class, 'index']);
     Route::get('/manage-users', [App\Http\Controllers\Admin\ManageUsersController::class, 'index']);
     Route::get('/view', [App\Http\Controllers\Admin\ViewDocumentController::class, 'index']);
+    Route::get('/back-up', function () {
+     $data['title'] = 'Back Up Database';
+     return view('admin.contents.back_up.back_up')->with($data);
+    });
 }); 
 
 
@@ -79,9 +85,22 @@ Route::middleware(['WatchAdminCheck'])->prefix('watchlisted/admin')->group(funct
 }); 
 
 
-Route::post('/verify-user', [App\Http\Controllers\Web\AuthController::class, 'verify_user']);
-Route::post('/verify-code', [App\Http\Controllers\Web\AuthController::class, 'verify_code']);
+
+//Authentication
+Route::post('/web/verify-code', [App\Http\Controllers\Web\AuthController::class, 'verify_code']);
+Route::post('/web/verify-user', [App\Http\Controllers\Web\AuthController::class, 'verify_user']);
 Route::get('/logout', [App\Http\Controllers\Web\AuthController::class, 'logout']);
 Route::get('/logout_admin', [App\Http\Controllers\Web\AuthController::class, 'logout_admin_watchlisted']);
+Route::post('/back_up_db', [App\Http\Controllers\Web\AuthController::class, 'back_up_db']);
 
 
+
+//WATCHLISTED
+
+//Dashboard
+Route::get('web/data-per-barangay', 'App\Http\Controllers\Web\PersonController@data_per_barangay');
+
+//LIST
+
+Route::post('web/remove','App\Http\Controllers\Web\PersonController@remove');
+Route::post('web/delete','App\Http\Controllers\Web\PersonController@delete');

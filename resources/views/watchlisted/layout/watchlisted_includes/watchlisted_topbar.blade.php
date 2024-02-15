@@ -16,9 +16,6 @@
                  <span class="text-dark">{{session('name')}}</span>
               </a>
 							<div class="dropdown-menu dropdown-menu-end">
-								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-								
-								<div class="dropdown-divider"></div>
 								<a class="dropdown-item text-danger" href="{{url('/logout_admin')}}">Log out</a>
 							</div>
 						</li>

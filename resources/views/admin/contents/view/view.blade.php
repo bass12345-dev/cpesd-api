@@ -1,5 +1,5 @@
 @extends('admin.layout.admin_master')
-@section('title', 'My Documents')
+@section('title', $title)
 @section('content')
 
 @include('includes.title')

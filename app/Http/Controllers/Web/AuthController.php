@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\UserModel;
 
+use Alert;
+use Artisan;
+use Log;
+use Storage;
+
 class AuthController extends Controller
 {
     public $app_key;
@@ -21,6 +26,14 @@ class AuthController extends Controller
           return view('auth.login');
     }
 
+
+     public function code_login(){
+
+          return view('auth.code');
+    }
+
+
+
     public function logout(Request $request){
         $request->session()->flush();
          return redirect('/dts');
@@ -28,22 +41,15 @@ class AuthController extends Controller
 
     public function logout_admin_watchlisted(Request $request){
          $request->session()->flush();
-         return redirect('/');
+         return redirect('/watchlisted');
     }
 
 
     public function verify_user(Request $request){
 
-    $authorization = $request->header('Authorization');
-
-         if ($authorization == $this->app_key) {
-
-
             $username = $request->input('username');
             $password = $request->input('password');
-
-    
-
+            
             $user = DB::table('users')->where('username', $request->input('username'));
 
             if ($user->count() > 0 ) {
@@ -75,19 +81,12 @@ class AuthController extends Controller
                 return response()->json(['message'=>'invalid Username.','response'=> false]);
             }
 
-              }else {
-
-             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
-        }
+             
     }
 
 
 
     public function verify_code(Request $request){
-
-         $authorization = $request->header('Authorization');
-
-         if ($authorization == $this->app_key) {
 
        $key = DB::table('security')->where('us_id', 8);
        
@@ -112,13 +111,13 @@ class AuthController extends Controller
        }else {
              return response()->json(['message'=>'ID not found Please Contact Developer','response'=> false]);
          }
-
-
-       }else {
-
-             return response()->json(array('message' => 'Request Unauthorized' , 'response' => false )); 
-        }
        
+    }
+
+
+    public function back_up_db(){
+
+          echo 1;
     }
 
 }

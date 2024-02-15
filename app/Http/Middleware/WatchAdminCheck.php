@@ -12,7 +12,7 @@ class WatchAdminCheck
     public function handle(Request $request, Closure $next)
     {
          if (!Session::has('watch_id')) {
-             return redirect('/');
+             return redirect('/watchlisted');
         }
 
         return $next($request);

@@ -1,5 +1,5 @@
 @extends('user.layout.user_master')
-@section('title', 'Incoming')
+@section('title', $title)
 @section('content')
 
 @include('includes.title')

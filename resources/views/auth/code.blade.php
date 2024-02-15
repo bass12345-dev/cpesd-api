@@ -2,11 +2,18 @@
 <html lang="en">
 
 <head>
-	@include('includes.meta')
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="PESO OROQUIETA DTS">
+	<meta name="author" content="Basil John C. Mañabo">
+	<meta name="csrf-token" content="{{ csrf_token() }}" />
+	<meta name="keywords" content="PESO OROQUIETA DTS">
+	<title>Login</title>
 	@include('includes.css')
 	<style type="text/css">
 		body{
-			background-image: url("{{ asset('assets/img/background-track.jpg') }}");
+			background-color: #3F6BA4;
 			background-size: cover;
 			height: 100vh;
 		}
@@ -25,40 +32,28 @@
 							<div class="card-body">
 								<a href="{{url('/')}}"><i class="fas fa-arrow-left"></i></a>
 								<div class="text-center mt-4">
-									<h1 class="h2 text-black">Welcome back!</h1>
-									<p class="lead text-black">
-										Sign in to your account to continue
-
-									</p>
+									<h1 class="h2 text-black">Welcome back!!</h1>
+									
 								</div>
 								<div class="m-sm-3">
 									<form id="login_form">
 										<div class="mb-3">
-											<label class="form-label">Username</label>
-											<input class="form-control form-control-lg" type="text" name="username" placeholder="Enter your Username" />
+	
+											<input class="form-control form-control-lg" type="password" name="code" placeholder="Enter Code" />
 										</div>
-										<div class="mb-3">
-											<label class="form-label">Password</label>
-											<input class="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" />
-										</div>
-										
+
 										<div class="d-grid gap-2 mt-3">
 											<button type="submit" class="btn btn-lg btn-primary">Submit</button>
 									
 
 										</div>
 
-										<!-- <div class="d-grid gap-2 mt-1">
-											<a href="{{url('/dts/track')}}" class="btn btn-lg btn-success">Track Documents</a>
-										</div> -->
 									</form>
 								</div>
 							</div>
 						</div>
 						
-						<div class="text-center mb-3 text-white">
-							Don't have an account? <a href="{{url('/dts/register')}}">Sign up</a>
-						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -78,14 +73,14 @@
 $('#login_form').on('submit', function (e) {
    e.preventDefault();
    $.ajax({
-      url: base_url + '/web/verify-user',
+      url: base_url + '/web/verify-code',
       method: 'POST',
       data: $(this).serialize(),
       dataType: 'json',
       beforeSend: function () {
          Swal.showLoading()
       },
-      headers: {
+       headers: {
          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
       success: function (data) {
@@ -95,7 +90,7 @@ $('#login_form').on('submit', function (e) {
             Swal.fire({
                position: "top-end",
                icon: "success",
-               title: data.message,
+               title: data.mes,
                showConfirmButton: false,
                timer: 1500
             });
